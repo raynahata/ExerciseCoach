@@ -1,6 +1,8 @@
 # ExerciseCoach
 
-The STT base code is from: https://www.youtube.com/watch?v=_q5vBvTNDEA 
+The STT base code is from: https://github.com/RekhuGopal/PythonHacks/blob/main/AWSBoto3Hacks/AWSboto3TextAnalytics-PDF-AmazonTextract.py
+
+Tutorial linked to the base code: https://www.youtube.com/watch?v=_q5vBvTNDEA 
 
 ## Setup
 
