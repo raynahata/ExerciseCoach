@@ -1,4 +1,6 @@
 # Base code credit: https://www.youtube.com/watch?v=_q5vBvTNDEA 
+#this code will continually run the transcrption 
+#NOTE this code cannot be used with the open ai code 
 import asyncio
 import sounddevice
 from pynput import keyboard  # Requires 'pip install pynput'
