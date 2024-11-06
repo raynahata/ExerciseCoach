@@ -1,0 +1,84 @@
+role,content,timestamp
+2024-11-03 15:07:05,System,Conversation log initialized
+2024-11-03 15:07:06,Robot,"Hello! I'm Quori, your exercise coach. How are you today?"
+2024-11-03 15:07:13,User,i am good how are you
+2024-11-03 15:07:13,Robot,"I'm great, thank you! Before we start, I'll ask a few questions. How old are you?"
+2024-11-03 15:15:42,Robot,"Hello! I'm Quori, your exercise coach robot. How are you today?"
+2024-11-03 15:18:38,Robot,"Hello! I'm Quori, your exercise coach. How are you today?"
+2024-11-03 15:21:21,Robot,"Hello! I'm Quori, your exercise coach. How are you today?"
+2024-11-03 15:23:31,Robot,"Hello! I'm Quori, your exercise coach. How are you today?"
+2024-11-06 12:21:02,Robot,"Hello, I'm Quori. How are you today?"
+2024-11-06 12:23:27,Robot,"Hello! I'm Quori, your exercise coach. How are you today?"
+2024-11-06 12:23:27,User,<coroutine object start_transcription at 0x107e9e240>
+2024-11-06 12:26:03,Robot,"Hello! I'm Quori, your exercise coach. How are you today?"
+2024-11-06 12:26:07,User,i am good how are you
+2024-11-06 12:26:08,Robot,"I'm glad to hear that! I'm doing great, thank you. Before we start, I'll ask a few questions. How old are you?"
+2024-11-06 12:28:23,Robot,"Hello! I'm Quori, your exercise coach. How are you today?"
+2024-11-06 12:35:58,Robot,"Hello, I'm Quori. How are you today?"
+2024-11-06 12:40:41,Robot,"Hello, I'm Quori. How are you today?"
+2024-11-06 12:40:59,Robot,"Hello! I'm Quori, your exercise coach robot. How are you today?"
+2024-11-06 12:44:08,User,checking for communciation
+2024-11-06 12:44:08,Robot,"Hello! I'm Quori, your exercise coach. How are you today?"
+2024-11-06 12:44:08,User,checking for communciation
+2024-11-06 12:44:09,Robot,"Hello! I'm Quori, your exercise coach. How are you today?"
+2024-11-06 12:44:09,User,checking for communciation
+2024-11-06 12:44:10,Robot,"Hello! I'm Quori, your exercise coach. How are you today?"
+2024-11-06 12:44:10,User,checking for communciation
+2024-11-06 12:44:10,Robot,"Hello! I'm Quori, your exercise coach. How are you today?"
+2024-11-06 12:44:10,User,checking for communciation
+2024-11-06 12:44:11,Robot,"Hello! I'm Quori, your exercise coach. How are you today?"
+2024-11-06 12:44:11,User,checking for communciation
+2024-11-06 12:44:12,Robot,"Hello! I'm Quori, your exercise coach. How are you today?"
+2024-11-06 12:44:12,User,checking for communciation
+2024-11-06 12:44:13,Robot,"Hello! I'm Quori, your exercise coach. How are you today?"
+2024-11-06 12:44:13,User,checking for communciation
+2024-11-06 12:44:13,Robot,"Hello! I'm Quori, your exercise coach. How are you today?"
+2024-11-06 12:44:13,User,checking for communciation
+2024-11-06 12:49:25,User,Listening for input...
+2024-11-06 12:49:57,User,Listening for input...
+2024-11-06 12:54:36,User,Received text: Hello
+2024-11-06 12:57:10,User,Received text: Hello
+2024-11-06 12:57:15,User,
+2024-11-06 12:57:19,User,Received text: Bye.
+2024-11-06 12:58:51,User,Transcription complete.
+2024-11-06 12:58:55,User,
+2024-11-06 12:59:44,User,
+2024-11-06 12:59:48,User,
+2024-11-06 13:00:58,User,Hello
+2024-11-06 13:01:08,User,Interesting. Why are you shutting down?
+2024-11-06 13:02:23,User,Bye
+2024-11-06 13:02:57,Robot,"Hello! I'm Quori, your exercise coach. How are you today?"
+2024-11-06 13:03:01,User,<coroutine object start_transcription at 0x105714bf0>
+2024-11-06 13:03:20,Robot,"Hello! I'm Quori, your exercise coach. How are you today?"
+2024-11-06 13:03:25,User,<coroutine object start_transcription at 0x106eccbf0>
+2024-11-06 13:04:46,Robot,Hello! My name is Quori. How are you today?
+2024-11-06 13:04:50,User,I'm good. How are you?
+2024-11-06 13:04:51,Robot,"I'm functioning optimally, thank you! Before explaining the exercises, I'll ask some questions. How old are you?"
+2024-11-06 13:04:57,User,I'm 23.
+2024-11-06 13:05:00,Robot,"Great, thank you! Is exercise something you choose to do?"
+2024-11-06 13:06:01,Robot,"Hello! I'm Quori, your exercise coach. How are you today?"
+2024-11-06 13:07:28,Robot,Hello! I'm Quori. How are you today?
+2024-11-06 13:07:32,User,I'm good. How are you?
+2024-11-06 13:07:33,Robot,"I'm functioning well, thank you! Before we start, I'll ask a few questions. How old are you?"
+2024-11-06 13:07:42,User,I'm 23.
+2024-11-06 13:07:43,Robot,"Great, thank you. Is exercise something you choose to do?"
+2024-11-06 13:08:05,Robot,"Hello! I'm Quori, your exercise coach. How are you today?"
+2024-11-06 13:08:11,User,I'm good today. How are you?
+2024-11-06 13:08:12,Robot,"I'm just a robot, but I'm ready to help you exercise! Before we start, I'll ask a few questions. How old are you?"
+2024-11-06 13:08:20,User,I'm 23.
+2024-11-06 13:08:20,Robot,Great! Is exercise something you choose to do on your own?
+2024-11-06 13:08:25,User,Bye.
+2024-11-06 13:08:39,Robot,"Hello! I'm Quori, your exercise coach. How are you today?"
+2024-11-06 13:08:44,User,I'm good. How are you?
+2024-11-06 13:08:45,Robot,"I'm just a robot, but I'm ready to help you exercise! Before I explain the exercises, I'll ask some questions. How old are you?"
+2024-11-06 13:08:51,User,I'm 23.
+2024-11-06 13:08:52,Robot,Great! Is exercise something you choose to do?
+2024-11-06 13:08:58,User,Not really. Bye.
+2024-11-06 13:08:59,Robot,"Alright, take care! If you need assistance in the future, I'm here to help."
+2024-11-06 13:09:04,User,Bye.
+2024-11-06 13:10:07,Robot,Hello! I'm Quori. How are you today?
+2024-11-06 13:10:12,User,I'm good. How are you?
+2024-11-06 13:10:13,Robot,"I'm here and ready to help you exercise! Before we start, I'll ask a few questions. How old are you?"
+2024-11-06 13:10:18,User,I'm 24.
+2024-11-06 13:10:18,Robot,"Great, thank you! Do you choose to exercise on your own?"
+2024-11-06 13:10:23,User,Bye.
