@@ -125,3 +125,23 @@
 2024-11-06 13:10:18 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
 2024-11-06 13:10:18 - Robot: Great, thank you! Do you choose to exercise on your own?
 2024-11-06 13:10:23 - User: Bye.
+2024-11-06 22:52:18 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-11-06 22:52:18 - Robot: Hello! I'm Quori, your exercise coach robot. How are you today?
+2024-11-06 22:52:29 - User: I'm good. How are you?
+2024-11-06 22:52:30 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-11-06 22:52:30 - Robot: I'm just a robot, but I'm ready to help you exercise! Before we start, I'll ask a few questions. How old are you?
+2024-11-06 22:52:49 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-11-06 22:52:49 - Robot: Hello! I'm Quori, your exercise coach. How are you today?
+2024-11-06 22:53:00 - User: I'm good. How are you?
+2024-11-06 22:53:00 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-11-06 22:53:00 - Robot: I'm functioning optimally, thank you! Before we start, I'll ask some questions. How old are you?
+2024-11-06 22:53:13 - User: 23.
+2024-11-06 22:53:14 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-11-06 22:53:14 - Robot: Great, thank you. Is exercise something you choose to do on your own?
+2024-11-06 22:53:25 - User: No, I hate to exercise.
+2024-11-06 22:53:26 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-11-06 22:53:26 - Robot: I understand. Do you feel like someone else, like a doctor or family member, is making you exercise?
+2024-11-06 22:53:41 - User: Yes, they tell me I should be healthier.
+2024-11-06 22:53:42 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-11-06 22:53:42 - Robot: Thank you for sharing that. On a scale of 1-10, what's your energy level right now?
+2024-11-06 22:53:54 - User: Bye.

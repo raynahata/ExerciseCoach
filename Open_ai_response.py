@@ -4,6 +4,8 @@ import asyncio
 from AWS_STT import start_transcription  # Import the transcription function
 from conv_logger import log_conversation
 import string
+from gtts import gTTS
+import speech as sp
 
 apikey = None
 
@@ -56,7 +58,12 @@ async def main():
 
     # Generate and print the initial response before waiting for user transcription
     print("Generating initial response...")
-    initial_response = await generate_conversational_phrase(messages, csv_history_file)
+    initial_response = await generate_conversational_phrase(messages, csv_history_file)  #replace this with robot speech to text when transferring to robot
+    print("Begin speaking")
+    #logger.info('Begin speaking,{}'.format(message))
+    sp.text_to_speech(initial_response)
+    #logger.info('End speaking')
+    print("End speaking")
     if initial_response:
         messages.append({"role": "assistant", "content": initial_response})
 
@@ -83,6 +90,7 @@ async def main():
 
             # Generate the next OpenAI response
             conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
+            sp.text_to_speech(conversational_phrase) #replace this with robot speech to text when transferring to robot
             if conversational_phrase:
                 messages.append({"role": "assistant", "content": conversational_phrase})
 
@@ -90,3 +98,5 @@ async def main():
 if __name__ == "__main__":
     asyncio.run(main())
 
+
+#TODO: add the participant csv change
