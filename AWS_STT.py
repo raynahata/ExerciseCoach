@@ -4,6 +4,9 @@ import time
 from amazon_transcribe.client import TranscribeStreamingClient
 from amazon_transcribe.handlers import TranscriptResultStreamHandler
 from amazon_transcribe.model import TranscriptEvent
+import pvporcupine
+
+
 
 class MyEventHandler(TranscriptResultStreamHandler):
     def __init__(self, output_stream):
