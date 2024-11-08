@@ -14,6 +14,7 @@ pip install pynput asyncio sounddevice time pyporcupine pyaudio gtts openai
 
 
 ## File Information 
+### there are many files where I my own filepaths hard coded. You will need to fix those 
 ### AWS_STT.py
 This is the current working file. This code will quit the transcription each time. 
 
