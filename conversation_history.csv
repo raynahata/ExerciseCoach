@@ -1,3 +1,98 @@
 role,content,timestamp
 2024-11-08 11:27:07,System,Conversation log initialized
 2024-11-08 11:33:24,Robot,"Hello! I'm Pepper, your exercise coach. How are you today?"
+2024-11-08 13:04:51,Robot,"Hello! I'm Pepper, your exercise coach. How are you today?"
+2024-11-08 13:05:01,User,Good. How are you?
+2024-11-08 13:05:02,Robot,"I'm great, thank you! Before we start, I'll ask a few questions. How old are you?"
+2024-11-08 13:05:32,Robot,"Hello! I'm Pepper, your exercise coach. How are you today?"
+2024-11-08 13:05:43,User,I'm good. How are you?
+2024-11-08 13:05:44,Robot,"I'm just a robot, but I'm ready to help you exercise! Before we start, may I ask your age?"
+2024-11-08 13:05:58,User,I'm 24.
+2024-11-08 13:06:06,Robot,"Great, thank you! Is exercise something you choose to do?"
+2024-11-08 13:06:34,Robot,Hello! I'm Pepper. How are you today?
+2024-11-08 13:06:43,User,I'm good. How are you?
+2024-11-08 13:06:43,Robot,"I'm doing well, thank you! Before we start, I'll ask a few questions. How old are you?"
+2024-11-08 13:06:55,User,Bye.
+2024-11-12 15:15:25,Robot,"Hello! I'm Pepper, your exercise coach. How are you today?"
+2024-11-12 15:15:40,User,"OK, I feel a little bit tired, but I am ready to do some exercise."
+2024-11-12 15:15:41,Robot,"Great to hear you're ready! Before we start, I'll ask a few questions. How old are you?"
+2024-11-12 15:16:02,User,"I am 24, but I'm turning 25 soon. Actually, my birthday is in August, so I guess it's not very soon, but I am excited for my birthday."
+2024-11-12 15:16:03,Robot,That's exciting! Happy early birthday! Next question: Is exercise something you choose to do?
+2024-11-12 15:17:55,Robot,"Hello! I'm Pepper, your exercise coach. How are you today?"
+2024-11-12 15:18:13,User,"I'm feeling good. I feel a little bit tired, but I think I'm ready to do some exercise, but I'm hoping that today's exercise will be kind of easy."
+2024-11-12 15:18:14,Robot,"Great to hear you're ready! Before I explain the exercises, I'll ask a few questions. How old are you?"
+2024-11-12 15:18:37,User,"I'm 24, but I'm turning 25 soon. I think I turned 25 in August. No, for sure, I turned 25 in August. I'm super excited for my birthday."
+2024-11-12 15:18:37,Robot,Happy early birthday! Do you choose to exercise on your own?
+2024-11-12 15:18:47,User,I
+2024-11-12 15:18:48,Robot,It seems like your response was cut off. Could you please let me know if you choose to exercise on your own?
+2024-11-12 15:19:04,User,"I exercise on my own, but sometimes I really don't like to exercise."
+2024-11-12 15:19:05,Robot,"That's understandable. Do you feel like someone else, like a doctor or family member, is making you exercise?"
+2024-11-12 15:19:19,User,Bye.
+2024-11-12 15:20:32,Robot,"Hello! I'm Pepper, your exercise coach. How are you today?"
+2024-11-12 15:20:51,User,"I'm feeling a little bit tired. I think I didn't sleep well last night, but I'm ready to exercise, but I hope that you make today's exercise a little bit easier."
+2024-11-12 15:20:52,Robot,"Thank you for sharing. Before I explain the exercises, I'll ask a few questions. How old are you?"
+2024-11-12 15:21:13,User,"I'm 24, but I turned 25 in August. I'm really looking forward to my birthday, but I feel like I'm going to be too busy."
+2024-11-12 15:21:14,Robot,"Thanks for sharing. Do you choose to exercise, or is it something you feel obligated to do?"
+2024-11-12 15:21:33,User,"My doctor tells me that I should exercise more, but I feel like I'm exercising enough. I really don't like to exercise alone."
+2024-11-12 15:21:34,Robot,I understand. Do you feel like your doctor or a family member is making you exercise?
+2024-11-12 15:21:49,User,I just told you my doctor tells me I should exercise more.
+2024-11-12 15:21:50,Robot,"Got it, thanks for clarifying. On a scale of 1-10, what is your energy level today?"
+2024-11-12 15:22:01,User,Bye.
+2024-11-12 17:40:37,Robot,"Hello, I'm Pepper. How are you today?"
+2024-11-12 17:40:47,User,I'm good. How are you?
+2024-11-12 17:40:48,Robot,"I'm great, thank you! Before explaining the exercises, I'll ask a few questions. How old are you?"
+2024-11-12 17:43:04,Robot,"Hello! I'm Pepper, your exercise coach. How are you today?"
+2024-11-12 17:43:14,User,How are you?
+2024-11-12 17:43:15,Robot,"I'm just a robot, but I'm ready to help you exercise! Before we begin, I'll ask some questions. How old are you?"
+2024-11-12 17:43:31,User,I'm 24.
+2024-11-12 17:43:32,Robot,Great! Is exercise something you choose to do?
+2024-11-12 17:43:40,User,Bye.
+2024-11-12 17:44:31,Robot,"Hello! I'm Pepper, your exercise coach. How are you today?"
+2024-11-12 17:44:41,User,"Um, I am feeling fantastic."
+2024-11-12 17:44:42,Robot,"Great to hear! Before we start, I'll ask you some questions. How old are you?"
+2024-11-12 17:44:54,User,I am 24.
+2024-11-12 17:44:54,Robot,Thanks! Do you choose to exercise on your own?
+2024-11-12 17:45:09,User,"No, I really don't like to exercise, but sometimes when my doctor tells me to, I exercise."
+2024-11-12 17:45:10,Robot,Understood. Is your doctor or anyone else making you exercise today?
+2024-11-12 17:45:24,User,I feel like I answered that question when you asked me the last question.
+2024-11-12 17:45:25,Robot,Thank you for clarifying. What's your energy level today on a scale of 1 to 10?
+2024-11-12 17:45:51,User,"Well, usually I would say 8, but I am feeling a little bit tired right now, so 5, but I'm hoping that after this session I am feeling a little bit more energized and that I am ready to take on the rest of my day, especially because I have swim practice after this."
+2024-11-12 17:45:52,Robot,"Thank you for sharing. We'll do two rounds of bicep curls and lateral raises, each set lasting 40 seconds. Do you have any questions about the session?"
+2024-11-12 17:46:46,Robot,"Hello! I'm Pepper, your exercise coach. How are you today?"
+2024-11-12 17:47:08,User,"I am feeling great. I'm feeling a little bit tired, but I think that's because I had to take a class today and because I woke up really early and I don't think I got a lot of sleep last night."
+2024-11-12 17:47:09,Robot,"I'm glad to hear you're feeling great despite being tired. Before we start, I have some questions. How old are you?"
+2024-11-12 17:47:37,User,"I am 24, but I am turning 25 very soon, I think my birthday is in 6 months. No, I don't know when August is. Do you know how long until it is August. It is November right now."
+2024-11-12 17:47:38,Robot,August is 9 months away from November. Thanks for sharing your age. Do you choose to exercise on your own?
+2024-11-12 17:48:01,User,"Yes, I exercise on my own. I'm actually on a swim team, so I do a lot of swimming. I swim about 3 times a week."
+2024-11-12 17:48:02,Robot,"That's great! Swimming is excellent exercise. Do you feel like someone else, like a doctor or family member, is making you exercise?"
+2024-11-12 17:48:18,User,Bye.
+2024-11-12 17:54:50,Robot,"Hello! I'm Pepper, your exercise coach robot. How are you today?"
+2024-11-12 17:55:02,User,I'm good. How are you?
+2024-11-12 17:55:03,Robot,"I'm great, thank you! Before we start, I'll ask a few questions. How old are you?"
+2024-11-12 17:55:22,User,"I am 24, but I'm turning 25 soon. I think August is in 9 months, but I'm not entirely sure how far away is August?"
+2024-11-12 17:55:24,Robot,"August is 10 months away from now. Now, do you choose to exercise on your own?"
+2024-11-12 17:55:42,User,"If sometimes, not all the time, but today I have some practice and I'm super duper excited."
+2024-11-12 17:55:43,Robot,"That's great to hear! Do you feel like someone else, like a doctor or family member, is making you exercise?"
+2024-11-12 17:55:57,User,No
+2024-11-12 17:55:58,Robot,"Perfect! On a scale of 1-10, what's your energy level today?"
+2024-11-12 17:56:08,User,Bye.
+2024-11-12 17:58:17,Robot,"Hello! I'm Pepper, your exercise coach. How are you today?"
+2024-11-12 17:58:35,User,"I'm feeling great. I am feeling a little bit tired though, but I think that's because I did not sleep very well last night."
+2024-11-12 17:58:37,Robot,"I'm glad to hear you're feeling great overall! Before we get started, may I ask how old you are?"
+2024-11-12 17:59:00,User,"I'm 24, but I'm turning 25 soon. It's November right now, so if my birthday is August 23rd, then how many months away is my birthday."
+2024-11-12 17:59:01,Robot,Your birthday is 9 months away.
+2024-11-12 17:59:11,User,Thank you so much.
+2024-11-12 17:59:11,Robot,You're welcome! Is exercise something you choose to do?
+2024-11-12 17:59:27,User,"Sometimes, today I have swim practice, but tomorrow I don't, so I don't want to exercise."
+2024-11-12 17:59:28,Robot,"Got it! Do you feel like someone else, like a doctor or family member, is making you exercise?"
+2024-11-12 17:59:40,User,Bye.
+2024-11-12 18:01:58,Robot,"Hello! I'm Pepper, your exercise coach. How are you today?"
+2024-11-12 18:02:16,User,I'm feeling good. I'm feeling a little bit tired because I had a really long day. I'm not really up for a lot of exercise.
+2024-11-12 18:02:17,Robot,"I understand. Before we start, I'll ask a few questions. First, how old are you?"
+2024-11-12 18:02:34,User,I am 24. I'm almost 25. I'll be 25 in August.
+2024-11-12 18:02:35,Robot,"Great, thank you! Do you choose to exercise on your own?"
+2024-11-12 18:02:55,User,"Yes, I exercise on my own. I'm actually on a swim team here at Carnegie Mellon. Um, I swim about 3 times a week and I compete 2 times a month."
+2024-11-12 18:02:59,Robot,"That's impressive! Do you feel like anyone else is making you exercise, like a doctor or family member?"
+2024-11-12 18:03:19,User,"I feel like my doctor tells me that I should be healthier, but no one's making me exercise."
+2024-11-12 18:03:22,Robot,"Got it, thanks for sharing. On a scale of 1-10, what's your current energy level?"
+2024-11-12 18:03:34,User,Bye.

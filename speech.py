@@ -4,9 +4,11 @@ import os
 from io import BytesIO
 
 
-folder_path = '/Users/raynahata/Desktop/Github/ExerciseCoach/speech_files' 
-if not os.path.exists(folder_path): 
-    os.makedirs(folder_path) 
+# Dynamically construct the folder path based on the script's location
+base_dir = os.path.dirname(os.path.abspath(__file__))
+folder_path = os.path.join(base_dir, "speech_files")
+if not os.path.isdir(folder_path):
+    os.makedirs(folder_path)
 
 def text_to_speech(text):
     text=str(text)

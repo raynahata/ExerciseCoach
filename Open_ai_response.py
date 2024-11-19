@@ -8,6 +8,7 @@ from gtts import gTTS
 import speech as sp
 import pvporcupine
 import pyaudio
+import time 
 
 
 apikey = None
@@ -16,9 +17,17 @@ access_key="ErK9WB5nNekaAlns1cldvwAU8rQSB8JPkF1QkhNfwO9vNA5FS7ihmA=="
 def getkey():
     global apikey
     if not apikey:
-        filename = '/Users/raynahata/Desktop/Github/ExerciseCoach/chatGPT.key'
-        with open(filename, 'r') as keyfile:
-            apikey = keyfile.read().strip('/n')
+        # Dynamically get the directory of the current script
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        
+        # Construct the path to the key file relative to the script's location
+        key_file = os.path.join(base_dir, "chatGPT.key")
+        
+        if not os.path.exists(key_file):
+            raise FileNotFoundError(f"API key file not found at {key_file}")
+        
+        with open(key_file, 'r') as keyfile:
+            apikey = keyfile.read().strip()  # Remove any trailing newline or whitespace
     return apikey
 
 # Configure OpenAI client with key only
@@ -46,9 +55,14 @@ async def generate_conversational_phrase(messages, csv_history_file):
     
 async def listen_for_wake_word():
     # Initialize PyPorcupine with a built-in keyword (e.g., "porcupine")
+    # Get the base directory of the script
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # Construct the relative path to the keyword file
+    keyword_file = os.path.join(base_dir, "hello-pepper_en_mac_v3_0_0.ppn")
     porcupine = pvporcupine.create(
         access_key=access_key,
-        keyword_paths=["/Users/raynahata/Desktop/Github/ExerciseCoach/hello-pepper_en_mac_v3_0_0.ppn"]  # Replace with your desired keyword
+        keyword_paths=[keyword_file]  # Use the dynamically constructed path
     )
     
     pa = pyaudio.PyAudio()
@@ -73,8 +87,10 @@ async def listen_for_wake_word():
 
 
 async def main():
-    prompt_template_file = '/Users/raynahata/Desktop/Github/ExerciseCoach/prompt'
-    csv_history_file = '/Users/raynahata/Desktop/Github/ExerciseCoach/conversation_history.csv'
+    # Dynamically construct paths based on the script's location
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    prompt_template_file = os.path.join(base_dir, "prompt")
+    csv_history_file = os.path.join(base_dir, "conversation_history.csv")
 
     # Initialize conversation log if not present
     if not os.path.isfile(csv_history_file):
@@ -88,45 +104,94 @@ async def main():
     initial_prompt = prompt_template
     messages = [{"role": "system", "content": initial_prompt}]
     done_chat = False
-
     await listen_for_wake_word() 
+
     # Generate and print the initial response before waiting for user transcription
     print("Generating initial response...")
     initial_response = await generate_conversational_phrase(messages, csv_history_file)  #replace this with robot speech to text when transferring to robot
-    print("Begin speaking")
-    #logger.info('Begin speaking,{}'.format(message))
-    sp.text_to_speech(initial_response)
-    #logger.info('End speaking')
-    print("End speaking")
+    
+    sp.text_to_speech(initial_response) 
+
+   
+
     if initial_response:
         messages.append({"role": "assistant", "content": initial_response})
-
     while not done_chat:
-        # Print a prompt to indicate waiting for user input
+    
         print("Waiting for user response...")
+        user_response_start_time = time.time()  # Timer for when user input process starts
         
-        # Start the transcription only when needed
-        # user_message = await start_transcription()
-        user_message = await start_transcription()
-        #print("Received transcription:", user_message)
-        #user_message=start_transcription() #this for transcition
-        #user_message = input("You: ").strip() #this for using terminal
+        try:
+            # Start transcription
+            user_message = await start_transcription()
+            user_response_end_time = time.time()  # Timer for when user input finishes
 
-        # Log and process the user response
-        log_conversation("User", user_message, csv_file=csv_history_file)
-        print("You:", user_message)
+            log_conversation("User", user_message, csv_file=csv_history_file)
+            print("You:", user_message)
+            
+            if user_message.lower().replace(" ", "").strip(string.punctuation) == "bye":
+                done_chat = True
+                print("Ending conversation.")
+                break
 
-        if user_message.lower().replace(" ", "").strip(string.punctuation) == "bye":
-            done_chat = True
-            print("Ending conversation.")
-        else:
             messages.append({"role": "user", "content": user_message})
-
-            # Generate the next OpenAI response
+            
+            # Generate robot's response
+            print("Generating robot response...")
+            
             conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
-            sp.text_to_speech(conversational_phrase) #replace this with robot speech to text when transferring to robot
+            robot_response_start_time = time.time()
+
             if conversational_phrase:
+                sp.text_to_speech(conversational_phrase)
+                
+                # Log time intervals
+                print("Time from user speech start to robot response start:", robot_response_start_time - user_response_start_time)
+                print("Time from user speech end to robot response start:", robot_response_start_time - user_response_end_time)
+                print("Time for STT to complete:",user_response_end_time - user_response_start_time)
+                
                 messages.append({"role": "assistant", "content": conversational_phrase})
+        
+        except Exception as e:
+            print(f"Error during user response or robot generation: {e}")
+
+    # while not done_chat:
+
+
+    #     print("Waiting for user response...")
+    #     user_response_time=time.time() #start timer when the person starts speaking
+
+    #     # Start the transcription only when needed
+    #     # user_message = await start_transcription()
+    #     user_message = await start_transcription()
+
+    #     after_user_response_time=time.time() #start timer when the person stops speaking
+
+    #     #user_message=start_transcription() #this for transcription
+    #     #user_message = input("You: ").strip() #this for using terminal
+
+    #     # Log and process the user response
+    #     log_conversation("User", user_message, csv_file=csv_history_file)
+    #     print("You:", user_message)
+
+    #     if user_message.lower().replace(" ", "").strip(string.punctuation) == "bye":
+    #         done_chat = True
+    #         print("Ending conversation.")
+    #     else:
+    #         messages.append({"role": "user", "content": user_message})
+
+    #         # Generate the next OpenAI response
+    #         conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
+    #         robot_output_time=time.time() #start timer when robot starts speaking
+            
+    #         print("Elapsed time from start of user speech to next robot speech:", robot_output_time-user_response_time)
+    #         print("Elapsed time from end of user speech to next robot speech:", robot_output_time-after_user_response_time)
+    #         sp.text_to_speech(conversational_phrase) #replace this with robot speech to text when transferring to robot
+            
+           
+            
+    #         if conversational_phrase:
+    #             messages.append({"role": "assistant", "content": conversational_phrase})
 
 # Run the event loop
 if __name__ == "__main__":
