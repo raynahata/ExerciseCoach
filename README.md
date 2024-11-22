@@ -14,16 +14,16 @@ pip install pynput asyncio sounddevice time pyporcupine pyaudio gtts openai
 
 
 ## File Information 
+### Open_ai_response.py
+This is the current working file. **Run this file to do the full loop. **
+NOTE: You will need your own Open AI key. That can be modified at the getKey() function at the top. 
+Wake word: Hello Pepper.
+
 ### AWS_STT.py
 This is the current working file. This code will quit the transcription each time. 
 
 ### aws_backup.py 
 This file will continually run the transcription. If you use this with the Open_AI file, it will not work. The continual listening somehow keeps the Open_AI file from moving onto the next line of code. 
-
-### Open_ai_response.py
-This is the current working file. **Run this file to do the full loop. **
-NOTE: You will need your own Open AI key. That can be modified at the getKey() function at the top. 
-Wake word: Hello Pepper. 
 
 ### Open_ai_backup.py 
 This will run a chatbot-like style. You can converse by typing the responses into the terminal. This file will not communicate with AWS STT.
