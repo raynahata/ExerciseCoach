@@ -33,3 +33,7 @@ This will run a chatbot-like style. You can converse by typing the responses int
 2) Create a porcupine account at https://picovoice.ai/docs/quick-start/porcupine-python/
 3) Create a wake word (NOTE: The free versoin only lets you train for three so choose wisely)
 4) Download the wake word file and add it to the main file 
+
+# Branches 
+The main branch can be run on a standard Mac and is not ROS integrated.  
+The TBD-LAT is ROS integrated. 
