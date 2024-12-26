@@ -10,7 +10,7 @@ Tutorial linked to the base code: https://www.youtube.com/watch?v=_q5vBvTNDEA
 https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html 
 
 ### Dependencies (there may be more than what is listed on here) 
-pip install pynput asyncio sounddevice time pyporcupine pyaudio gtts openai
+pip install pynput asyncio sounddevice time pvporcupine pyaudio gtts openai amazon_transcribe gtts
 
 
 ## File Information 
