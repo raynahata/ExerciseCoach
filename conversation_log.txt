@@ -293,3 +293,8 @@
 2024-11-12 18:03:22 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
 2024-11-12 18:03:22 - Robot: Got it, thanks for sharing. On a scale of 1-10, what's your current energy level?
 2024-11-12 18:03:34 - User: Bye.
+2024-12-26 15:21:06 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-12-26 15:21:06 - Robot: Hello! I'm Pepper, your exercise coach. How are you today?
+2024-12-26 15:21:17 - User: I'm good. How are you?
+2024-12-26 15:21:18 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-12-26 15:21:18 - Robot: I'm just a robot, but I'm ready to help you exercise! Before we begin, I'll ask a few questions. How old are you?
