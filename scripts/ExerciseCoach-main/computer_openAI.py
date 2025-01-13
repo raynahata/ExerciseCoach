@@ -47,7 +47,7 @@ async def generate_conversational_phrase(messages, csv_history_file):
         )
         conversational_phrase = response.choices[0].message.content.strip()
         log_conversation("Robot", conversational_phrase, csv_file=csv_history_file)
-        #print("Robot:", conversational_phrase)
+        print("Robot:", conversational_phrase)
         return conversational_phrase
     except Exception as e:
         print(f"Error: {e}")
@@ -91,7 +91,8 @@ def read_prompt_file(prompt_file):
     return prompt_template
 
 #gets the prompt file and reads and returns it 
-def get_prompt(base_dir,prompt_name):
+def get_prompt(prompt_name):
+    base_dir = os.path.dirname(os.path.abspath(__file__))
     prompt_template_file = os.path.join(base_dir,prompt_name)
     prompt=read_prompt_file(prompt_template_file)
     return prompt
@@ -102,40 +103,50 @@ def get_dir_param():
     return base_dir 
 
 
-def initialize_csv(base_dir,conv_CSV_filename):
+def initialize_csv(conv_CSV_filename):
+    base_dir = os.path.dirname(os.path.abspath(__file__))
     conversational_CSV_filepath = os.path.join(base_dir, conv_CSV_filename)
     if not os.path.isfile(conversational_CSV_filepath):
         log_conversation("System", "Conversation log initialized", csv_file=conv_CSV_filename)
 
 
-#pass in the prompt for the initial response
-async def inital_robot_response(prompt_filename,conv_csv_filename):
-    print("Generating initial robot response...")
-    base_dir = get_dir_param()
-    initial_prompt=get_prompt(base_dir,prompt_filename)
-    messages = [{"role": "system", "content": initial_prompt}]
-    initial_response = await generate_conversational_phrase(messages, conv_csv_filename) 
-    print("Robot:",initial_response)
-    return initial_response
+# #pass in the prompt for the initial response
+# async def inital_robot_response(prompt_filename,conv_csv_filename):
+#     print("Generating initial robot response...")
+#     base_dir = os.path.dirname(os.path.abspath(__file__))
+#     initial_prompt=get_prompt(prompt_filename)
+#     messages = [{"role": "system", "content": initial_prompt}]
+#     initial_response = await generate_conversational_phrase(messages, conv_csv_filename) 
+#     print("Robot:",initial_response)
+#     return initial_response
     
 
-#gets the prompt that it wants to use 
-async def robot_response(messages,csv_history_file):
-    print("Generating robot response...")  
-    conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
-    print("Robot:",conversational_phrase)
-    return conversational_phrase
+# #gets the prompt that it wants to use 
+# async def robot_response(messages,csv_history_file):
+#     print("Generating robot response...")  
+#     conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
+#     print("Robot:",conversational_phrase)
+#     return conversational_phrase
    
 
 async def main():
-    base_dir=get_dir_param()
+    base_dir = os.path.dirname(os.path.abspath(__file__))
     print("Base directory:",base_dir)
-    initialize_csv(base_dir,"conversation_history.csv")
+    initialize_csv("conversation_history.csv")
+    csv_history_file = os.path.join(base_dir, "conversation_history.csv")
+    
+    initial_prompt=get_prompt("prompt")
+    messages = [{"role": "system", "content": initial_prompt}]
+
     done_chat=False
     await listen_for_wake_word()
-    initial_response = await inital_robot_response("prompt","conversation_history.csv")
+
+    print("Generating initial response...")
+    initial_response = await generate_conversational_phrase(messages, csv_history_file) 
     sp.text_to_speech(initial_response)
-    messages=[{"role":"system","content":initial_response}]
+    if initial_response:
+        messages.append({"role": "assistant", "content": initial_response})
+    
     while not done_chat:
         print("Waiting for user response...")
         user_response_start_time=time.time()
@@ -149,7 +160,7 @@ async def main():
                 print("Ending conversation.")
                 break
             messages.append({"role":"user","content":user_message})
-            conversational_phrase=await robot_response(messages,"conversation_history.csv")
+            conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
             robot_response_start_time=time.time()
             if conversational_phrase:
                 sp.text_to_speech(conversational_phrase)
