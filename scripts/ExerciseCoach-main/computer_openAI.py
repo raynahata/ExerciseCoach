@@ -129,6 +129,7 @@ async def robot_response(messages,csv_history_file):
 
 async def main():
     base_dir=get_dir_param()
+    print("Base directory:",base_dir)
     initialize_csv(base_dir,"conversation_history.csv")
     done_chat=False
     await listen_for_wake_word()

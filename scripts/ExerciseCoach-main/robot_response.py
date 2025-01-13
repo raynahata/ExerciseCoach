@@ -165,7 +165,7 @@ async def response():
    
 # Run the event loop
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(response())
 
 
 #TODO: add the participant csv change
