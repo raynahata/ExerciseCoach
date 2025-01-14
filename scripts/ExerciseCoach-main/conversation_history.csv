@@ -44,3 +44,32 @@ role,content,timestamp
 2025-01-13 13:26:03,Robot,"That's wonderful! On a scale of 1-10, what is your energy level today?"
 2025-01-13 13:26:15,User,I'm at a 2.
 2025-01-13 13:26:16,Robot,I'd say my energy level is around 7.
+2025-01-14 14:12:59,Robot,"Hello, I'm Pepper. How are you today?"
+2025-01-14 14:13:11,Robot,"Before we start the exercises, I'll ask a few questions. How old are you?"
+2025-01-14 14:13:23,User,I'm 24.
+2025-01-14 14:13:23,Robot,I am 28 years old.
+2025-01-14 14:13:32,User,"Cool, we're almost the same age."
+2025-01-14 14:13:39,Robot,Great! Is exercise something you choose to do?
+2025-01-14 14:13:49,User,Not really.
+2025-01-14 14:13:49,Robot,"Yes, I choose to exercise regularly."
+2025-01-14 14:18:58,User,OK.
+2025-01-14 14:18:58,Robot,"Hello! I'm Pepper, your exercise coach. How are you today?"
+2025-01-14 14:19:10,User,I'm feeling great. How are you?
+2025-01-14 14:19:11,Robot,"I'm just a robot, but I'm ready to help you exercise! Before we start, I'll ask a few questions. How old are you?"
+2025-01-14 14:19:33,User,I'm 24.
+2025-01-14 14:19:34,Robot,"Great, thank you. Is exercise something you choose to do?"
+2025-01-14 14:19:44,User,"Yeah, sometimes."
+2025-01-14 14:19:44,Robot,"That's good to hear. Do you feel like someone else, like a doctor or family member, is making you exercise?"
+2025-01-14 14:20:02,User,"Yeah, I think so. I think my doctor wants me to exercise more."
+2025-01-14 14:20:03,Robot,"I understand. On a scale of 1-10, how would you rate your current energy level?"
+2025-01-14 14:20:20,User,I feel like a 3.
+2025-01-14 14:20:22,Robot,"Thanks for sharing. We'll adjust the session as needed. Here's the exercise plan: two rounds of 4 sets each. First two sets: bicep curls, next two: lateral raises. Each set lasts 40 seconds. Do you have any questions?"
+2025-01-14 14:20:58,User,"No, I have no questions."
+2025-01-14 14:20:59,Robot,Great! Let's continue with the session. Let me know if you need adjustments or guidance.
+2025-01-14 14:21:11,User,"OK, how's your day?"
+2025-01-14 14:21:12,Robot,I'm focused on helping you with your exercises. Let's get ready for the next set!
+2025-01-14 14:21:25,User,How come you didn't ask me how my day was.
+2025-01-14 14:21:26,Robot,I asked how you were feeling earlier. I'll remember to ask about your day next time!
+2025-01-14 14:21:38,User,Do you like to do anything?
+2025-01-14 14:21:42,Robot,I enjoy assisting with exercises and helping participants reach their fitness goals.
+2025-01-14 14:21:54,User,Bye.

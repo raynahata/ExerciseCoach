@@ -94,30 +94,95 @@ def read_prompt_file(prompt_file):
         prompt_template = file.read()
     return prompt_template
 
+# async def exercise_session(messages, exercise_list, csv_history_file):
+#     current_set = 0
+#     sp.text_to_speech("Starting the social session.")
+#     while current_set < 4:  # 4 sets in each round
+#         sp.text_to_speech(f"Let's do some {exercise_list[current_set]}.")
+#         messages.append({"role": "system", "content": f"Let's do some {exercise_list[current_set]}."})
+#         EST = timezone(timedelta(hours=-5))
+#         inittime = datetime.now(EST)
+
+#         # Exercise phase (20 seconds)
+#         while (datetime.now(EST) - inittime).total_seconds() < 20:
+#             conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
+#             sp.text_to_speech(conversational_phrase)
+#             messages.append({"role": "assistant", "content": conversational_phrase})
+
+#             # Listen for user response
+#             print("Waiting for user response...")
+#             user_message = await start_transcription()
+#             log_conversation("User", user_message, csv_file=csv_history_file)
+#             print("You:", user_message)
+#             if user_message.lower().replace(" ", "").strip(string.punctuation) == "bye":
+#                 sp.text_to_speech("Ending session.")
+#                 print("Ending session.")
+#                 return  # Exit early if the user ends the session
+
+#         # End of the set
+#         sp.text_to_speech("Done with the set.")
+#         messages.append({"role": "system", "content": "Done with the set."})
+#         current_set += 1
+
+#         # Rest phase (40 seconds)
+#         if current_set < 4:
+#             sp.text_to_speech("Take a rest for 40 seconds.")
+#             #messages.append({"role": "system", "content": "Take a rest for 40 seconds."})
+#             rest_start_time = datetime.now(EST)
+#             while (datetime.now(EST) - rest_start_time).total_seconds() < 40:
+#                 conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
+#                 sp.text_to_speech(conversational_phrase)
+#                 messages.append({"role": "assistant", "content": conversational_phrase})
+
+#                 # Listen for user response
+#                 print("Waiting for user response...")
+#                 user_message = await start_transcription()
+#                 log_conversation("User", user_message, csv_file=csv_history_file)
+#                 print("You:", user_message)
+#                 if user_message.lower().replace(" ", "").strip(string.punctuation) == "bye":
+#                     sp.text_to_speech("Ending session.")
+#                     print("Ending session.")
+#                     return  # Exit early if the user ends the session
+                
+
+#     sp.text_to_speech("Great job completing this round!")
+    #messages.append({"role": "system", "content": "Great job completing this round!"})
 async def exercise_session(messages, exercise_list, csv_history_file):
     current_set = 0
     sp.text_to_speech("Starting the social session.")
+    last_speaker = "robot"  # Initialize the last speaker as the robot
+    EST = timezone(timedelta(hours=-5))  # Define the EST timezone
+
     while current_set < 4:  # 4 sets in each round
         sp.text_to_speech(f"Let's do some {exercise_list[current_set]}.")
         messages.append({"role": "system", "content": f"Let's do some {exercise_list[current_set]}."})
-        EST = timezone(timedelta(hours=-5))
         inittime = datetime.now(EST)
 
         # Exercise phase (20 seconds)
         while (datetime.now(EST) - inittime).total_seconds() < 20:
-            conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
-            sp.text_to_speech(conversational_phrase)
-            messages.append({"role": "assistant", "content": conversational_phrase})
+            if last_speaker == "robot":
+                # Wait for user response
+                print("Waiting for user response...")
+                user_message = await start_transcription()
+                log_conversation("User", user_message, csv_file=csv_history_file)
+                print("You:", user_message)
+                if user_message.lower().replace(" ", "").strip(string.punctuation) == "bye":
+                    sp.text_to_speech("Ending session.")
+                    print("Ending session.")
+                    return  # Exit early if the user ends the session
 
-            # Listen for user response
-            print("Waiting for user response...")
-            user_message = await start_transcription()
-            log_conversation("User", user_message, csv_file=csv_history_file)
-            print("You:", user_message)
-            if user_message.lower().replace(" ", "").strip(string.punctuation) == "bye":
-                sp.text_to_speech("Ending session.")
-                print("Ending session.")
-                return  # Exit early if the user ends the session
+                # Update last speaker and append the message
+                last_speaker = "user"
+                messages.append({"role": "user", "content": user_message})
+
+            elif last_speaker == "user":
+                # Generate and speak robot response
+                conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
+                sp.text_to_speech(conversational_phrase)
+                messages.append({"role": "assistant", "content": conversational_phrase})
+
+                # Update last speaker
+                last_speaker = "robot"
 
         # End of the set
         sp.text_to_speech("Done with the set.")
@@ -127,26 +192,34 @@ async def exercise_session(messages, exercise_list, csv_history_file):
         # Rest phase (40 seconds)
         if current_set < 4:
             sp.text_to_speech("Take a rest for 40 seconds.")
-            #messages.append({"role": "system", "content": "Take a rest for 40 seconds."})
             rest_start_time = datetime.now(EST)
             while (datetime.now(EST) - rest_start_time).total_seconds() < 40:
-                conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
-                sp.text_to_speech(conversational_phrase)
-                messages.append({"role": "assistant", "content": conversational_phrase})
+                if last_speaker == "robot":
+                    # Wait for user response
+                    print("Waiting for user response...")
+                    user_message = await start_transcription()
+                    log_conversation("User", user_message, csv_file=csv_history_file)
+                    print("You:", user_message)
+                    if user_message.lower().replace(" ", "").strip(string.punctuation) == "bye":
+                        sp.text_to_speech("Ending session.")
+                        print("Ending session.")
+                        return  # Exit early if the user ends the session
 
-                # Listen for user response
-                print("Waiting for user response...")
-                user_message = await start_transcription()
-                log_conversation("User", user_message, csv_file=csv_history_file)
-                print("You:", user_message)
-                if user_message.lower().replace(" ", "").strip(string.punctuation) == "bye":
-                    sp.text_to_speech("Ending session.")
-                    print("Ending session.")
-                    return  # Exit early if the user ends the session
-                
+                    # Update last speaker and append the message
+                    last_speaker = "user"
+                    messages.append({"role": "user", "content": user_message})
+
+                elif last_speaker == "user":
+                    # Generate and speak robot response
+                    conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
+                    sp.text_to_speech(conversational_phrase)
+                    messages.append({"role": "assistant", "content": conversational_phrase})
+
+                    # Update last speaker
+                    last_speaker = "robot"
 
     sp.text_to_speech("Great job completing this round!")
-    #messages.append({"role": "system", "content": "Great job completing this round!"})
+    messages.append({"role": "system", "content": "Great job completing this round!"})
 
 async def main():
     base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -159,12 +232,12 @@ async def main():
     await listen_for_wake_word()
 
     # Generate initial response
-    print("Generating initial response...")
-    initial_response = await generate_conversational_phrase(messages, csv_history_file) 
-    sp.text_to_speech(initial_response)
+    # print("Generating initial response...")
+    # initial_response = await generate_conversational_phrase(messages, csv_history_file) 
+    # sp.text_to_speech(initial_response)
     
-    if initial_response:
-        messages.append({"role": "assistant", "content": initial_response})
+    # if initial_response:
+    #     messages.append({"role": "assistant", "content": initial_response})
 
     # Exercise interaction
     exercise_list = ["bicep curls", "bicep curls", "lateral raises", "lateral raises"]
