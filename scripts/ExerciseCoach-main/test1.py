@@ -64,7 +64,7 @@ async def generate_conversational_phrase(messages, csv_history_file):
         )
         conversational_phrase = response.choices[0].message.content.strip()
         log_conversation("Robot", conversational_phrase, csv_file=csv_history_file)
-        print("Robot:", conversational_phrase)
+        #print("Robot:", conversational_phrase)
         return conversational_phrase
     except Exception as e:
         print(f"Error: {e}")
@@ -150,6 +150,7 @@ async def exercise_session(messages, exercise_list, csv_history_file):
             elif last_speaker == "user":
                 # Generate and speak robot response
                 conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
+               
                 sp.text_to_speech(conversational_phrase)
                 messages.append({"role": "assistant", "content": conversational_phrase})
 
@@ -184,6 +185,7 @@ async def exercise_session(messages, exercise_list, csv_history_file):
                 elif last_speaker == "user":
                     # Generate and speak robot response
                     conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
+                    
                     sp.text_to_speech(conversational_phrase)
                     messages.append({"role": "assistant", "content": conversational_phrase})
 
@@ -210,7 +212,8 @@ async def intro_session(messages, csv_history_file):
     print("Generating initial response...")
     initial_response= await generate_conversational_phrase(messages, csv_history_file) 
     spoken_response, ready_to_start = parse_robot_response(initial_response)
-    
+    print("Initial response:",spoken_response)
+    print("Ready to start:",ready_to_start)
     sp.text_to_speech(spoken_response)
 
     if initial_response:
@@ -228,18 +231,23 @@ async def intro_session(messages, csv_history_file):
         messages.append({"role":"user","content":user_message})
         conversational_response = await generate_conversational_phrase(messages, csv_history_file)
         spoken_response, ready_to_start = parse_robot_response(conversational_response)  # Parse the tuple
+      
+        print("spoken response:",spoken_response)
+        print("ready to start:",ready_to_start)
         if spoken_response:
                 sp.text_to_speech(spoken_response)
                 messages.append({"role": "assistant", "content": spoken_response})
 
           
                 # If the user is ready to start, end the intro session
-                if ready_to_start=="true":
+                if ready_to_start==True:
+
                     print("User is ready to start the exercise session.")
-                    sp.text_to_speech("Great! Let's begin the exercise session.")
+                    # sp.text_to_speech("Great! Let's begin the exercise session.")
                     done_chat=True
-                    print("Ending conversation.")
-                    return messages
+                    # print("Ending conversation.")
+                    # return messages
+                    break
                     
                 
   
@@ -248,27 +256,22 @@ async def main():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     csv_history_file = os.path.join(base_dir, "conversation_history.csv")
     initial_prompt=get_prompt("prompt")
+    conversational_prompt=get_prompt("conversational_prompt")
     messages = [{"role": "system", "content": initial_prompt}]
+    conversational_messages = [{"role": "system", "content": conversational_prompt}]
 
 
     # Wake word detection
     await listen_for_wake_word()
 
-    # Generate initial response
-    # print("Generating initial response...")
-    # initial_response = await generate_conversational_phrase(messages, csv_history_file) 
-    # sp.text_to_speech(initial_response)
-    
-    # if initial_response:
-    #     messages.append({"role": "assistant", "content": initial_response})
-
-    # Exercise interaction
+  
     print("Starting the intro session...")
     intro_messages=await intro_session(messages, csv_history_file)
-    messages.append(intro_messages)
+    #messages.append(intro_messages)
+    #messages.append({"role": "assistant", "content": conversational_prompt})
     print("Starting the exercise session...")
     exercise_list = ["bicep curls", "bicep curls", "lateral raises", "lateral raises"]
-    await exercise_session(messages, exercise_list, csv_history_file)
+    await exercise_session(conversational_messages, exercise_list, csv_history_file)
 
 if __name__ == "__main__":
     asyncio.run(main())

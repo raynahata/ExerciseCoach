@@ -100,3 +100,128 @@ role,content,timestamp
 
 {""Great! Let's get started. Remember to pace yourself during the exercises. Ready to begin?"", true}"
 2025-01-16 11:57:43,Robot,Perfect! Let's start with bicep curls. Begin when you're ready.
+2025-02-03 12:04:14,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-03 12:04:22,User,<coroutine object start_transcription at 0x10597ef80>
+2025-02-03 12:05:06,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-03 12:08:02,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-03 12:09:33,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-03 12:10:41,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-03 12:17:29,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-03 12:19:34,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-03 12:20:35,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-03 12:21:16,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-03 12:22:24,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-03 12:22:56,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-03 12:24:08,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-03 12:27:40,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-03 12:28:54,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-03 14:59:35,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-03 14:59:48,Robot,"I'm great, thank you! Before explaining the exercises, I'll ask a few questions. How old are you?"
+2025-02-03 15:00:05,Robot,"Before we start, could you tell me if exercise is something you choose to do?"
+2025-02-03 15:00:17,Robot,"Great! Do you feel like someone else is making you exercise, such as your doctor or family member?"
+2025-02-03 16:05:59,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-03 16:06:11,Robot,"I'm great, thank you! Before we start, I'll ask you some questions. How old are you?"
+2025-02-03 16:06:25,Robot,Thank you. Is exercise something that you choose to do?
+2025-02-03 16:06:37,Robot,"Great! Do you feel like anyone else, like a doctor or family member, is making you exercise?"
+2025-02-03 16:06:51,Robot,"Alright. On a scale of 1-10, what is your energy level today?"
+2025-02-03 16:07:02,Robot,"Fantastic! Here's today's session: two rounds, 4 sets each. Bicep curls first, then lateral raises, 40 seconds per set. Any questions?"
+2025-02-03 16:07:23,Robot,"Great! Let's get started with the exercises. 
+
+{Spoken_response, ready_to_start}"
+2025-02-03 16:07:38,Robot,"{""Great! Let's get started with the exercises."", true}"
+2025-02-03 16:07:49,Robot,"{Great! Let's get started with the exercises., true}"
+2025-02-03 16:08:11,User,OK.
+2025-02-03 16:08:18,User,Bye.
+2025-02-03 16:13:39,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-03 16:13:53,Robot,"I'm great, thank you! Before I explain the exercises, I'll ask a few questions. How old are you?"
+2025-02-03 16:14:08,Robot,Thank you! Is exercise something that you choose to do?
+2025-02-03 16:14:34,User,Cool. How was your day?
+2025-02-03 16:20:48,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-03 16:20:59,Robot,"Thank you for sharing. Before we start, I'll ask some questions. How old are you?"
+2025-02-03 16:21:31,User,School.
+2025-02-03 16:23:50,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-03 16:24:01,Robot,"Before we begin, I'll ask a few questions. How old are you?"
+2025-02-03 16:24:12,Robot,Do you choose to exercise on your own?
+2025-02-03 16:27:19,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-03 16:27:31,Robot,"Before we start, I'll ask some questions. How old are you?"
+2025-02-03 16:28:05,User,"OK, I'm ready to do some bicep curls."
+2025-02-03 16:28:12,User,OK.
+2025-02-03 16:28:18,User,Bye.
+2025-02-03 16:29:06,User,Oh.
+2025-02-03 16:29:07,Robot,How's your day been so far?
+2025-02-03 16:29:17,User,Good. How was yours?
+2025-02-03 16:29:18,Robot,"Pretty good, thanks for asking! Have you read any good books lately?"
+2025-02-03 16:29:33,User,Bye
+2025-02-04 15:13:09,User,How are you today?
+2025-02-04 15:13:12,Robot,"I'm doing great, thanks! How about you? How's your day going?"
+2025-02-04 15:13:22,User,It's going pretty well.
+2025-02-04 15:13:23,Robot,Glad to hear that! Doing anything exciting today after our workout?
+2025-02-04 15:13:40,User,"No, not really."
+2025-02-04 15:13:42,Robot,Sometimes a relaxing day is the best! Have you read any good books lately?
+2025-02-04 15:13:57,User,"Yes, I read a book about dinosaurs."
+2025-02-04 15:13:59,Robot,That's awesome! Dinosaurs are fascinating. Did you learn anything surprising from the book?
+2025-02-04 15:14:14,User,"No, but I can't remember the name of the book. Can you help me?"
+2025-02-04 15:14:16,Robot,"Sure, I can try! Do you remember any specific details or topics it covered that might help narrow it down?"
+2025-02-04 15:14:35,User,I'm trying to think of it.
+2025-02-04 15:14:37,Robot,"No worries, take your time! Sometimes the details come back when you least expect them."
+2025-02-04 15:14:53,User,"Oh, I remember now. I think it had a T-rex on the cover."
+2025-02-04 15:15:08,Robot,"A T-rex on the cover narrows it down a bit! There are quite a few dinosaur books with T-rexes, though. Was it more of a scientific book, or was it more for entertainment?"
+2025-02-04 15:15:27,User,It was more for entertainment.
+2025-02-04 15:15:29,Robot,Got it! It might be one of those popular dinosaur-themed novels or illustrated books. They're always fun to read! Do you have a favorite dinosaur?
+2025-02-04 15:15:56,User,"Yeah, I really like the ones that fly. Can you name me a couple?"
+2025-02-04 15:15:58,Robot,Sure! Pterodactyls and Pteranodons are a couple of the well-known flying reptiles from the dinosaur era. They're pretty fascinating with their massive wingspans!
+2025-02-04 15:16:22,User,Thanks
+2025-02-04 15:16:24,Robot,You're welcome! It's always fun to talk about dinosaurs. Ready for the next exercise?
+2025-02-04 15:16:38,User,"Yeah, what is the next exercise?"
+2025-02-04 15:16:39,Robot,Let's do some tricep dips! They're great for building arm strength.
+2025-02-04 15:16:50,User,OK.
+2025-02-04 15:16:51,Robot,Awesome! Let's get started. Let me know when you're ready to chat again!
+2025-02-04 15:17:02,User,Bye.
+2025-02-04 15:18:24,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-04 15:18:37,Robot,"I'm here to help you exercise! Before we begin, I'll ask a few questions. How old are you?"
+2025-02-04 15:18:51,Robot,"Great, thanks! Do you choose to exercise on your own?"
+2025-02-04 15:19:04,Robot,"Got it. On a scale of 1-10, how would you rate your energy level today?"
+2025-02-04 15:19:17,Robot,"Thank you for sharing. We'll do two rounds of 4 sets: bicep curls, then lateral raises, 40 seconds each. Any questions?"
+2025-02-04 15:19:35,Robot,"{""Great! Let me know if you need any help. Ready to start the session?"", false}"
+2025-02-04 15:19:48,Robot,"{""Begin with caution due to low energy. Let's start the session!"", true}"
+2025-02-04 15:24:46,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-04 15:24:59,Robot,"I'm doing great, thank you! Before we explain the exercises, I'll ask some questions. How old are you?"
+2025-02-04 15:25:14,Robot,Thank you! Is exercise something you choose to do?
+2025-02-04 15:25:25,Robot,"Great! Do you feel like someone else, like a doctor or family member, is making you exercise?"
+2025-02-04 15:25:39,Robot,"Good to know! On a scale of 1-10, what's your energy level today?"
+2025-02-04 15:25:52,Robot,"Thank you! The session includes 2 rounds of 4 sets each. First 2 sets: bicep curls, next 2: lateral raises, 40 seconds each. Any questions?"
+2025-02-04 15:26:14,Robot,Great! Let's begin the exercise session. Ready to start? True
+2025-02-04 15:26:25,Robot,Awesome! Let's start with the bicep curls. Enjoy your workout!
+2025-02-04 15:28:00,Robot,"{""We'll do 2 rounds: bicep curls, then lateral raises. Each set is 40 seconds. Ready to start?"", false}"
+2025-02-04 15:28:14,Robot,"{""Great! Let's get started with the exercises"", true}"
+2025-02-04 15:29:03,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-04 15:29:15,Robot,"I'm functioning optimally, thank you! Before I explain the exercises, I'll ask you a few questions. How old are you?"
+2025-02-04 15:29:32,Robot,"Great, thank you. Is exercise something you choose to do?"
+2025-02-04 15:29:44,Robot,"That's wonderful! Do you feel like anyone else, such as a doctor or family member, is making you exercise?"
+2025-02-04 15:29:59,Robot,"Excellent. On a scale of 1-10, what's your current energy level?"
+2025-02-04 15:30:12,Robot,Fantastic! Here's the exercise session: Two rounds of 4 sets each. First two sets: bicep curls. Second two: lateral raises. Each set is 40 seconds. Any questions?
+2025-02-04 15:30:35,Robot,Great! Let's get started with the exercises.
+2025-02-04 15:30:45,Robot,"{""Great! Let's get started with the exercises"", true}"
+2025-02-04 15:31:06,User,"Cool, uh, what do you do for fun today?"
+2025-02-04 15:31:07,Robot,I love helping people like you out. How about you? Anything fun planned for today?
+2025-02-04 15:31:23,User,"Yes, I am planning to plant some plants."
+2025-02-04 15:31:30,Robot,That sounds relaxing and rewarding! What kind of plants are you thinking of planting?
+2025-02-04 15:31:45,User,Do you know any good plants that grow in February.
+2025-02-04 15:31:47,Robot,"Sure thing! In February, you can start planting cold-tolerant vegetables like kale, spinach, and peas. If you're into flowers, pansies and snapdragons do well too. Do any of those interest you?"
+2025-02-04 15:32:12,User,"Oh, I love vegetables."
+2025-02-04 15:32:18,Robot,That's great! Growing your own vegetables can be really satisfying. Do you have a favorite vegetable to grow or eat?
+2025-02-04 15:32:32,User,I love tomatoes.
+2025-02-04 15:32:33,Robot,Tomatoes are a great choice! They're so versatile in the kitchen. Have you grown them before?
+2025-02-04 15:32:53,User,"Yeah, but they rotted."
+2025-02-04 15:32:54,Robot,"Oh no, that's frustrating! Sometimes it can be tricky with tomatoes. Have you thought about what you might do differently this time?"
+2025-02-04 15:33:11,User,"Yeah, I think I'm going to space them out more."
+2025-02-04 15:33:12,Robot,That sounds like a smart plan. Proper spacing can really help with airflow and prevent rot. I'm sure you'll have better luck this time!
+2025-02-04 15:33:30,User,"Yeah, do you have a favorite plant that you like to plant?"
+2025-02-04 15:33:36,Robot,"I don't have personal preferences, but I know a lot of people enjoy growing herbs like basil or mint. They're easy to grow and great for cooking. How about you, any herbs in your garden?"
+2025-02-04 15:33:57,User,"Yeah, I really like growing basil."
+2025-02-04 15:34:04,Robot,Basil is fantastic! It smells amazing and is perfect for so many dishes. Do you have a favorite recipe that uses basil?
+2025-02-04 15:34:24,User,"Yeah, I really like to make my own pesto. Can you suggest me a pesto recipe?"
+2025-02-04 15:34:26,Robot,"Sure! A basic pesto recipe includes fresh basil, garlic, pine nuts, Parmesan cheese, olive oil, and a bit of salt. Blend them together until smooth. You can adjust the ingredients to your taste. Enjoy making your own pesto!"
+2025-02-04 15:34:58,User,Do you know how many more sets I have.
+2025-02-04 15:34:59,Robot,You're almost there! Just one more set after this one. Keep up the great work!
+2025-02-04 15:35:12,User,"Cool, thank you so much. Are you getting tired?"

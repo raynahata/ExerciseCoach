@@ -10,10 +10,23 @@ import pvporcupine
 import pyaudio
 import time 
 import talker
+import rospy
+from std_msgs.msg import String
 
 
 apikey = None
 access_key="ErK9WB5nNekaAlns1cldvwAU8rQSB8JPkF1QkhNfwO9vNA5FS7ihmA=="
+
+rospy.init_node("robot_speech_publisher", anonymous=True)
+speech_publisher = rospy.Publisher("/gpt_speech", String, queue_size=10)
+
+def send_to_pepper(text):
+    """
+    Sends GPT-generated text to Pepper via ROS topic.
+    """
+    rospy.loginfo("Sending to Pepper: {}".format(text))
+    speech_publisher.publish(text)
+
 
 def getkey():
     global apikey
@@ -108,14 +121,16 @@ async def response():
     done_chat = False
    
     # ros talker
-    talker_text, talker_state, rate = talker.talker_init()
+    #talker_text, talker_state, rate = talker.talker_init()
 
     # Generate and print the initial response before waiting for user transcription
     print("Generating initial response...")
     initial_response = await generate_conversational_phrase(messages, csv_history_file)  #replace this with robot speech to text when transferring to robot
     
     # sp.text_to_speech(initial_response) 
-    talker.talker(initial_response, talker_state, talker_text, rate)
+    #talker.talker(initial_response, talker_state, talker_text, rate)
+    send_to_pepper(initial_response)
+
 
    
 
@@ -149,7 +164,8 @@ async def response():
 
             if conversational_phrase:
                 # sp.text_to_speech(conversational_phrase)
-                talker.talker(conversational_phrase, talker_state, talker_text, rate)
+                #talker.talker(conversational_phrase, talker_state, talker_text, rate)
+                send_to_pepper(conversational_phrase)
 
                 
                 # Log time intervals

@@ -19,4 +19,6 @@ There should be two outputs. The first output is your spoken response. The secon
 
 {Spoken_response, ready_to_start}
 
-An examnple would be {"Hello! I'm Pepper, your exercise coach. How are you today?", false}
+An example would be {"Hello! I'm Pepper, your exercise coach. How are you today?", false}
+
+If the person says that they are ready to start an example would be {"Great! Let's get started with the exercises", true}

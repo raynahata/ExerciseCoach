@@ -1,13 +1,15 @@
 # This node file should be run on Python 2.7
-# export PYTHONPATH=${PYTHONPATH}:/path/to/naoqi-sdk/lib/python2.7/site-packages
+# export PYTHONPATH=${PYTHONPATH}:/home/raynahata/exercise_bot/pynaoqi-python2.7-2.8.6.23-linux64-20191127_152327/lib/python2.7/site-packages
 
 import rospy
 from naoqi import ALProxy
 import math
 import time
+from std_msgs.msg import String
 
 
-class PepperListener:
+
+class Pepper:
     # Pepper IP address is  128.237.236.27
     def __init__(self,ip_address="128.237.236.27",port=9559):
         self.IP =ip_address
@@ -35,7 +37,7 @@ class PepperListener:
         self.tts.setParameter("defaultVoiceSpeed", 70)
 
         # Initialize ROS node
-        rospy.init_node('listener', anonymous=True)
+        rospy.init_node('pepper_controller', anonymous=True)
 
     ### Helper Function: Convert Degrees to Radians ###
     def degrees_to_radians(self, angles_in_degrees):
@@ -83,11 +85,11 @@ class PepperListener:
         #rospy.loginfo("Displaying webpage on tablet: {}".format(url))
         #self.tablet.showWebview(url)
         rospy.loginfo("Displaying message on tablet: {}".format(message))
-        js_script = """
-                document.body.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100vh; text-align: center;">'
-                            + '<h1 style="font-family: Arial, sans-serif; font-size: 80px; font-weight: bold; color: black;">{}</h1>'
-                            + '</div>';
-        """.format(message)
+        js_script = """document.body.innerHTML = `<style>
+            body{font-family:Arial,sans-serif;text-align:center;background:#f0f0f0;display:flex;justify-content:center;align-items:center;height:100vh;margin:0;}
+            .text{font-size:60px;color:#333;opacity:0;animation:fadeIn 1s ease-in-out forwards;}
+            @keyframes fadeIn{0%{opacity:0;}100%{opacity:1;}}</style>
+            <div class='text'>""" + str(message) + """</div>`;"""
         self.tablet.executeJS(js_script)
         
 
@@ -166,6 +168,7 @@ class PepperListener:
 
         # Move the left arm
         self.move_arm("L", left_arm_angles_radians, speed=0.1)
+   
     ### Looping Arm Motion ###
     def move_arms_up_and_down(self):
         """
@@ -194,17 +197,37 @@ class PepperListener:
         except rospy.ROSInterruptException:
             rospy.loginfo("Shutting down arm motion.")
 
+    def gpt_speech_callback(self, msg):
+        """
+        Callback function for the aws_speech topic.
+        Updates Pepper's tablet with the received text.
+        """
+        rospy.loginfo("Received GPT Speech: {}".format(msg.data))
+        self.display_feedback(msg.data)  # Update tablet with new text
+        self.tts.say(msg.data)
+
+    def subscribe_gpt_speech(self):
+        """
+        Subscribes to the `gpt_speech` topic to receive speech text.
+        """
+        rospy.Subscriber("gpt_speech", String, self.gpt_speech_callback)
+        rospy.loginfo("Subscribed to gpt_speech topic.")
+
+
     def listener(self):
         """
         Start the ROS listener node and execute the arm motion loop.
         """
         rospy.loginfo("Starting listener...")
-        self.move_arms_up_and_down()
+       
+        #self.move_arms_up_and_down()
+        self.subscribe_gpt_speech()
+        rospy.spin()
 
 
 if __name__ == '__main__':
     try:
-        pepper_listener = PepperListener()
-        pepper_listener.listener()
+        pepper = Pepper()
+        pepper.listener()
     except rospy.ROSInterruptException:
         rospy.loginfo("Shutting down Pepper Listener.")
