@@ -267,8 +267,7 @@ async def main():
   
     print("Starting the intro session...")
     intro_messages=await intro_session(messages, csv_history_file)
-    #messages.append(intro_messages)
-    #messages.append({"role": "assistant", "content": conversational_prompt})
+    
     print("Starting the exercise session...")
     exercise_list = ["bicep curls", "bicep curls", "lateral raises", "lateral raises"]
     await exercise_session(conversational_messages, exercise_list, csv_history_file)
