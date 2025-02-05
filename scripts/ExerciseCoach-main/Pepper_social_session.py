@@ -180,6 +180,7 @@ async def exercise_session(messages, exercise_list, csv_history_file):
                 #sp.text_to_speech(conversational_phrase)
                 send_to_pepper(conversational_phrase)
                 messages.append({"role": "assistant", "content": conversational_phrase})
+                log_conversation("Robot", conversational_phrase, csv_history_file)
 
                 # Update last speaker
                 last_speaker = "robot"
@@ -187,6 +188,7 @@ async def exercise_session(messages, exercise_list, csv_history_file):
         # End of the set
         #sp.text_to_speech("Done with the set.")
         send_to_pepper("Done with the set.")
+        log_conversation("Robot", "Done with the set.", csv_history_file)
         send_exercise_to_pepper("rest")
         messages.append({"role": "system", "content": "Done with the set."})
         current_set += 1
@@ -195,7 +197,10 @@ async def exercise_session(messages, exercise_list, csv_history_file):
         if current_set < 4:
             #sp.text_to_speech("Take a rest for 40 seconds.")
             messages.append({"role": "system", "content": "Take a rest for 40 seconds."})
+
             send_to_pepper("Take a rest for 40 seconds.")
+            log_conversation("Robot","Take a rest for 40 seconds.", csv_history_file)\
+
             send_exercise_to_pepper("rest")
             rest_start_time = datetime.now(EST)
             while (datetime.now(EST) - rest_start_time).total_seconds() < 40:
@@ -225,6 +230,8 @@ async def exercise_session(messages, exercise_list, csv_history_file):
                     #sp.text_to_speech(conversational_phrase)
                     send_to_pepper(conversational_phrase)
                     messages.append({"role": "assistant", "content": conversational_phrase})
+                    log_conversation("Robot",conversational_phrase, csv_file=csv_history_file)
+                    
 
                     # Update last speaker
                     last_speaker = "robot"
@@ -232,6 +239,7 @@ async def exercise_session(messages, exercise_list, csv_history_file):
     #sp.text_to_speech("Great job completing this round!")
     send_to_pepper("Great job completing this round!")
     messages.append({"role": "system", "content": "Great job completing this round!"})
+    log_conversation("Robot","Great job completing this round!", csv_file=csv_history_file)
 
 async def intro_session(messages, csv_history_file):
     """
@@ -253,9 +261,11 @@ async def intro_session(messages, csv_history_file):
     
     #sp.text_to_speech(spoken_response)
     send_to_pepper(spoken_response)
+    log_conversation("Robot",spoken_response,csv_history_file)
 
     if initial_response:
         messages.append({"role": "assistant", "content": spoken_response})
+        
     while not done_chat:
         print("Waiting for user response...")
  

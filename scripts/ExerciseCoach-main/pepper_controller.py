@@ -20,6 +20,7 @@ class Pepper:
         self.tablet=ALProxy("ALTabletService",self.IP,9559)
 
         self.tts.setParameter("defaultVoiceSpeed", 70)
+        self.tts.setParameter("pitchShift", 0.8)
         self.exercise_running=False
         
         self.state = ""
@@ -30,7 +31,6 @@ class Pepper:
         self.state_pub = rospy.Publisher("pepper_state", String, queue_size=10)
         self.text_pub = rospy.Publisher("chat_text", String, queue_size=10)
         rospy.Subscriber("pepper_state", String, self.callback_state)
-        #rospy.Subscriber("chat_text", String, self.callback_text)
         rospy.Subscriber("gpt_speech", String, self.gpt_callback)
         rospy.Subscriber("exercise_command", String, self.exercise_callback)
         rospy.loginfo("Subscribed to /gpt_speech")
