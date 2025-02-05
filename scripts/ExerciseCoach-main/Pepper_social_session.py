@@ -97,7 +97,7 @@ async def listen_for_wake_word():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     
     # Construct the relative path to the keyword file
-    keyword_file = os.path.join(base_dir,  "Hello-Pepper_en_linux_v3_0_0.ppn")
+    keyword_file = os.path.join(base_dir,  "pepper_wake_word", "Hello-Pepper_en_linux_v3_0_0.ppn")
     porcupine = pvporcupine.create(
         access_key=access_key,
         keyword_paths=[keyword_file]  # Use the dynamically constructed path
