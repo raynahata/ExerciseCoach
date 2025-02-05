@@ -1,3 +1,4 @@
+
 import openai
 import os
 import asyncio
@@ -19,6 +20,7 @@ apikey = None
 access_key="ErK9WB5nNekaAlns1cldvwAU8rQSB8JPkF1QkhNfwO9vNA5FS7ihmA=="
 
 rospy.init_node("robot_speech_publisher", anonymous=True)
+
 speech_publisher = rospy.Publisher("/gpt_speech", String, queue_size=10)
 exercise_publisher = rospy.Publisher("/exercise_command", String, queue_size=10)
 
@@ -48,7 +50,8 @@ def send_exercise_to_pepper(text):
     Sends GPT-generated text to Pepper via ROS topic.
     """
     rospy.loginfo("Sending exercise Pepper: {}".format(text))
-    exercise_publisher.publish(text)
+    exercise_publisher.publish(String(text))
+    rospy.sleep(1)
 
 
 def parse_robot_response(response):
@@ -153,6 +156,7 @@ async def exercise_session(messages, exercise_list, csv_history_file):
         send_to_pepper(f"Let's do some {exercise_list[current_set]}.")
         messages.append({"role": "system", "content": f"Let's do some {exercise_list[current_set]}."})
         inittime = datetime.now(EST)
+        
 
         # Exercise phase (20 seconds)
         while (datetime.now(EST) - inittime).total_seconds() < 10:
@@ -215,6 +219,7 @@ async def exercise_session(messages, exercise_list, csv_history_file):
                         #sp.text_to_speech("Ending session.")
                         robot_response="Thank you for exercising with me."
                         send_to_pepper(robot_response)
+                        send_exercise_to_pepper("rest")
                         log_conversation("Robot", robot_response, csv_file=csv_history_file)
                         print("Ending session.")
                         return  # Exit early if the user ends the session
@@ -307,10 +312,10 @@ async def main():
     csv_history_file = os.path.join(base_dir, "conversation_files",csv_filename)
     
     #getting the prompts
-    initial_prompt=get_prompt("prompt")
+    #initial_prompt=get_prompt("prompt")
     conversational_prompt=get_prompt("conversational_prompt")
 
-    messages = [{"role": "system", "content": initial_prompt}]
+    #messages = [{"role": "system", "content": initial_prompt}]
     conversational_messages = [{"role": "system", "content": conversational_prompt}]
 
 
@@ -319,7 +324,7 @@ async def main():
 
   
     print("Starting the intro session...")
-    intro_messages=await intro_session(messages, csv_history_file)
+    #intro_messages=await intro_session(messages, csv_history_file)
     
     print("Starting the exercise session...")
     exercise_list = ["bicep curls", "bicep curls", "lateral raises", "lateral raises"]

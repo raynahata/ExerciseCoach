@@ -20,7 +20,7 @@ class Pepper:
         self.tablet=ALProxy("ALTabletService",self.IP,9559)
 
         self.tts.setParameter("defaultVoiceSpeed", 70)
-        self.tts.setParameter("pitchShift", 0.8)
+        self.tts.setParameter("pitchShift", 1)
         self.exercise_running=False
         
         self.state = ""
@@ -30,10 +30,19 @@ class Pepper:
         rospy.init_node("pepper_controller", anonymous=True)
         self.state_pub = rospy.Publisher("pepper_state", String, queue_size=10)
         self.text_pub = rospy.Publisher("chat_text", String, queue_size=10)
+        self.exercise_publisher = rospy.Publisher("/exercise_command", String, queue_size=10)
         rospy.Subscriber("pepper_state", String, self.callback_state)
         rospy.Subscriber("gpt_speech", String, self.gpt_callback)
         rospy.Subscriber("exercise_command", String, self.exercise_callback)
+
+
         rospy.loginfo("Subscribed to /gpt_speech")
+
+        self.exercise_running = False  # True when an exercise is running
+        self.current_exercise = None  # Stores the name of the current exercise
+        self.is_resting = False  # True when Pepper is resting
+
+        rospy.loginfo("Subscribed to /exercise_command topic.")
 
     ### Helper Function: Convert Degrees to Radians ###
     def degrees_to_radians(self, angles_in_degrees):
@@ -73,9 +82,7 @@ class Pepper:
 
     def exercise_callback(self, msg):
         """
-        Callback for /exercise_command topic.
-        If "bicep curls" is received, start the exercise.
-        If "rest" is received, stop the exercise.
+        Handles incoming exercise commands.
         """
         rospy.loginfo("Received exercise command: {}".format(msg.data))
         command = msg.data.lower()
@@ -84,25 +91,31 @@ class Pepper:
             if not self.exercise_running:
                 rospy.loginfo("Starting bicep curls...")
                 self.exercise_running = True
+                self.is_resting = False
+                self.current_exercise = "bicep curls"
                 self.bicep_curls()
             else:
-                rospy.loginfo("Exercise is already running.")
+                rospy.loginfo("Bicep curls are already running.")
 
         elif command == "lateral raises":
             if not self.exercise_running:
                 rospy.loginfo("Starting lateral raises...")
                 self.exercise_running = True
+                self.is_resting = False
+                self.current_exercise = "lateral raises"
                 self.lateral_raises()
             else:
-                rospy.loginfo("Exercise is already running.")
+                rospy.loginfo("Lateral raises are already running.")
 
         elif command == "rest":
             if self.exercise_running:
-                rospy.loginfo("Stopping exercise...")
-                self.exercise_running = False  # Stop any running exercise
-
+                rospy.loginfo("Stopping exercise and entering rest phase...")
+                self.exercise_running = False
+                self.current_exercise = None
+                self.is_resting = True
+                self.stop_exercise_motion()
             else:
-                rospy.loginfo("No exercise is currently running.")
+                rospy.loginfo("Already in rest phase.")
 
 
 
@@ -170,7 +183,8 @@ class Pepper:
 
     ### Hardcoded Arm Motion: Up ###
     def stop_exercise_motion(self):
-        self.posture.goToPosture("StandInit", 0.5)
+        self.motion.stopMove()
+        self.motion.setStiffnesses("Body",0.0)
         
     def lateral_arm_motion_up(self):
         """
@@ -250,59 +264,55 @@ class Pepper:
     ### Looping Arm Motion ###
     def bicep_curls(self):
         """
-        Continuously move the arms up and down until the program is stopped.
+        Moves Pepper's arms up and down for bicep curls until stopped.
         """
-        rospy.loginfo("Starting to move arms up and down...")
-       
-        self.posture.goToPosture("StandInit", 0.5)
-    
+        rospy.loginfo("Pepper is performing bicep curls.")
 
         try:
-            while not rospy.is_shutdown() and self.exercise_running:
-                
-                
-                # Move arms up
+            while self.exercise_running and not rospy.is_shutdown():
                 self.bicep_arm_motion_up()
-                #self.bicep_arm_motion_up()
                 rospy.loginfo("Arms moved up.")
-                time.sleep(2)  # Wait for 2 seconds
-
-                # Move arms down
-                self.bicep_arm_motion_down()
-                #self.bicep_arm_motion_down()
-                rospy.loginfo("Arms moved down.")
-                time.sleep(2)  # Wait for 2 seconds
                 
-               
-                     
+                rospy.sleep(2)
+
+                self.bicep_arm_motion_down()
+                rospy.loginfo("Arms moved down.")
+                rospy.sleep(2)
+
+            rospy.loginfo("Bicep curls stopped. Entering rest phase.")
+            self.exercise_running = False
+            self.current_exercise = None
+            self.is_resting = True
+            self.exercise_publisher.publish("rest")  
+
         except rospy.ROSInterruptException:
-            rospy.loginfo("Shutting down arm motion.")
+            rospy.loginfo("Bicep curls interrupted.")
 
     def lateral_raises(self):
         """
-        Continuously move the arms up and down until the program is stopped.
+        Moves Pepper's arms outward for lateral raises until stopped.
         """
-        rospy.loginfo("Starting to move arms up and down...")
-       
-        self.posture.goToPosture("StandInit", 0.5)
-    
-        try:
-            while not rospy.is_shutdown() and self.exercise_running:
-                
-                
-                # Move arms up
-                self.lateral_arm_motion_up()
-                #self.bicep_arm_motion_up()
-                rospy.loginfo("Arms moved up.")
-                time.sleep(2)  # Wait for 2 seconds
+        rospy.loginfo("Pepper is performing lateral raises.")
 
-                # Move arms down
+        try:
+            while self.exercise_running and not rospy.is_shutdown():
+                self.lateral_arm_motion_up()
+                rospy.loginfo("Arms moved up.")
+                
+                rospy.sleep(2)
+
                 self.lateral_arm_motion_down()
-                #self.bicep_arm_motion_down()
                 rospy.loginfo("Arms moved down.")
-                time.sleep(2)  # Wait for 2 seconds
+                rospy.sleep(2)
+
+            rospy.loginfo("Lateral raises stopped. Entering rest phase.")
+            self.exercise_running = False
+            self.current_exercise = None
+            self.is_resting = True
+            self.exercise_publisher.publish("rest")  
+
         except rospy.ROSInterruptException:
-            rospy.loginfo("Shutting down arm motion.")
+            rospy.loginfo("Lateral raises interrupted.")
 
     def listener(self):
         """
