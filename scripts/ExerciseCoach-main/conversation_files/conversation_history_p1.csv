@@ -1,0 +1,16 @@
+role,content,timestamp
+2025-02-05 09:43:23,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-05 09:43:39,Robot,"I'm great, thank you! Before I explain the exercises, I'll ask some questions. How old are you?"
+2025-02-05 09:44:04,User,Mhm
+2025-02-05 09:44:06,Robot,"Great! While we’re working on those bicep curls, do you have any fun plans for the rest of the day?"
+2025-02-05 09:44:24,User,Bye.
+2025-02-05 09:45:52,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-05 09:46:05,User,I'm good. How are you?
+2025-02-05 09:46:06,Robot,"I'm here to help you exercise! Before we start, may I ask a few questions?"
+2025-02-05 09:46:17,User,Bye
+2025-02-05 09:46:30,User,Bye.
+2025-02-05 09:52:24,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-02-05 09:52:35,User,I'm good. How are you?
+2025-02-05 09:52:36,Robot,"I'm great, thank you! Before explaining the exercises, I'll ask some questions. How old are you?"
+2025-02-05 09:52:49,User,Bye.
+2025-02-05 09:53:00,User,Bye

@@ -109,31 +109,19 @@ def initialize_csv(conv_CSV_filename):
     if not os.path.isfile(conversational_CSV_filepath):
         log_conversation("System", "Conversation log initialized", csv_file=conv_CSV_filename)
 
-
-# #pass in the prompt for the initial response
-# async def inital_robot_response(prompt_filename,conv_csv_filename):
-#     print("Generating initial robot response...")
-#     base_dir = os.path.dirname(os.path.abspath(__file__))
-#     initial_prompt=get_prompt(prompt_filename)
-#     messages = [{"role": "system", "content": initial_prompt}]
-#     initial_response = await generate_conversational_phrase(messages, conv_csv_filename) 
-#     print("Robot:",initial_response)
-#     return initial_response
-    
-
-# #gets the prompt that it wants to use 
-# async def robot_response(messages,csv_history_file):
-#     print("Generating robot response...")  
-#     conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
-#     print("Robot:",conversational_phrase)
-#     return conversational_phrase
    
 
 async def main():
+
+    participant_number = 1
+    csv_filename = f"conversation_history_p{participant_number}.csv"
+
+
     base_dir = os.path.dirname(os.path.abspath(__file__))
     print("Base directory:",base_dir)
-    initialize_csv("conversation_history.csv")
-    csv_history_file = os.path.join(base_dir, "conversation_history.csv")
+   
+    initialize_csv(csv_filename)
+    #csv_history_file = os.path.join(base_dir, csv_filename)
     
     initial_prompt=get_prompt("prompt")
     messages = [{"role": "system", "content": initial_prompt}]
