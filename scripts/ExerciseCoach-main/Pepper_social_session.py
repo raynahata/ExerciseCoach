@@ -125,7 +125,7 @@ async def listen_for_wake_word():
         
 def initialize_csv(conv_CSV_filename):
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    conversational_CSV_filepath = os.path.join(base_dir, conv_CSV_filename)
+    conversational_CSV_filepath = os.path.join(base_dir,"conversation_files", conv_CSV_filename)
     if not os.path.isfile(conversational_CSV_filepath):
         log_conversation("System", "Conversation log initialized", csv_file=conv_CSV_filename)
 
@@ -260,7 +260,7 @@ async def intro_session(messages, csv_history_file):
         print("Waiting for user response...")
  
         user_message=await start_transcription()
-        log_conversation("User",user_message,csv_file="conversation_history.csv")
+        log_conversation("User",user_message,csv_history_file)
         print("You:",user_message)
         if user_message.lower().replace(" ","").strip(string.punctuation)=="bye":
             done_chat=True
@@ -288,10 +288,18 @@ async def intro_session(messages, csv_history_file):
   
   
 async def main():
+    participant_number = 1
+    csv_filename = f"conversation_history_p{participant_number}.csv"
+
+    #initializing the CSV files 
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    csv_history_file = os.path.join(base_dir, "conversation_history.csv")
+    initialize_csv(csv_filename)
+    csv_history_file = os.path.join(base_dir, "conversation_files",csv_filename)
+    
+    #getting the prompts
     initial_prompt=get_prompt("prompt")
     conversational_prompt=get_prompt("conversational_prompt")
+
     messages = [{"role": "system", "content": initial_prompt}]
     conversational_messages = [{"role": "system", "content": conversational_prompt}]
 
@@ -299,15 +307,9 @@ async def main():
     # Wake word detection
     await listen_for_wake_word()
 
-    # Generate initial response
-    #print("Generating initial response...")
-    print("Starting the intro session...")
-    initial_response = await generate_conversational_phrase(messages, csv_history_file) 
-    # sp.text_to_speech(initial_response)
   
-
-    # Exercise interaction
-    
+    print("Starting the intro session...")
+    intro_messages=await intro_session(messages, csv_history_file)
     
     print("Starting the exercise session...")
     exercise_list = ["bicep curls", "bicep curls", "lateral raises", "lateral raises"]
