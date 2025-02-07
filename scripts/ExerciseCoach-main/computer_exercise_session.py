@@ -121,13 +121,14 @@ def read_prompt_file(prompt_file):
 
 async def exercise_session(messages, exercise_list, csv_history_file):
     current_set = 0
-    sp.text_to_speech("Starting the social session.")
+    #sp.text_to_speech("Starting the social session.")
     last_speaker = "robot"  # Initialize the last speaker as the robot
     EST = timezone(timedelta(hours=-5))  # Define the EST timezone
 
     while current_set < 4:  # 4 sets in each round
         sp.text_to_speech(f"Let's do some {exercise_list[current_set]}.")
         messages.append({"role": "system", "content": f"Let's do some {exercise_list[current_set]}."})
+        log_conversation("Robot", f"Let's do some {exercise_list[current_set]}.", csv_history_file)
         inittime = datetime.now(EST)
 
         # Exercise phase (20 seconds)
@@ -135,17 +136,21 @@ async def exercise_session(messages, exercise_list, csv_history_file):
             if last_speaker == "robot":
                 # Wait for user response
                 print("Waiting for user response...")
+
                 user_message = await start_transcription()
+                messages.append({"role": "user", "content": user_message})
                 log_conversation("User", user_message, csv_file=csv_history_file)
                 print("You:", user_message)
+
                 if user_message.lower().replace(" ", "").strip(string.punctuation) == "bye":
-                    sp.text_to_speech("Ending session.")
+                    sp.text_to_speech("Thank you for exercising with me.")
+                    log_conversation("Robot", "Thank you for exercising with me.", csv_file=csv_history_file)
                     print("Ending session.")
-                    return  # Exit early if the user ends the session
+                    return
 
                 # Update last speaker and append the message
                 last_speaker = "user"
-                messages.append({"role": "user", "content": user_message})
+                
 
             elif last_speaker == "user":
                 # Generate and speak robot response
@@ -153,6 +158,7 @@ async def exercise_session(messages, exercise_list, csv_history_file):
                
                 sp.text_to_speech(conversational_phrase)
                 messages.append({"role": "assistant", "content": conversational_phrase})
+                log_conversation("Robot", conversational_phrase, csv_file=csv_history_file)
 
                 # Update last speaker
                 last_speaker = "robot"
@@ -160,11 +166,15 @@ async def exercise_session(messages, exercise_list, csv_history_file):
         # End of the set
         sp.text_to_speech("Done with the set.")
         messages.append({"role": "system", "content": "Done with the set."})
+        log_conversation("Robot", "Done with the set.", csv_file=csv_history_file)
+
         current_set += 1
 
         # Rest phase (40 seconds)
         if current_set < 4:
             sp.text_to_speech("Take a rest for 40 seconds.")
+            messages.append({"role": "system", "content": "Take a rest for 40 seconds."})
+            log_conversation("Robot", "Take a rest for 40 seconds.", csv_file=csv_history_file)
             rest_start_time = datetime.now(EST)
             while (datetime.now(EST) - rest_start_time).total_seconds() < 40:
                 if last_speaker == "robot":
@@ -263,10 +273,10 @@ async def main():
     csv_history_file = os.path.join(base_dir, "conversation_files",csv_filename)
     
     #getting the prompts
-    initial_prompt=get_prompt("prompt")
+    #initial_prompt=get_prompt("prompt")
     conversational_prompt=get_prompt("conversational_prompt")
 
-    messages = [{"role": "system", "content": initial_prompt}]
+    #messages = [{"role": "system", "content": initial_prompt}]
     conversational_messages = [{"role": "system", "content": conversational_prompt}]
 
 
@@ -274,8 +284,8 @@ async def main():
     await listen_for_wake_word()
 
   
-    print("Starting the intro session...")
-    intro_messages=await intro_session(messages, csv_history_file)
+    #print("Starting the intro session...")
+    #intro_messages=await intro_session(messages, csv_history_file)
     
     print("Starting the exercise session...")
     exercise_list = ["bicep curls", "bicep curls", "lateral raises", "lateral raises"]
