@@ -49,7 +49,7 @@ roscore
 ### **Terminal 2: Run Pepper Controller (Python 2)**
 1. Set the environment variable for naoqi SDK:
    ```sh
-   export PYTHONPATH=${PYTHONPATH}:/path/to/python-sdk
+   export PYTHONPATH=${PYTHONPATH}:/path_to_naoqi_sdk/lib/python2.7/site-packages
    ```
 2. Run the Pepper controller:
    ```sh
@@ -58,7 +58,7 @@ roscore
 
 ### **Terminal 3: Run Pepper Social Section (Python 3)**
 ```sh
-python3 Pepper_social_section.py
+python3 Pepper_social_session.py
 ```
 
 ---
