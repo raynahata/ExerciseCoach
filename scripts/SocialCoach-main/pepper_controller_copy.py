@@ -6,6 +6,7 @@ from naoqi import ALProxy
 import math
 import time
 from std_msgs.msg import String
+import threading
 
 
 class Pepper:
@@ -94,7 +95,7 @@ class Pepper:
                 self.exercise_running = True
                 self.is_resting = False
                 self.current_exercise = "bicep curls"
-                self.bicep_curls()
+                threading.Thread(target=self.bicep_curls).start()
             else:
                 rospy.loginfo("Bicep curls are already running.")
 
@@ -287,7 +288,9 @@ class Pepper:
         rospy.loginfo("-"*20)
         try:
             while self.exercise_running and not rospy.is_shutdown():
-                rospy.loginfo("self.exercise_running = {}".format(self.exercise_running))
+                print()
+                rospy.loginfo("[!!] self.exercise_running = {}".format(self.exercise_running))
+                print()
                 
                 self.bicep_arm_motion_up()
                 rospy.loginfo("Arms moved up.")
@@ -307,6 +310,7 @@ class Pepper:
         except rospy.ROSInterruptException:
             rospy.loginfo("Bicep curls interrupted.")
 
+
     def lateral_raises(self):
         """
         Moves Pepper's arms outward for lateral raises until stopped.
@@ -314,7 +318,7 @@ class Pepper:
         rospy.loginfo("Pepper is performing lateral raises.")
 
         try:
-            while self.exercise_running and not rospy.is_shutdown():
+            if self.exercise_running and not rospy.is_shutdown():
                 self.lateral_arm_motion_up()
                 rospy.loginfo("Arms moved up.")
                 
