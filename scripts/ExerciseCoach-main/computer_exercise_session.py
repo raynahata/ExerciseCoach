@@ -273,7 +273,7 @@ async def main():
     csv_history_file = os.path.join(base_dir, "conversation_files",csv_filename)
     
     #getting the prompts
-    #initial_prompt=get_prompt("prompt")
+    #initial_prompt=get_prompt("intro_prompt")
     conversational_prompt=get_prompt("conversational_prompt")
 
     #messages = [{"role": "system", "content": initial_prompt}]
