@@ -171,17 +171,15 @@ async def exercise_session(messages, exercise_list, csv_history_file):
         if global_exit:
             return  # Exit immediately if "bye" was said
 
-        sp.text_to_speech("Oh we've finished the set.")
-        messages.append({"role": "system", "content": "Done with the set."})
-        log_conversation("Robot", "Done with the set.", csv_history_file)
-        print("Robot: Done with the set.")
+       
         current_set += 1
 
         # Rest phase (40 seconds)
         if current_set < 4:
-            sp.text_to_speech("Take a rest for 40 seconds.")
-            messages.append({"role": "system", "content": "Take a rest for 40 seconds."})
-            log_conversation("Robot", "Take a rest for 40 seconds.", csv_history_file)
+            computer_speech="Oh, let's take a rest for 40 seconds."
+            sp.text_to_speech(computer_speech)
+            messages.append({"role": "system", "content": computer_speech})
+            log_conversation("Robot",computer_speech, csv_history_file)
             rest_start_time = datetime.now(EST)
 
             # Run listening and timer in parallel
@@ -192,9 +190,10 @@ async def exercise_session(messages, exercise_list, csv_history_file):
             if global_exit:
                 break # Exit immediately if "bye" was said
 
-    sp.text_to_speech("Great job completing this round!")
-    print("Great job completing this round!")
-    messages.append({"role": "system", "content": "Great job completing this round!"})
+    finish_speech="Great job completing this round!"       
+    sp.text_to_speech(finish_speech)
+    print(finish_speech)
+    messages.append({"role": "system", "content": finish_speech})
 # async def exercise_session(messages, exercise_list, csv_history_file):
 #     current_set = 0
 #     #sp.text_to_speech("Starting the social session.")
