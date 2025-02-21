@@ -109,7 +109,7 @@ def initialize_csv(conv_CSV_filename):
 
 def get_prompt(prompt_name):
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    prompt_template_file = os.path.join(base_dir,prompt_name)
+    prompt_template_file = os.path.join(base_dir,"prompts",prompt_name)
     prompt=read_prompt_file(prompt_template_file)
     return prompt
 
@@ -121,89 +121,165 @@ def read_prompt_file(prompt_file):
 
 async def exercise_session(messages, exercise_list, csv_history_file):
     current_set = 0
-    #sp.text_to_speech("Starting the social session.")
     last_speaker = "robot"  # Initialize the last speaker as the robot
     EST = timezone(timedelta(hours=-5))  # Define the EST timezone
+    global_exit = False  # Flag to exit all loops when "bye" is said
 
-    while current_set < 4:  # 4 sets in each round
+    async def listen_for_user(inittime, duration):
+        """Handles user listening during exercise or rest."""
+        nonlocal last_speaker, global_exit
+        while (datetime.now(EST) - inittime).total_seconds() < duration and not global_exit:
+            if last_speaker == "robot":
+                print("Waiting for user response...")
+                user_message = await start_transcription()
+                messages.append({"role": "user", "content": user_message})
+                log_conversation("User", user_message, csv_history_file)
+                print("You:", user_message)
+
+                if user_message.lower().replace(" ", "").strip(string.punctuation) == "bye":
+                    sp.text_to_speech("Thank you for exercising with me.")
+                    log_conversation("Robot", "Thank you for exercising with me.", csv_history_file)
+                    print("Ending session.")
+                    global_exit = True
+                    break  # Stop the function immediately
+
+                last_speaker = "user"
+
+            elif last_speaker == "user":
+                conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
+                print("Robot:", conversational_phrase)
+                sp.text_to_speech(conversational_phrase)
+                messages.append({"role": "assistant", "content": conversational_phrase})
+                log_conversation("Robot", conversational_phrase, csv_history_file)
+
+                last_speaker = "robot"
+
+    while current_set < 4:
+        if global_exit:
+            break  # Quit immediately if "bye" was said
+
         sp.text_to_speech(f"Let's do some {exercise_list[current_set]}.")
         messages.append({"role": "system", "content": f"Let's do some {exercise_list[current_set]}."})
         log_conversation("Robot", f"Let's do some {exercise_list[current_set]}.", csv_history_file)
         inittime = datetime.now(EST)
 
-        # Exercise phase (20 seconds)
-        while (datetime.now(EST) - inittime).total_seconds() < 20:
-            if last_speaker == "robot":
-                # Wait for user response
-                print("Waiting for user response...")
+        # Run listening and timer in parallel
+        listen_task = asyncio.create_task(listen_for_user(inittime, 20))
+        await asyncio.sleep(20)  # Let the timer run in parallel
+        listen_task.cancel()  # Stop listening task if it’s still running
 
-                user_message = await start_transcription()
-                messages.append({"role": "user", "content": user_message})
-                log_conversation("User", user_message, csv_file=csv_history_file)
-                print("You:", user_message)
+        if global_exit:
+            return  # Exit immediately if "bye" was said
 
-                if user_message.lower().replace(" ", "").strip(string.punctuation) == "bye":
-                    sp.text_to_speech("Thank you for exercising with me.")
-                    log_conversation("Robot", "Thank you for exercising with me.", csv_file=csv_history_file)
-                    print("Ending session.")
-                    return
-
-                # Update last speaker and append the message
-                last_speaker = "user"
-                
-
-            elif last_speaker == "user":
-                # Generate and speak robot response
-                conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
-               
-                sp.text_to_speech(conversational_phrase)
-                messages.append({"role": "assistant", "content": conversational_phrase})
-                log_conversation("Robot", conversational_phrase, csv_file=csv_history_file)
-
-                # Update last speaker
-                last_speaker = "robot"
-
-        # End of the set
-        sp.text_to_speech("Done with the set.")
+        sp.text_to_speech("Oh we've finished the set.")
         messages.append({"role": "system", "content": "Done with the set."})
-        log_conversation("Robot", "Done with the set.", csv_file=csv_history_file)
-
+        log_conversation("Robot", "Done with the set.", csv_history_file)
+        print("Robot: Done with the set.")
         current_set += 1
 
         # Rest phase (40 seconds)
         if current_set < 4:
             sp.text_to_speech("Take a rest for 40 seconds.")
             messages.append({"role": "system", "content": "Take a rest for 40 seconds."})
-            log_conversation("Robot", "Take a rest for 40 seconds.", csv_file=csv_history_file)
+            log_conversation("Robot", "Take a rest for 40 seconds.", csv_history_file)
             rest_start_time = datetime.now(EST)
-            while (datetime.now(EST) - rest_start_time).total_seconds() < 40:
-                if last_speaker == "robot":
-                    # Wait for user response
-                    print("Waiting for user response...")
-                    user_message = await start_transcription()
-                    log_conversation("User", user_message, csv_file=csv_history_file)
-                    print("You:", user_message)
-                    if user_message.lower().replace(" ", "").strip(string.punctuation) == "bye":
-                        sp.text_to_speech("Ending session.")
-                        print("Ending session.")
-                        return  # Exit early if the user ends the session
 
-                    # Update last speaker and append the message
-                    last_speaker = "user"
-                    messages.append({"role": "user", "content": user_message})
+            # Run listening and timer in parallel
+            rest_listen_task = asyncio.create_task(listen_for_user(rest_start_time, 40))
+            await asyncio.sleep(40)  # Let the timer run in parallel
+            rest_listen_task.cancel()  # Stop listening task if it’s still running
 
-                elif last_speaker == "user":
-                    # Generate and speak robot response
-                    conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
-                    
-                    sp.text_to_speech(conversational_phrase)
-                    messages.append({"role": "assistant", "content": conversational_phrase})
-
-                    # Update last speaker
-                    last_speaker = "robot"
+            if global_exit:
+                break # Exit immediately if "bye" was said
 
     sp.text_to_speech("Great job completing this round!")
+    print("Great job completing this round!")
     messages.append({"role": "system", "content": "Great job completing this round!"})
+# async def exercise_session(messages, exercise_list, csv_history_file):
+#     current_set = 0
+#     #sp.text_to_speech("Starting the social session.")
+#     last_speaker = "robot"  # Initialize the last speaker as the robot
+#     EST = timezone(timedelta(hours=-5))  # Define the EST timezone
+
+#     while current_set < 4:  # 4 sets in each round
+#         sp.text_to_speech(f"Let's do some {exercise_list[current_set]}.")
+#         messages.append({"role": "system", "content": f"Let's do some {exercise_list[current_set]}."})
+#         log_conversation("Robot", f"Let's do some {exercise_list[current_set]}.", csv_history_file)
+#         inittime = datetime.now(EST)
+
+#         # Exercise phase (20 seconds)
+#         while (datetime.now(EST) - inittime).total_seconds() < 20:
+#             if last_speaker == "robot":
+#                 # Wait for user response
+#                 print("Waiting for user response...")
+
+#                 user_message = await start_transcription()
+#                 messages.append({"role": "user", "content": user_message})
+#                 log_conversation("User", user_message, csv_file=csv_history_file)
+#                 print("You:", user_message)
+
+#                 if user_message.lower().replace(" ", "").strip(string.punctuation) == "bye":
+#                     sp.text_to_speech("Thank you for exercising with me.")
+#                     log_conversation("Robot", "Thank you for exercising with me.", csv_file=csv_history_file)
+#                     print("Ending session.")
+#                     return
+
+#                 # Update last speaker and append the message
+#                 last_speaker = "user"
+                
+
+#             elif last_speaker == "user":
+#                 # Generate and speak robot response
+#                 conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
+               
+#                 sp.text_to_speech(conversational_phrase)
+#                 messages.append({"role": "assistant", "content": conversational_phrase})
+#                 log_conversation("Robot", conversational_phrase, csv_file=csv_history_file)
+
+#                 # Update last speaker
+#                 last_speaker = "robot"
+
+#         # End of the set
+#         sp.text_to_speech("Done with the set.")
+#         messages.append({"role": "system", "content": "Done with the set."})
+#         log_conversation("Robot", "Done with the set.", csv_file=csv_history_file)
+
+#         current_set += 1
+
+#         # Rest phase (40 seconds)
+#         if current_set < 4:
+#             sp.text_to_speech("Take a rest for 40 seconds.")
+#             messages.append({"role": "system", "content": "Take a rest for 40 seconds."})
+#             log_conversation("Robot", "Take a rest for 40 seconds.", csv_file=csv_history_file)
+#             rest_start_time = datetime.now(EST)
+#             while (datetime.now(EST) - rest_start_time).total_seconds() < 40:
+#                 if last_speaker == "robot":
+#                     # Wait for user response
+#                     print("Waiting for user response...")
+#                     user_message = await start_transcription()
+#                     log_conversation("User", user_message, csv_file=csv_history_file)
+#                     print("You:", user_message)
+#                     if user_message.lower().replace(" ", "").strip(string.punctuation) == "bye":
+#                         sp.text_to_speech("Ending session.")
+#                         print("Ending session.")
+#                         return  # Exit early if the user ends the session
+
+#                     # Update last speaker and append the message
+#                     last_speaker = "user"
+#                     messages.append({"role": "user", "content": user_message})
+
+#                 elif last_speaker == "user":
+#                     # Generate and speak robot response
+#                     conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
+                    
+#                     sp.text_to_speech(conversational_phrase)
+#                     messages.append({"role": "assistant", "content": conversational_phrase})
+
+#                     # Update last speaker
+#                     last_speaker = "robot"
+
+#     sp.text_to_speech("Great job completing this round!")
+#     messages.append({"role": "system", "content": "Great job completing this round!"})
 
 async def intro_session(messages, csv_history_file):
     """
@@ -281,7 +357,7 @@ async def main():
 
 
     # Wake word detection
-    await listen_for_wake_word()
+    #await listen_for_wake_word()
 
   
     #print("Starting the intro session...")
