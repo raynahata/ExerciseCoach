@@ -16,9 +16,11 @@ class Pepper:
         self.motion = ALProxy("ALMotion", self.IP, 9559)
         self.posture = ALProxy("ALRobotPosture", self.IP, 9559)
         self.life = ALProxy('ALAutonomousLife', self.IP, 9559)
+        # self.life.setAutonomousAbilityEnabled("All", True)
         self.life.setAutonomousAbilityEnabled("All", False)
         self.life.stopAll()
-        self.tablet=ALProxy("ALTabletService",self.IP,9559)
+        self.tablet = ALProxy("ALTabletService",self.IP,9559)
+        self.memory = ALProxy("ALMemory", self.IP, 9559)
 
         self.tts.setParameter("defaultVoiceSpeed", 70)
         self.tts.setParameter("pitchShift", 1)
@@ -105,7 +107,8 @@ class Pepper:
                 self.exercise_running = True
                 self.is_resting = False
                 self.current_exercise = "lateral raises"
-                self.lateral_raises()
+                # self.lateral_raises()
+                threading.Thread(target=self.lateral_raises()).start()
             else:
                 rospy.loginfo("Lateral raises are already running.")
 
@@ -119,8 +122,6 @@ class Pepper:
             else:
                 rospy.loginfo("Already in rest phase.")
 
-
-
     
     def say_text(self, text):
         """
@@ -128,6 +129,7 @@ class Pepper:
         """
         rospy.loginfo("Saying: {}".format(text))
         self.tts.say(text)
+
     
     def set_flag_listening(self):
         """
@@ -153,6 +155,10 @@ class Pepper:
         self.display_text(self.current_text)
         self.say_text(self.current_text)
         # self.display_text(self.current_text)
+        while (self.memory.getData("ALTextToSpeech/Status"))[1] != "done":
+            time.sleep(0.1)
+        rospy.loginfo("Finished Speaking...")
+        time.sleep(0.1)
         self.set_flag_listening()
 
     def callback_state(self, data):
@@ -161,22 +167,22 @@ class Pepper:
         """
         rospy.loginfo("Received state: {}".format(data.data))
         self.state = data.data
-        if self.state == "listening" and not self.pepper_thinking:
-            # look back
-            self.look_back()
-            # look away
-            self.look_away()
-            self.pepper_thinking = True
-            # random head move (thinking)
-            # self.random_head_move()
+        # if self.state == "listening" and not self.pepper_thinking:
+        #     # look back
+        #     self.look_back()
+        #     # look away
+        #     self.look_away()
+        #     self.pepper_thinking = True
+        #     # random head move (thinking)
+        #     # self.random_head_move()
             
 
-        if self.state == "speaking" and self.pepper_thinking:
-            # look back
-            self.look_back()
-            # random nodding
-            # self.nod_head()
-            self.pepper_thinking = False
+        # if self.state == "speaking" and self.pepper_thinking:
+        #     # look back
+        #     self.look_back()
+        #     # random nodding
+        #     # self.nod_head()
+        #     self.pepper_thinking = False
 
     def publish_text(self, text):
         """
@@ -318,7 +324,7 @@ class Pepper:
         rospy.loginfo("Pepper is performing lateral raises.")
 
         try:
-            if self.exercise_running and not rospy.is_shutdown():
+            while self.exercise_running and not rospy.is_shutdown():
                 self.lateral_arm_motion_up()
                 rospy.loginfo("Arms moved up.")
                 
