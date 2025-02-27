@@ -11,6 +11,7 @@ import pyaudio
 from datetime import datetime, timezone, timedelta
 import re
 import time 
+import sys
 
 # Initialize OpenAI client
 apikey = None
@@ -69,37 +70,72 @@ async def generate_conversational_phrase(messages, csv_history_file):
     except Exception as e:
         print(f"Error: {e}")
         return None
-async def listen_for_wake_word():
-    # Initialize PyPorcupine with a built-in keyword (e.g., "porcupine")
-    # Get the base directory of the script
-    base_dir = os.path.dirname(os.path.abspath(__file__))
+# async def listen_for_wake_word():
+#     # Initialize PyPorcupine with a built-in keyword (e.g., "porcupine")
+#     # Get the base directory of the script
+#     base_dir = os.path.dirname(os.path.abspath(__file__))
     
-    # Construct the relative path to the keyword file
-    keyword_file = os.path.join(base_dir,"pepper_wake_word", "hello-pepper_en_mac_v3_0_0.ppn")
-    porcupine = pvporcupine.create(
-        access_key=access_key,
-        keyword_paths=[keyword_file]  # Use the dynamically constructed path
-    )
+#     # Construct the relative path to the keyword file
+#     keyword_file = os.path.join(base_dir,"pepper_wake_word", "hello-pepper_en_mac_v3_0_0.ppn")
+#     porcupine = pvporcupine.create(
+#         access_key=access_key,
+#         keyword_paths=[keyword_file]  # Use the dynamically constructed path
+#     )
     
-    pa = pyaudio.PyAudio()
-    audio_stream = pa.open(
-        rate=porcupine.sample_rate,
-        channels=1,
-        format=pyaudio.paInt16,
-        input=True,
-        frames_per_buffer=porcupine.frame_length
-    )
-    print("Listening for wake word...")
-    while True:
-        pcm = audio_stream.read(porcupine.frame_length, exception_on_overflow=False)
-        pcm = [int.from_bytes(pcm[i:i+2], byteorder="little", signed=True) for i in range(0, len(pcm), 2)]
+#     pa = pyaudio.PyAudio()
+#     audio_stream = pa.open(
+#         rate=porcupine.sample_rate,
+#         channels=1,
+#         format=pyaudio.paInt16,
+#         input=True,
+#         frames_per_buffer=porcupine.frame_length
+#     )
+#     print("Listening for wake word...")
+#     while True:
+#         pcm = audio_stream.read(porcupine.frame_length, exception_on_overflow=False)
+#         pcm = [int.from_bytes(pcm[i:i+2], byteorder="little", signed=True) for i in range(0, len(pcm), 2)]
         
-        keyword_index = porcupine.process(pcm)
-        if keyword_index >= 0:
-            print("Wake word detected!")
-            audio_stream.close()
-            porcupine.delete()
-            return  # Exit the loop and proceed
+#         keyword_index = porcupine.process(pcm)
+#         if keyword_index >= 0:
+#             print("Wake word detected!")
+#             audio_stream.close()
+#             porcupine.delete()
+#             return  # Exit the loop and proceed
+async def listen_for_wake_word(wake_word="hello", timeout=10):
+    """
+    Uses AWS Transcribe to listen for a wake word in real-time.
+    
+    Args:
+        wake_word (str): The phrase to trigger the system.
+        timeout (int): Time in seconds before the script shuts down if no speech is detected.
+    """
+    print("Listening for wake word...")
+    last_detection_time = time.time()  # Start tracking time
+
+    while True:
+        # Run transcription in the background
+        transcription_task = asyncio.create_task(start_transcription())
+
+        while not transcription_task.done():
+            await asyncio.sleep(1)  # Non-blocking wait
+
+            # Check for timeout
+            if time.time() - last_detection_time > timeout:
+                print("No speech detected for 3 minutes. Shutting down...")
+                sys.exit(0)  # Exit the script
+
+        # Get transcribed text once available
+        transcribed_text = transcription_task.result()
+
+        if transcribed_text:
+            print(f"Transcribed: {transcribed_text}")
+            last_detection_time = time.time()  # Reset timeout
+
+            # Normalize and check if the wake word is present
+            normalized_text = transcribed_text.lower().strip()
+            if wake_word in normalized_text:
+                print("Wake word detected!")
+                return  # Exit the function and continue execution
         
 def initialize_csv(conv_CSV_filename):
     base_dir = os.path.dirname(os.path.abspath(__file__))
