@@ -191,19 +191,19 @@ async def exercise_session(messages, exercise_list, csv_history_file):
 
         # End of the set
         #sp.text_to_speech("Done with the set.")
-        send_to_pepper("Done with the set.")
-        log_conversation("Robot", "Done with the set.", csv_history_file)
+        send_to_pepper("We are done with the set.")
+        log_conversation("Robot", "We are done with the set.", csv_history_file)
         send_exercise_to_pepper("rest")
-        messages.append({"role": "system", "content": "Done with the set."})
+        messages.append({"role": "system", "content": "We are done with the set."})
         current_set += 1
 
         # Rest phase (40 seconds)
         if current_set < 4:
             #sp.text_to_speech("Take a rest for 40 seconds.")
-            messages.append({"role": "system", "content": "Take a rest for 40 seconds."})
+            messages.append({"role": "system", "content": "Oh, let's take a rest for 40 seconds."})
 
-            send_to_pepper("Take a rest for 40 seconds.")
-            log_conversation("Robot","Take a rest for 40 seconds.", csv_history_file)\
+            send_to_pepper("Oh, lets take a rest for 40 seconds.")
+            log_conversation("Robot","Oh, lets take a rest for 40 seconds.", csv_history_file)\
 
             send_exercise_to_pepper("rest")
             rest_start_time = datetime.now(EST)
@@ -312,7 +312,7 @@ async def main():
     csv_history_file = os.path.join(base_dir, "conversation_files",csv_filename)
     
     #getting the prompts
-    #initial_prompt=get_prompt("prompt")
+    #initial_prompt=get_prompt("intro_prompt")
     conversational_prompt=get_prompt("conversational_prompt")
 
     #messages = [{"role": "system", "content": initial_prompt}]
