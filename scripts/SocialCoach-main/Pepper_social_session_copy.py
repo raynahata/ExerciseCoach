@@ -56,7 +56,7 @@ def send_to_pepper(text):
     """
     rospy.loginfo("Sending to Pepper: {}".format(text))
     speech_publisher.publish(text)
-    while (pepper_state != "listening"):
+    while (pepper_state != "listening" and not rospy.is_shutdown()):
         # print("Waiting for listening....")
         time.sleep(0.1)
 
@@ -192,21 +192,20 @@ async def exercise_session(messages, exercise_list, csv_history_file):
     EST = timezone(timedelta(hours=-5))  # Define the EST timezone
     global pepper_state
 
-    while current_set < 4:  # 4 sets in each round
+    while current_set < 4 and not rospy.is_shutdown():  # 4 sets in each round
         #sp.text_to_speech(f"Let's do some {exercise_list[current_set]}.")
         send_to_pepper(f"Let's do some {exercise_list[current_set]}.")
         messages.append({"role": "system", "content": f"Let's do some {exercise_list[current_set]}."})
         inittime = datetime.now(EST)
     
         # Exercise phase (20 seconds)
-        while (datetime.now(EST) - inittime).total_seconds() < 10 and not rospy.is_shutdown():
+        while (datetime.now(EST) - inittime).total_seconds() < 20 and not rospy.is_shutdown():
             send_exercise_to_pepper(exercise_list[current_set])
             if last_speaker == "robot" and pepper_state == "listening":
                 try:
                     # Wait for user response
                     print("Waiting for user response...")
-                    time_before = time.time()
-                    user_message = await asyncio.wait_for(start_transcription(), timeout=10)
+                    user_message = await asyncio.wait_for(start_transcription(), timeout=20)
 
                     log_conversation("User", user_message, csv_file=csv_history_file)
                     print("You:", user_message)
@@ -221,7 +220,7 @@ async def exercise_session(messages, exercise_list, csv_history_file):
                     messages.append({"role": "user", "content": user_message})
                 except asyncio.TimeoutError:
                     # Handle timeout case
-                    print("Timeout: No user response detected within 10 seconds: ", time.time()-time_before)
+                    print("Timeout: No user response detected within 20 seconds: ")
                     pepper_state = "speaking"
                     last_speaker = "robot"
 
@@ -256,14 +255,14 @@ async def exercise_session(messages, exercise_list, csv_history_file):
 
             send_exercise_to_pepper("rest")
             rest_start_time = datetime.now(EST)
-            while (datetime.now(EST) - rest_start_time).total_seconds() < 10 and not rospy.is_shutdown():
+            while (datetime.now(EST) - rest_start_time).total_seconds() < 40 and not rospy.is_shutdown():
                 # print(f"Pepper state = {pepper_state}")
                 if last_speaker == "robot" and pepper_state == "listening":
                     try:
                         # Wait for user response
                         # user_message = await start_transcription()
                         print("Waiting for user response...")
-                        user_message = await asyncio.wait_for(start_transcription(), timeout=10)
+                        user_message = await asyncio.wait_for(start_transcription(), timeout=40)
                         log_conversation("User", user_message, csv_file=csv_history_file)
                         print("You:", user_message)
                         
@@ -331,11 +330,11 @@ async def intro_session(messages, csv_history_file):
         messages.append({"role": "assistant", "content": spoken_response})
     
     try: 
-        while not done_chat:
+        while not done_chat and not rospy.is_shutdown():
             if pepper_state == "listening":
                 print("Waiting for user response...")
                 # user_message=await start_transcription()
-                user_message = await asyncio.wait_for(start_transcription(), timeout=40)
+                user_message = await asyncio.wait_for(start_transcription(), timeout=10)
                 log_conversation("User",user_message,csv_history_file)
                 print("You:",user_message)
                 if user_message.lower().replace(" ","").strip(string.punctuation)=="bye":
@@ -361,7 +360,7 @@ async def intro_session(messages, csv_history_file):
                         break
     except asyncio.TimeoutError:
         # Handle timeout case
-        print("Intro Section Timeout: No user response detected within 20 seconds.")
+        print("Intro Section Timeout: No user response detected within 10 seconds.")
                     
                 
   

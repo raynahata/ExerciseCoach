@@ -13,7 +13,7 @@ class MyEventHandler(TranscriptResultStreamHandler):
         super().__init__(output_stream)
         self.partial_sentence = ""
         self.last_update_time = time.time()
-        self.silence_threshold = 1  # Threshold in seconds to detect pauses
+        self.silence_threshold = 1.1  # Threshold in seconds to detect pauses
 
     async def handle_transcript_event(self, transcript_event: TranscriptEvent):
         results = transcript_event.transcript.results
