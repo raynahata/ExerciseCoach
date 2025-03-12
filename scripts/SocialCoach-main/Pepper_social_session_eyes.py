@@ -14,15 +14,28 @@ import re
 import time 
 import rospy
 from std_msgs.msg import String
+import sys
 
 # Initialize OpenAI client
 apikey = None
 access_key="ErK9WB5nNekaAlns1cldvwAU8rQSB8JPkF1QkhNfwO9vNA5FS7ihmA=="
 
 rospy.init_node("robot_speech_publisher", anonymous=True)
+pepper_state = "listening"
+
+def callback_state(data):
+    """
+    Callback for 'pepper_state' topic.
+    """
+    global pepper_state
+    rospy.loginfo("Received state: {}".format(data.data))
+    pepper_state = data.data
+
 
 speech_publisher = rospy.Publisher("/gpt_speech", String, queue_size=10)
+display_publisher = rospy.Publisher("/speech_display", String, queue_size=10)
 exercise_publisher = rospy.Publisher("/exercise_command", String, queue_size=10)
+rospy.Subscriber("pepper_state", String, callback_state)
 
 
 def getkey():
@@ -44,13 +57,22 @@ def send_to_pepper(text):
     """
     rospy.loginfo("Sending to Pepper: {}".format(text))
     speech_publisher.publish(text)
+    global pepper_state
+    pepper_state = "speaking"
+
+def send_to_pepper_dispay_only(text):
+    """
+    Sends GPT-generated text to Pepper via ROS topic.
+    """
+    rospy.loginfo("Sending to Pepper: {}".format(text))
+    speech_publisher.publish(text)
 
 def send_exercise_to_pepper(text):
     """
     Sends GPT-generated text to Pepper via ROS topic.
     """
-    rospy.loginfo("Sending exercise Pepper: {}".format(text))
-    exercise_publisher.publish(String(text))
+    rospy.loginfo("Sending to display only: {}".format(text))
+    display_publisher.publish(String(text))
     rospy.sleep(1)
 
 
@@ -94,37 +116,31 @@ async def generate_conversational_phrase(messages, csv_history_file):
         print(f"Error: {e}")
         return None
 
-async def listen_for_wake_word():
-    # Initialize PyPorcupine with a built-in keyword (e.g., "porcupine")
-    # Get the base directory of the script
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    
-    # Construct the relative path to the keyword file
-    keyword_file = os.path.join(base_dir,  "pepper_wake_word", "Hello-Pepper_en_linux_v3_0_0.ppn")
-    porcupine = pvporcupine.create(
-        access_key=access_key,
-        keyword_paths=[keyword_file]  # Use the dynamically constructed path
-    )
-    
-    pa = pyaudio.PyAudio()
-    audio_stream = pa.open(
-        rate=porcupine.sample_rate,
-        channels=1,
-        format=pyaudio.paInt16,
-        input=True,
-        frames_per_buffer=porcupine.frame_length
-    )
+
+async def listen_for_wake_word(wake_word="hello", timeout=20):
+    """
+    Uses AWS Transcribe to listen for a wake word in real-time.    Args:
+        wake_word (str): The phrase to trigger the system.
+        timeout (int): Time in seconds before the script shuts down if no speech is detected.
+    """
     print("Listening for wake word...")
+    last_detection_time = time.time()  # Start tracking time    
     while True:
-        pcm = audio_stream.read(porcupine.frame_length, exception_on_overflow=False)
-        pcm = [int.from_bytes(pcm[i:i+2], byteorder="little", signed=True) for i in range(0, len(pcm), 2)]
-        
-        keyword_index = porcupine.process(pcm)
-        if keyword_index >= 0:
-            print("Wake word detected!")
-            audio_stream.close()
-            porcupine.delete()
-            return  # Exit the loop and proceed
+        # Run transcription in the background
+        transcription_task = asyncio.create_task(start_transcription())        
+        while not transcription_task.done():
+            await asyncio.sleep(1)  # Non-blocking wait            # Check for timeout
+            if time.time() - last_detection_time > timeout:
+                print("No speech detected for 3 minutes. Shutting down...")
+                sys.exit(0)  # Exit the script        # Get transcribed text once available
+        transcribed_text = transcription_task.result()        
+        if transcribed_text:
+            print(f"Transcribed: {transcribed_text}")
+            last_detection_time = time.time()  # Reset timeout            # Normalize and check if the wake word is present
+            normalized_text = transcribed_text.lower().strip()
+            if wake_word in normalized_text:
+                print("Wake word detected!")
+                return  # Exit the function and continue execution
         
 def initialize_csv(conv_CSV_filename):
     base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -146,75 +162,34 @@ def read_prompt_file(prompt_file):
 
 async def exercise_session(messages, exercise_list, csv_history_file):
     current_set = 0
-    #sp.text_to_speech("Starting the social session.")
-    send_to_pepper("Starting the socials session.")
-    last_speaker = "robot"  # Initialize the last speaker as the robot
+    
+   
+    
     EST = timezone(timedelta(hours=-5))  # Define the EST timezone
+    global pepper_state
 
     while current_set < 4:  # 4 sets in each round
         #sp.text_to_speech(f"Let's do some {exercise_list[current_set]}.")
-        send_to_pepper(f"Let's do some {exercise_list[current_set]}.")
-        messages.append({"role": "system", "content": f"Let's do some {exercise_list[current_set]}."})
+       
         inittime = datetime.now(EST)
-        
-
+    
         # Exercise phase (20 seconds)
         while (datetime.now(EST) - inittime).total_seconds() < 10:
+            if current_set == 0:
+                pepper_speech=f"I'm super excited to exercise with you. Let's do some {exercise_list[current_set]}."
+            else:
+                pepper_speech=f"Let's do some {exercise_list[current_set]}."
+            send_to_pepper(pepper_speech)
+            messages.append({"role": "system", "content": pepper_speech})
             send_exercise_to_pepper(exercise_list[current_set])
-            if last_speaker == "robot":
-                # Wait for user response
-                print("Waiting for user response...")
-                user_message = await start_transcription()
-                log_conversation("User", user_message, csv_file=csv_history_file)
-                print("You:", user_message)
-                if user_message.lower().replace(" ", "").strip(string.punctuation) == "bye":
-                    #sp.text_to_speech("Ending session.")
-                    
-                    print("Ending session.")
-                    return  # Exit early if the user ends the session
-
-                # Update last speaker and append the message
-                last_speaker = "user"
-                messages.append({"role": "user", "content": user_message})
-
-            elif last_speaker == "user":
-                # Generate and speak robot response
-                conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
-               
-                #sp.text_to_speech(conversational_phrase)
-                send_to_pepper(conversational_phrase)
-                messages.append({"role": "assistant", "content": conversational_phrase})
-                log_conversation("Robot", conversational_phrase, csv_history_file)
-
-                # Update last speaker
-                last_speaker = "robot"
-
-        # End of the set
-        #sp.text_to_speech("Done with the set.")
-        send_to_pepper("Done with the set.")
-        log_conversation("Robot", "Done with the set.", csv_history_file)
-        send_exercise_to_pepper("rest")
-        messages.append({"role": "system", "content": "Done with the set."})
-        current_set += 1
-
-        # Rest phase (40 seconds)
-        if current_set < 4:
-            #sp.text_to_speech("Take a rest for 40 seconds.")
-            messages.append({"role": "system", "content": "Take a rest for 40 seconds."})
-
-            send_to_pepper("Take a rest for 40 seconds.")
-            log_conversation("Robot","Take a rest for 40 seconds.", csv_history_file)\
-
-            send_exercise_to_pepper("rest")
-            rest_start_time = datetime.now(EST)
-            while (datetime.now(EST) - rest_start_time).total_seconds() < 40:
-                if last_speaker == "robot":
+            # print(f"Pepper state = {pepper_state}")
+            if last_speaker == "robot" and pepper_state == "listening":
+                try:
                     # Wait for user response
                     print("Waiting for user response...")
-                    user_message = await start_transcription()
+                    user_message = await asyncio.wait_for(start_transcription(), timeout=10)
                     log_conversation("User", user_message, csv_file=csv_history_file)
                     print("You:", user_message)
-                    
                     if user_message.lower().replace(" ", "").strip(string.punctuation) == "bye":
                         #sp.text_to_speech("Ending session.")
                         robot_response="Thank you for exercising with me."
@@ -227,6 +202,67 @@ async def exercise_session(messages, exercise_list, csv_history_file):
                     # Update last speaker and append the message
                     last_speaker = "user"
                     messages.append({"role": "user", "content": user_message})
+                except asyncio.TimeoutError:
+                    # Handle timeout case
+                    print("Timeout: No user response detected within 20 seconds.")
+                    last_speaker == "robot"
+
+            elif last_speaker == "user":
+                # Generate and speak robot response
+                conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
+            
+                #sp.text_to_speech(conversational_phrase)
+                send_to_pepper(conversational_phrase)
+                messages.append({"role": "assistant", "content": conversational_phrase})
+                log_conversation("Robot", conversational_phrase, csv_history_file)
+
+                # Update last speaker
+                last_speaker = "robot"
+
+        # End of the set
+        #sp.text_to_speech("Done with the set.")
+        send_to_pepper_dispay_only("Done with the set.")
+        log_conversation("Robot", "Done with the set.", csv_history_file)
+        send_exercise_to_pepper("rest")
+        messages.append({"role": "system", "content": "Done with the set."})
+        current_set += 1
+
+        # Rest phase (40 seconds)
+        if current_set < 4:
+            #sp.text_to_speech("Take a rest for 40 seconds.")
+            rest_mesaage="Let's take a rest for 40 seconds."
+            messages.append({"role": "system", "content": rest_mesaage})
+            send_to_pepper_dispay_only(rest_mesaage)    
+            log_conversation("Robot","Take a rest for 40 seconds.", csv_history_file)
+            send_exercise_to_pepper("rest")
+            rest_start_time = datetime.now(EST)
+            while (datetime.now(EST) - rest_start_time).total_seconds() < 10:
+                # print(f"Pepper state = {pepper_state}")
+                if last_speaker == "robot" and pepper_state == "listening":
+                    try:
+                        # Wait for user response
+                        # user_message = await start_transcription()
+                        print("Waiting for user response...")
+                        user_message = await asyncio.wait_for(start_transcription(), timeout=10)
+                        log_conversation("User", user_message, csv_file=csv_history_file)
+                        print("You:", user_message)
+                        
+                        if user_message.lower().replace(" ", "").strip(string.punctuation) == "bye":
+                            #sp.text_to_speech("Ending session.")
+                            robot_response="Thank you for exercising with me."
+                            send_to_pepper(robot_response)
+                            send_exercise_to_pepper("rest")
+                            log_conversation("Robot", robot_response, csv_file=csv_history_file)
+                            print("Ending session.")
+                            return  # Exit early if the user ends the session
+
+                        # Update last speaker and append the message
+                        last_speaker = "user"
+                        messages.append({"role": "user", "content": user_message})
+                    except asyncio.TimeoutError:
+                        # Handle timeout case
+                        print("Timeout: No user response detected within 20 seconds.")
+                        last_speaker == "robot"
 
                 elif last_speaker == "user":
                     # Generate and speak robot response
@@ -237,7 +273,6 @@ async def exercise_session(messages, exercise_list, csv_history_file):
                     messages.append({"role": "assistant", "content": conversational_phrase})
                     log_conversation("Robot",conversational_phrase, csv_file=csv_history_file)
                     
-
                     # Update last speaker
                     last_speaker = "robot"
 
@@ -270,34 +305,39 @@ async def intro_session(messages, csv_history_file):
 
     if initial_response:
         messages.append({"role": "assistant", "content": spoken_response})
-        
-    while not done_chat:
-        print("Waiting for user response...")
- 
-        user_message=await start_transcription()
-        log_conversation("User",user_message,csv_history_file)
-        print("You:",user_message)
-        if user_message.lower().replace(" ","").strip(string.punctuation)=="bye":
-            done_chat=True
-            print("Ending conversation.")
-            break
-        messages.append({"role":"user","content":user_message})
-        conversational_response = await generate_conversational_phrase(messages, csv_history_file)
-        spoken_response, ready_to_start = parse_robot_response(conversational_response)  # Parse the tuple
-        if spoken_response:
-                #sp.text_to_speech(spoken_response)
-                send_to_pepper(spoken_response)
-                messages.append({"role": "assistant", "content": spoken_response})
-
-          
-                # If the user is ready to start, end the intro session
-                if ready_to_start==True:
-                    # print("User is ready to start the exercise session.")
-                    # sp.text_to_speech("Great! Let's begin the exercise session.")
-                    # done_chat=True
-                    # print("Ending conversation.")
-                    # return messages
+    
+    try: 
+        while not done_chat:
+            if pepper_state == "listening":
+                print("Waiting for user response...")
+                # user_message=await start_transcription()
+                user_message = await asyncio.wait_for(start_transcription(), timeout=40)
+                log_conversation("User",user_message,csv_history_file)
+                print("You:",user_message)
+                if user_message.lower().replace(" ","").strip(string.punctuation)=="bye":
+                    done_chat=True
+                    print("Ending conversation.")
                     break
+                messages.append({"role":"user","content":user_message})
+                conversational_response = await generate_conversational_phrase(messages, csv_history_file)
+                spoken_response, ready_to_start = parse_robot_response(conversational_response)  # Parse the tuple
+                if spoken_response:
+                    #sp.text_to_speech(spoken_response)
+                    send_to_pepper(spoken_response)
+                    messages.append({"role": "assistant", "content": spoken_response})
+
+                
+                    # If the user is ready to start, end the intro session
+                    if ready_to_start==True:
+                        # print("User is ready to start the exercise session.")
+                        # sp.text_to_speech("Great! Let's begin the exercise session.")
+                        # done_chat=True
+                        # print("Ending conversation.")
+                        # return messages
+                        break
+    except asyncio.TimeoutError:
+        # Handle timeout case
+        print("Intro Section Timeout: No user response detected within 20 seconds.")
                     
                 
   

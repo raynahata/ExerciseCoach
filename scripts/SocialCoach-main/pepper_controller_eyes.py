@@ -6,6 +6,7 @@ from naoqi import ALProxy
 import math
 import time
 from std_msgs.msg import String
+import threading
 
 
 class Pepper:
@@ -15,13 +16,16 @@ class Pepper:
         self.motion = ALProxy("ALMotion", self.IP, 9559)
         self.posture = ALProxy("ALRobotPosture", self.IP, 9559)
         self.life = ALProxy('ALAutonomousLife', self.IP, 9559)
+        # self.life.setAutonomousAbilityEnabled("All", True)
         self.life.setAutonomousAbilityEnabled("All", False)
         self.life.stopAll()
-        self.tablet=ALProxy("ALTabletService",self.IP,9559)
+        self.tablet = ALProxy("ALTabletService",self.IP,9559)
+        self.memory = ALProxy("ALMemory", self.IP, 9559)
 
         self.tts.setParameter("defaultVoiceSpeed", 70)
         self.tts.setParameter("pitchShift", 1)
         self.exercise_running=False
+        self.pepper_thinking = False
         
         self.state = ""
         self.current_text = ""
@@ -33,7 +37,9 @@ class Pepper:
         self.exercise_publisher = rospy.Publisher("/exercise_command", String, queue_size=10)
         rospy.Subscriber("pepper_state", String, self.callback_state)
         rospy.Subscriber("gpt_speech", String, self.gpt_callback)
+        rospy.Subscriber("speech_display", String, self.display_callback)
         rospy.Subscriber("exercise_command", String, self.exercise_callback)
+
 
 
         rospy.loginfo("Subscribed to /gpt_speech")
@@ -80,6 +86,7 @@ class Pepper:
         self.motion.setAngles(joint_names, angles, speed)
         #self.motion.angleInterpolation(joint_names,angles,[speed]*len(joint_names),True)
 
+
     def exercise_callback(self, msg):
         """
         Handles incoming exercise commands.
@@ -93,7 +100,7 @@ class Pepper:
                 self.exercise_running = True
                 self.is_resting = False
                 self.current_exercise = "bicep curls"
-                self.bicep_curls()
+                threading.Thread(target=self.bicep_curls).start()
             else:
                 rospy.loginfo("Bicep curls are already running.")
 
@@ -103,7 +110,8 @@ class Pepper:
                 self.exercise_running = True
                 self.is_resting = False
                 self.current_exercise = "lateral raises"
-                self.lateral_raises()
+                # self.lateral_raises()
+                threading.Thread(target=self.lateral_raises()).start()
             else:
                 rospy.loginfo("Lateral raises are already running.")
 
@@ -113,11 +121,10 @@ class Pepper:
                 self.exercise_running = False
                 self.current_exercise = None
                 self.is_resting = True
+                self.set_eye_color((0, 0, 255))
                 self.stop_exercise_motion()
             else:
                 rospy.loginfo("Already in rest phase.")
-
-
 
     
     def say_text(self, text):
@@ -126,6 +133,7 @@ class Pepper:
         """
         rospy.loginfo("Saying: {}".format(text))
         self.tts.say(text)
+
     
     def set_flag_listening(self):
         """
@@ -151,14 +159,42 @@ class Pepper:
         self.display_text(self.current_text)
         self.say_text(self.current_text)
         # self.display_text(self.current_text)
+        while (self.memory.getData("ALTextToSpeech/Status"))[1] != "done":
+            time.sleep(0.1)
+        rospy.loginfo("Finished Speaking...")
+        time.sleep(0.1)
         self.set_flag_listening()
 
+    def display_callback(self, data):
+        """
+        Callback for 'chat_text' topic.
+        """
+        rospy.loginfo("Received display text: {}".format(data.data))
+        self.current_text = data.data
+        self.display_text(self.current_text)
+    
     def callback_state(self, data):
         """
         Callback for 'pepper_state' topic.
         """
         rospy.loginfo("Received state: {}".format(data.data))
         self.state = data.data
+        # if self.state == "listening" and not self.pepper_thinking:
+        #     # look back
+        #     self.look_back()
+        #     # look away
+        #     self.look_away()
+        #     self.pepper_thinking = True
+        #     # random head move (thinking)
+        #     # self.random_head_move()
+            
+
+        # if self.state == "speaking" and self.pepper_thinking:
+        #     # look back
+        #     self.look_back()
+        #     # random nodding
+        #     # self.nod_head()
+        #     self.pepper_thinking = False
 
     def publish_text(self, text):
         """
@@ -180,6 +216,11 @@ class Pepper:
         rospy.loginfo("Displaying static text on tablet: {}".format(message))
         js_script = """document.body.innerHTML = `<style>body{font-family:Arial,sans-serif;text-align:center;background:#f0f0f0;display:flex;justify-content:center;align-items:center;height:100vh;width:100vw;margin:0;padding:20px;overflow:hidden;} .text{font-size:10vh;color:#333;width:90vw;height:100vh;word-wrap:break-word;overflow-wrap:break-word;display:flex;align-items:center;justify-content:center;text-align:center;white-space:normal;line-height:1.5;}</style><div class='text'>""" + message + """</div>`;"""
         self.tablet.executeJS(js_script)
+
+    def set_eye_color(self, color):
+        r, g, b = color
+        hex_color = (r << 16) | (g << 8) | b  # Convert to hex format
+        self.leds.fadeRGB("FaceLeds", hex_color, 1.0)
 
     ### Hardcoded Arm Motion: Up ###
     def stop_exercise_motion(self):
@@ -267,9 +308,13 @@ class Pepper:
         Moves Pepper's arms up and down for bicep curls until stopped.
         """
         rospy.loginfo("Pepper is performing bicep curls.")
-
+        rospy.loginfo("-"*20)
         try:
             while self.exercise_running and not rospy.is_shutdown():
+                print()
+                rospy.loginfo("[!!] self.exercise_running = {}".format(self.exercise_running))
+                print()
+                
                 self.bicep_arm_motion_up()
                 rospy.loginfo("Arms moved up.")
                 
@@ -287,6 +332,7 @@ class Pepper:
 
         except rospy.ROSInterruptException:
             rospy.loginfo("Bicep curls interrupted.")
+
 
     def lateral_raises(self):
         """
@@ -313,6 +359,50 @@ class Pepper:
 
         except rospy.ROSInterruptException:
             rospy.loginfo("Lateral raises interrupted.")
+    
+    ### Look Back Motion ###
+    def look_back(self):
+        """
+        Pepper looking toward the user.
+        """
+        rospy.loginfo("Pepper is looking back.")
+
+        # go to an init head pose.
+        names  = ["HeadYaw", "HeadPitch"] 
+        angles = [0.0, 0.0]
+        times  = [1.0, 1.0]
+        self.motion.angleInterpolation(names, angles, times, True)
+
+    def look_away(self):
+        # tilting head
+        rospy.loginfo("Pepper is looking away.")
+
+        names  = ["HeadYaw", "HeadPitch"]
+        angles = [-math.pi/5, 0.2]
+        times  = [2.0, 3.0]
+        self.motion.angleInterpolation(names, angles, times, True, _async=True)
+
+    def random_head_move(self):
+        rospy.loginfo("Pepper is randomly moving head.")
+
+        names  = ["HeadYaw", "HeadPitch"]
+        angles = [-math.pi/5, 0.2]
+        times  = [2.0, 3.0]
+        self.motion.angleInterpolation(names, angles, times, True, _async=True)
+
+    def nod_head(self):
+        rospy.loginfo("Pepper is nodding.")
+        
+        # Define the head movement for nodding (pitch angle)
+        names = ["HeadPitch"]
+        # Nodding down and up
+        angles = [-0.1, 0.1]
+        # Time to complete the two movements
+        times = [2.0, 2.0]  # 1.5 seconds for each nod
+        
+        # Perform the nodding motion twice in 3 seconds
+        self.motion.angleInterpolation(names, angles, times, True, _async=True)
+
 
     def listener(self):
         """
