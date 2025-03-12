@@ -56,8 +56,9 @@ def send_to_pepper(text):
     """
     rospy.loginfo("Sending to Pepper: {}".format(text))
     speech_publisher.publish(text)
-    global pepper_state
-    pepper_state = "speaking"
+    while (pepper_state != "listening"):
+        # print("Waiting for listening....")
+        time.sleep(0.1)
 
 def send_exercise_to_pepper(text):
     """
@@ -173,7 +174,7 @@ def initialize_csv(conv_CSV_filename):
 
 def get_prompt(prompt_name):
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    prompt_template_file = os.path.join(base_dir,prompt_name)
+    prompt_template_file = os.path.join(base_dir,"prompts",prompt_name)
     prompt=read_prompt_file(prompt_template_file)
     return prompt
 
@@ -198,14 +199,15 @@ async def exercise_session(messages, exercise_list, csv_history_file):
         inittime = datetime.now(EST)
     
         # Exercise phase (20 seconds)
-        while (datetime.now(EST) - inittime).total_seconds() < 10:
+        while (datetime.now(EST) - inittime).total_seconds() < 10 and not rospy.is_shutdown():
             send_exercise_to_pepper(exercise_list[current_set])
-            # print(f"Pepper state = {pepper_state}")
             if last_speaker == "robot" and pepper_state == "listening":
                 try:
                     # Wait for user response
                     print("Waiting for user response...")
+                    time_before = time.time()
                     user_message = await asyncio.wait_for(start_transcription(), timeout=10)
+
                     log_conversation("User", user_message, csv_file=csv_history_file)
                     print("You:", user_message)
                     if user_message.lower().replace(" ", "").strip(string.punctuation) == "bye":
@@ -219,8 +221,9 @@ async def exercise_session(messages, exercise_list, csv_history_file):
                     messages.append({"role": "user", "content": user_message})
                 except asyncio.TimeoutError:
                     # Handle timeout case
-                    print("Timeout: No user response detected within 20 seconds.")
-                    last_speaker == "robot"
+                    print("Timeout: No user response detected within 10 seconds: ", time.time()-time_before)
+                    pepper_state = "speaking"
+                    last_speaker = "robot"
 
             elif last_speaker == "user":
                 # Generate and speak robot response
@@ -228,6 +231,7 @@ async def exercise_session(messages, exercise_list, csv_history_file):
             
                 #sp.text_to_speech(conversational_phrase)
                 send_to_pepper(conversational_phrase)
+                pepper_state = "speaking"
                 messages.append({"role": "assistant", "content": conversational_phrase})
                 log_conversation("Robot", conversational_phrase, csv_history_file)
 
@@ -252,7 +256,7 @@ async def exercise_session(messages, exercise_list, csv_history_file):
 
             send_exercise_to_pepper("rest")
             rest_start_time = datetime.now(EST)
-            while (datetime.now(EST) - rest_start_time).total_seconds() < 10:
+            while (datetime.now(EST) - rest_start_time).total_seconds() < 10 and not rospy.is_shutdown():
                 # print(f"Pepper state = {pepper_state}")
                 if last_speaker == "robot" and pepper_state == "listening":
                     try:
@@ -267,6 +271,7 @@ async def exercise_session(messages, exercise_list, csv_history_file):
                             #sp.text_to_speech("Ending session.")
                             robot_response="Thank you for exercising with me."
                             send_to_pepper(robot_response)
+                            pepper_state = "speaking"
                             send_exercise_to_pepper("rest")
                             log_conversation("Robot", robot_response, csv_file=csv_history_file)
                             print("Ending session.")
@@ -278,7 +283,8 @@ async def exercise_session(messages, exercise_list, csv_history_file):
                     except asyncio.TimeoutError:
                         # Handle timeout case
                         print("Timeout: No user response detected within 20 seconds.")
-                        last_speaker == "robot"
+                        pepper_state = "speaking"
+                        last_speaker = "robot"
 
                 elif last_speaker == "user":
                     # Generate and speak robot response
@@ -286,6 +292,7 @@ async def exercise_session(messages, exercise_list, csv_history_file):
                     
                     #sp.text_to_speech(conversational_phrase)
                     send_to_pepper(conversational_phrase)
+                    pepper_state = "speaking"
                     messages.append({"role": "assistant", "content": conversational_phrase})
                     log_conversation("Robot",conversational_phrase, csv_file=csv_history_file)
                     
@@ -294,6 +301,7 @@ async def exercise_session(messages, exercise_list, csv_history_file):
 
     #sp.text_to_speech("Great job completing this round!")
     send_to_pepper("Great job completing this round!")
+
     messages.append({"role": "system", "content": "Great job completing this round!"})
     log_conversation("Robot","Great job completing this round!", csv_file=csv_history_file)
 

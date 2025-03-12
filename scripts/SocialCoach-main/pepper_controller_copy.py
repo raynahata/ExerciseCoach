@@ -16,9 +16,9 @@ class Pepper:
         self.motion = ALProxy("ALMotion", self.IP, 9559)
         self.posture = ALProxy("ALRobotPosture", self.IP, 9559)
         self.life = ALProxy('ALAutonomousLife', self.IP, 9559)
-        # self.life.setAutonomousAbilityEnabled("All", True)
-        self.life.setAutonomousAbilityEnabled("All", False)
-        self.life.stopAll()
+        self.life.setAutonomousAbilityEnabled("All", True)
+        # self.life.setAutonomousAbilityEnabled("All", False)
+        # self.life.stopAll()
         self.tablet = ALProxy("ALTabletService",self.IP,9559)
         self.memory = ALProxy("ALMemory", self.IP, 9559)
 
@@ -154,7 +154,9 @@ class Pepper:
         self.set_flag_speaking()
         self.display_text(self.current_text)
         self.say_text(self.current_text)
+        # TODO: Consider the buffer for this say text function
         # self.display_text(self.current_text)
+        time.sleep(0.1)
         while (self.memory.getData("ALTextToSpeech/Status"))[1] != "done":
             time.sleep(0.1)
         rospy.loginfo("Finished Speaking...")
