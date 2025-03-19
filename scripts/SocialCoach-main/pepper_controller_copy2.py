@@ -17,6 +17,8 @@ class Pepper:
         self.posture = ALProxy("ALRobotPosture", self.IP, 9559)
         self.life = ALProxy('ALAutonomousLife', self.IP, 9559)
         self.life.setAutonomousAbilityEnabled("All", True)
+        self.ledProxy = ALProxy("ALLeds", self.IP, 9559)
+        # self.ledProxy = ALProxy("ALLeds", "128.237.236.27", 9559)
         # self.life.setAutonomousAbilityEnabled("All", False)
         # self.life.stopAll()
         self.tablet = ALProxy("ALTabletService",self.IP,9559)
@@ -106,6 +108,7 @@ class Pepper:
         Set state to 'listening' and trigger appropriate action.
         """
         self.state = "listening"
+        self.set_eye_color()
         self.state_pub.publish("listening")
 
     def set_flag_speaking(self):
@@ -113,7 +116,9 @@ class Pepper:
         Set state to 'speaking' and trigger appropriate action.
         """
         self.state = "speaking"
+        self.set_eye_color((255,255,0))
         self.state_pub.publish("speaking")
+
 
     def gpt_callback(self, data):
         """
@@ -139,22 +144,7 @@ class Pepper:
         """
         rospy.loginfo("Received state: {}".format(data.data))
         self.state = data.data
-        # if self.state == "listening" and not self.pepper_thinking:
-        #     # look back
-        #     self.look_back()
-        #     # look away
-        #     self.look_away()
-        #     self.pepper_thinking = True
-        #     # random head move (thinking)
-        #     # self.random_head_move()
-            
 
-        # if self.state == "speaking" and self.pepper_thinking:
-        #     # look back
-        #     self.look_back()
-        #     # random nodding
-        #     # self.nod_head()
-        #     self.pepper_thinking = False
 
     def publish_text(self, text):
         """
@@ -162,6 +152,11 @@ class Pepper:
         """
         rospy.loginfo("Publishing text: {}".format (text))
         self.text_pub.publish(text)
+    
+    def set_eye_color(self, color=(255,255,255)):
+        r, g, b = color
+        hex_color = (r << 16) | (g << 8) | b  # Convert to hex format
+        self.ledProxy.fadeRGB("FaceLeds", hex_color, 0.1)
     
     def clear_screen(self):
         rospy.loginfo("Clearing Pepper's tablet screen.")
@@ -420,6 +415,13 @@ class Pepper:
                     self.stop_exercise_motion()
                 
                 last_command = self.command
+
+                # if self.state == "listening":
+                #     self.set_eye_color()
+
+                # elif self.state == "speaking":
+                #     self.set_eye_color((255,255,0))
+                    
                 
                 rospy.sleep(1)
 
