@@ -40,8 +40,6 @@ class Pepper:
         rospy.Subscriber("speech_display", String, self.display_callback)
         rospy.Subscriber("exercise_command", String, self.exercise_callback)
 
-
-
         rospy.loginfo("Subscribed to /gpt_speech")
 
         self.exercise_running = False  # True when an exercise is running
@@ -179,22 +177,7 @@ class Pepper:
         """
         rospy.loginfo("Received state: {}".format(data.data))
         self.state = data.data
-        # if self.state == "listening" and not self.pepper_thinking:
-        #     # look back
-        #     self.look_back()
-        #     # look away
-        #     self.look_away()
-        #     self.pepper_thinking = True
-        #     # random head move (thinking)
-        #     # self.random_head_move()
-            
-
-        # if self.state == "speaking" and self.pepper_thinking:
-        #     # look back
-        #     self.look_back()
-        #     # random nodding
-        #     # self.nod_head()
-        #     self.pepper_thinking = False
+        
 
     def publish_text(self, text):
         """
