@@ -1,13 +1,14 @@
-# This node file should be run on Python 2.7
-# export PYTHONPATH=${PYTHONPATH}:/home/raynahata/exercise_bot/pynaoqi-python2.7-2.8.6.23-linux64-20191127_152327/lib/python2.7/site-packages
+import sys
+from naoqi import ALProxy
 
 import rospy
-from naoqi import ALProxy
 import math
 import time
 from std_msgs.msg import String
-import threading
 
+# Replace this with your Pepper's IP address
+pepper_ip = "128.237.236.27"
+pepper_port = 9559
 
 class Pepper:
     def __init__(self):
@@ -16,16 +17,13 @@ class Pepper:
         self.motion = ALProxy("ALMotion", self.IP, 9559)
         self.posture = ALProxy("ALRobotPosture", self.IP, 9559)
         self.life = ALProxy('ALAutonomousLife', self.IP, 9559)
-        # self.life.setAutonomousAbilityEnabled("All", True)
         self.life.setAutonomousAbilityEnabled("All", False)
         self.life.stopAll()
-        self.tablet = ALProxy("ALTabletService",self.IP,9559)
-        self.memory = ALProxy("ALMemory", self.IP, 9559)
-        self.leds = ALProxy("ALLeds", self.IP, 9559)
+        self.tablet=ALProxy("ALTabletService",self.IP,9559)
+
         self.tts.setParameter("defaultVoiceSpeed", 70)
         self.tts.setParameter("pitchShift", 1)
         self.exercise_running=False
-        self.pepper_thinking = False
         
         self.state = ""
         self.current_text = ""
@@ -37,8 +35,8 @@ class Pepper:
         self.exercise_publisher = rospy.Publisher("/exercise_command", String, queue_size=10)
         rospy.Subscriber("pepper_state", String, self.callback_state)
         rospy.Subscriber("gpt_speech", String, self.gpt_callback)
-        rospy.Subscriber("speech_display", String, self.display_callback)
         rospy.Subscriber("exercise_command", String, self.exercise_callback)
+
 
         rospy.loginfo("Subscribed to /gpt_speech")
 
@@ -84,6 +82,22 @@ class Pepper:
         self.motion.setAngles(joint_names, angles, speed)
         #self.motion.angleInterpolation(joint_names,angles,[speed]*len(joint_names),True)
 
+    ### Function to Move Torso ###
+    def move_torso(self, angles, speed=0.2):
+        """
+        Moves Pepper's torso to the specified angles
+        Args:
+            angles: List of angles (in radians) for the torso joints
+            speed: Fraction of the maximum speed (0.0 to 1.0)
+        """
+        joint_names = ["HipRoll", "HipPitch", "KneePitch"]
+        if len(angles) != len(joint_names):
+            rospy.logerr("Number of angles does not match the number of torso joints.")
+            return
+
+        rospy.loginfo("Moving torso to angles: {}".format(angles))
+        #TODO: confirm that the joint_names below make sense
+        self.motion.setAngles(joint_names, angles, speed)
 
     def exercise_callback(self, msg):
         """
@@ -98,7 +112,7 @@ class Pepper:
                 self.exercise_running = True
                 self.is_resting = False
                 self.current_exercise = "bicep curls"
-                threading.Thread(target=self.bicep_curls).start()
+                self.bicep_curls()
             else:
                 rospy.loginfo("Bicep curls are already running.")
 
@@ -108,8 +122,7 @@ class Pepper:
                 self.exercise_running = True
                 self.is_resting = False
                 self.current_exercise = "lateral raises"
-                # self.lateral_raises()
-                threading.Thread(target=self.lateral_raises()).start()
+                self.lateral_raises()
             else:
                 rospy.loginfo("Lateral raises are already running.")
 
@@ -119,10 +132,11 @@ class Pepper:
                 self.exercise_running = False
                 self.current_exercise = None
                 self.is_resting = True
-                self.set_eye_color((0, 0, 255))
                 self.stop_exercise_motion()
             else:
                 rospy.loginfo("Already in rest phase.")
+
+
 
     
     def say_text(self, text):
@@ -131,7 +145,6 @@ class Pepper:
         """
         rospy.loginfo("Saying: {}".format(text))
         self.tts.say(text)
-
     
     def set_flag_listening(self):
         """
@@ -157,27 +170,14 @@ class Pepper:
         self.display_text(self.current_text)
         self.say_text(self.current_text)
         # self.display_text(self.current_text)
-        while (self.memory.getData("ALTextToSpeech/Status"))[1] != "done":
-            time.sleep(0.1)
-        rospy.loginfo("Finished Speaking...")
-        time.sleep(0.1)
         self.set_flag_listening()
 
-    def display_callback(self, data):
-        """
-        Callback for 'chat_text' topic.
-        """
-        rospy.loginfo("Received display text: {}".format(data.data))
-        self.current_text = data.data
-        self.display_text(self.current_text)
-    
     def callback_state(self, data):
         """
         Callback for 'pepper_state' topic.
         """
         rospy.loginfo("Received state: {}".format(data.data))
         self.state = data.data
-        
 
     def publish_text(self, text):
         """
@@ -199,11 +199,6 @@ class Pepper:
         rospy.loginfo("Displaying static text on tablet: {}".format(message))
         js_script = """document.body.innerHTML = `<style>body{font-family:Arial,sans-serif;text-align:center;background:#f0f0f0;display:flex;justify-content:center;align-items:center;height:100vh;width:100vw;margin:0;padding:20px;overflow:hidden;} .text{font-size:10vh;color:#333;width:90vw;height:100vh;word-wrap:break-word;overflow-wrap:break-word;display:flex;align-items:center;justify-content:center;text-align:center;white-space:normal;line-height:1.5;}</style><div class='text'>""" + message + """</div>`;"""
         self.tablet.executeJS(js_script)
-
-    def set_eye_color(self, color):
-        r, g, b = color
-        hex_color = (r << 16) | (g << 8) | b  # Convert to hex format
-        self.leds.fadeRGB("FaceLeds", hex_color, 1.0)
 
     ### Hardcoded Arm Motion: Up ###
     def stop_exercise_motion(self):
@@ -291,13 +286,9 @@ class Pepper:
         Moves Pepper's arms up and down for bicep curls until stopped.
         """
         rospy.loginfo("Pepper is performing bicep curls.")
-        rospy.loginfo("-"*20)
+
         try:
             while self.exercise_running and not rospy.is_shutdown():
-                print()
-                rospy.loginfo("[!!] self.exercise_running = {}".format(self.exercise_running))
-                print()
-                
                 self.bicep_arm_motion_up()
                 rospy.loginfo("Arms moved up.")
                 
@@ -315,7 +306,6 @@ class Pepper:
 
         except rospy.ROSInterruptException:
             rospy.loginfo("Bicep curls interrupted.")
-
 
     def lateral_raises(self):
         """
@@ -342,50 +332,70 @@ class Pepper:
 
         except rospy.ROSInterruptException:
             rospy.loginfo("Lateral raises interrupted.")
-    
-    ### Look Back Motion ###
-    def look_back(self):
+
+    ### Begin code for Pepper's movements in response to rating/movement ###
+    def firm_position_action(self):
         """
-        Pepper looking toward the user.
+        Pepper leans forward and arms forward toward the side at a low speed
+
+        //TODO: remove this when you're done (note to self below)
+            joint_names = ["RShoulderPitch", "RShoulderRoll", "RElbowYaw", "RElbowRoll", "RWristYaw"]
+            joint_names = ["LShoulderPitch", "LShoulderRoll", "LElbowYaw", "LElbowRoll", "LWristYaw"]
         """
-        rospy.loginfo("Pepper is looking back.")
 
-        # go to an init head pose.
-        names  = ["HeadYaw", "HeadPitch"] 
-        angles = [0.0, 0.0]
-        times  = [1.0, 1.0]
-        self.motion.angleInterpolation(names, angles, times, True)
+        #Right arm angles in degrees (arm forward toward the side)
+        right_arm_angles_degrees = [66.3, -4.8, 97.8, 6.6, -1.9]
+        right_arm_angles_radians = self.degrees_to_radians(right_arm_angles_degrees)
 
-    def look_away(self):
-        # tilting head
-        rospy.loginfo("Pepper is looking away.")
+        #Left arm angles in degrees (arm forward toward the side)
+        left_arm_angles_degrees = [66.3, 4.8, -97.8, -6.6, 1.9]
+        left_arm_angles_radians = self.degrees_to_radians(left_arm_angles_degrees)
 
-        names  = ["HeadYaw", "HeadPitch"]
-        angles = [-math.pi/5, 0.2]
-        times  = [2.0, 3.0]
-        self.motion.angleInterpolation(names, angles, times, True, _async=True)
+        #torso angles in degrees (leaning forward)
+        torso_angles_degrees = [-0.3, -32.6, -0.8]
+        torso_angles_radians = self.degrees_to_radians(torso_angles_degrees)
 
-    def random_head_move(self):
-        rospy.loginfo("Pepper is randomly moving head.")
+        #move the right arm
+        self.move_arm("R", right_arm_angles_radians, speed=0.1)
 
-        names  = ["HeadYaw", "HeadPitch"]
-        angles = [-math.pi/5, 0.2]
-        times  = [2.0, 3.0]
-        self.motion.angleInterpolation(names, angles, times, True, _async=True)
+        #move the left arm
+        self.move_arm("L", left_arm_angles_radians, speed=0.1)
 
-    def nod_head(self):
-        rospy.loginfo("Pepper is nodding.")
-        
-        # Define the head movement for nodding (pitch angle)
-        names = ["HeadPitch"]
-        # Nodding down and up
-        angles = [-0.1, 0.1]
-        # Time to complete the two movements
-        times = [2.0, 2.0]  # 1.5 seconds for each nod
-        
-        # Perform the nodding motion twice in 3 seconds
-        self.motion.angleInterpolation(names, angles, times, True, _async=True)
+        #move the torso
+        self.move_torso(torso_angles_radians, speed=0.1)
 
+    def neutral_position_action(self):
+        """
+        Pepper has torso straight, arm positions move in somewhat random motion
+        //TODO: implement this. For now, just do a completely neutral position (no random movements)
+        """
+        return True
+
+    def encouraging_position_action(self):
+        """
+        Pepper leans backwards with arms high
+        """
+
+        #right arm angle in degrees (arm high)
+        right_arm_angles_degrees = [-55.9, -0.9, 97.2, 7.1, -0.8]
+        right_arm_angles_radians = self.degrees_to_radians(right_arm_angles_degrees)
+
+        #left arm angles in degrees (arm high)
+        left_arm_angles_degrees = [-55.9, 0.9, -97.2, -7.1, 0.8]
+        left_arm_angles_radians = self.degrees_to_radians(left_arm_angles_degrees)
+
+        # torso angles in degrees (leaning forward)
+        torso_angles_degrees = [1.5, 15.0, -0.6]
+        torso_angles_radians = self.degrees_to_radians(torso_angles_degrees)
+
+        #move the right arm
+        self.move_arm("R", right_arm_angles_radians, speed=0.1)
+
+        #move the left arm
+        self.move_arm("L", left_arm_angles_radians, speed=0.1)
+
+        # move the torso
+        self.move_torso(torso_angles_radians, speed=0.1)
 
     def listener(self):
         """
@@ -403,12 +413,33 @@ class Pepper:
         except KeyboardInterrupt:
             rospy.loginfo("Shutting down Pepper Listener.")
 
-if __name__ == '__main__':
-    rospy.init_node('pepper_controller', anonymous=True)
-    pepper_listener = Pepper()
-    pepper_listener.clear_screen()
 
-    try:
-        rospy.spin()  # Keep the node running
-    except KeyboardInterrupt:
-        rospy.loginfo("Shutting down Pepper Listener.")
+try:
+    print('slay queen ')
+    # Create a proxy to ALMotion
+    motion_proxy = ALProxy("ALMotion", pepper_ip, pepper_port)
+
+    # Wake up Pepper (set to stand posture)
+    motion_proxy.wakeUp()
+
+    # Define the joint names (this is for example; replace with the ones you need)
+    # joint_names = ["HeadYaw", "HeadPitch", "LShoulderPitch", "RShoulderPitch"]
+
+    # Define the angles you want for each joint (in radians)
+    # joint_angles = [0.5, 0.2, 1.0, 1.0]
+    pepper = Pepper()
+    pepper.firm_position_action()
+
+    # Set the angles for the joints
+    # motion_proxy.setAngles(joint_names, joint_angles, 0.2)
+
+    # You can add other movements here by changing the joint names and angles
+   
+    # Example: make the robot walk forward by 0.2 meters
+    # motion_proxy.moveTo(0.2, 0, 0)  # (x, y, theta)
+   
+    # After finishing movements, let Pepper rest
+    motion_proxy.rest()
+
+except Exception as e:
+    print("Error: ", e)

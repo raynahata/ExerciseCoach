@@ -1,3 +1,5 @@
+# export PYTHONPATH=${PYTHONPATH}:/home/raynahata/exercise_bot/pynaoqi-python2.7-2.8.6.23-linux64-20191127_152327/lib/python2.7/site-packages
+
 import rospy
 from naoqi import ALProxy
 

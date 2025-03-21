@@ -65,14 +65,14 @@ def send_to_pepper_dispay_only(text):
     Sends GPT-generated text to Pepper via ROS topic.
     """
     rospy.loginfo("Sending to Pepper: {}".format(text))
-    speech_publisher.publish(text)
+    display_publisher.publish(text)
 
 def send_exercise_to_pepper(text):
     """
     Sends GPT-generated text to Pepper via ROS topic.
     """
-    rospy.loginfo("Sending to display only: {}".format(text))
-    display_publisher.publish(String(text))
+    rospy.loginfo("Sending exercise Pepper: {}".format(text))
+    exercise_publisher.publish(String(text))
     rospy.sleep(1)
 
 
@@ -135,7 +135,7 @@ async def listen_for_wake_word(wake_word="hello", timeout=20):
                 sys.exit(0)  # Exit the script        # Get transcribed text once available
         transcribed_text = transcription_task.result()        
         if transcribed_text:
-            print(f"Transcribed: {transcribed_text}")
+            print(transcribed_text)
             last_detection_time = time.time()  # Reset timeout            # Normalize and check if the wake word is present
             normalized_text = transcribed_text.lower().strip()
             if wake_word in normalized_text:
@@ -150,7 +150,7 @@ def initialize_csv(conv_CSV_filename):
 
 def get_prompt(prompt_name):
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    prompt_template_file = os.path.join(base_dir,prompt_name)
+    prompt_template_file = os.path.join(base_dir,"prompts",prompt_name)
     prompt=read_prompt_file(prompt_template_file)
     return prompt
 
@@ -162,9 +162,7 @@ def read_prompt_file(prompt_file):
 
 async def exercise_session(messages, exercise_list, csv_history_file):
     current_set = 0
-    
-   
-    
+        
     EST = timezone(timedelta(hours=-5))  # Define the EST timezone
     global pepper_state
 
@@ -172,22 +170,28 @@ async def exercise_session(messages, exercise_list, csv_history_file):
         #sp.text_to_speech(f"Let's do some {exercise_list[current_set]}.")
        
         inittime = datetime.now(EST)
-    
-        # Exercise phase (20 seconds)
-        while (datetime.now(EST) - inittime).total_seconds() < 10:
-            if current_set == 0:
-                pepper_speech=f"I'm super excited to exercise with you. Let's do some {exercise_list[current_set]}."
-            else:
-                pepper_speech=f"Let's do some {exercise_list[current_set]}."
+        if current_set == 0:
+            pepper_speech=f"I'm super excited to exercise with you. Let's do some {exercise_list[current_set]}."
             send_to_pepper(pepper_speech)
-            messages.append({"role": "system", "content": pepper_speech})
-            send_exercise_to_pepper(exercise_list[current_set])
+            last_speaker="robot"
+        else:
+            pepper_speech=f"Let's do some {exercise_list[current_set]}."
+            send_to_pepper_dispay_only(pepper_speech)
+        
+        
+        messages.append({"role": "system", "content": pepper_speech})
+        send_exercise_to_pepper(exercise_list[current_set])
+        # Exercise phase (20 seconds)
+        while (datetime.now(EST) - inittime).total_seconds() < 40:
+            
+            
+           
             # print(f"Pepper state = {pepper_state}")
-            if last_speaker == "robot" and pepper_state == "listening":
+            if last_speaker == "robot" :
                 try:
                     # Wait for user response
                     print("Waiting for user response...")
-                    user_message = await asyncio.wait_for(start_transcription(), timeout=10)
+                    user_message = await asyncio.wait_for(start_transcription(), timeout=50)
                     log_conversation("User", user_message, csv_file=csv_history_file)
                     print("You:", user_message)
                     if user_message.lower().replace(" ", "").strip(string.punctuation) == "bye":
@@ -243,7 +247,7 @@ async def exercise_session(messages, exercise_list, csv_history_file):
                         # Wait for user response
                         # user_message = await start_transcription()
                         print("Waiting for user response...")
-                        user_message = await asyncio.wait_for(start_transcription(), timeout=10)
+                        user_message = await asyncio.wait_for(start_transcription(), timeout=50)
                         log_conversation("User", user_message, csv_file=csv_history_file)
                         print("You:", user_message)
                         
@@ -277,7 +281,9 @@ async def exercise_session(messages, exercise_list, csv_history_file):
                     last_speaker = "robot"
 
     #sp.text_to_speech("Great job completing this round!")
+    send_exercise_to_pepper("rest")
     send_to_pepper("Great job completing this round!")
+
     messages.append({"role": "system", "content": "Great job completing this round!"})
     log_conversation("Robot","Great job completing this round!", csv_file=csv_history_file)
 
