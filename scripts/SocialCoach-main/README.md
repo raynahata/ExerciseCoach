@@ -47,7 +47,7 @@ Step 1:
  https://www.aldebaran.com/en/support/nao-6/downloads-softwares
  - Extract the tar.gz file and export the package
  ```
- export PYTHONPATH=${PYTHONPATH}:/path_to_naoqi_sdk/lib/python2.7/site-packages
+ export PYTHONPATH=${PYTHONPATH}:/home/raynahata/exercise_bot/pynaoqi-python2.7-2.8.6.23-linux64-20191127_152327/lib/python2.7/site-packages
  ```
 
 Step 2:
