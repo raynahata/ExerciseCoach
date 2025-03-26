@@ -31,7 +31,7 @@ def callback_state(data):
     rospy.loginfo("Received state: {}".format(data.data))
     pepper_state = data.data
 
-
+state_publisher = rospy.Publisher("/pepper_state", String, queue_size=10)
 speech_publisher = rospy.Publisher("/gpt_speech", String, queue_size=10)
 exercise_publisher = rospy.Publisher("/exercise_command", String, queue_size=10)
 rospy.Subscriber("pepper_state", String, callback_state)
@@ -51,8 +51,8 @@ def getkey():
 client = openai.OpenAI(api_key=getkey())
 
 def send_state_to_pepper(state):
-    rospy.loginfo("Sending exercise Pepper: {}".format(state))
-    exercise_publisher.publish(String(state))
+    rospy.loginfo("Sending state Pepper: {}".format(state))
+    state_publisher.publish(String(state))
     rospy.sleep(1)
 
 def send_to_pepper(text):
@@ -191,14 +191,17 @@ def read_prompt_file(prompt_file):
 
 async def exercise_session(messages, exercise_list, csv_history_file):
     current_set = 0
-    #sp.text_to_speech("Starting the social session.")
-    send_to_pepper("Starting the socials session.")
-    last_speaker = "robot"  # Initialize the last speaker as the robot
-    EST = timezone(timedelta(hours=-5))  # Define the EST timezone
     global pepper_state
+    pepper_state = "speaking"
+    send_state_to_pepper(pepper_state)
+    send_to_pepper("Starting the socials session.")
+    EST = timezone(timedelta(hours=-5))  # Define the EST timezone
+    last_speaker = "robot"  # Initialize the last speaker as the robot
 
     while current_set < 4 and not rospy.is_shutdown():  # 4 sets in each round
         #sp.text_to_speech(f"Let's do some {exercise_list[current_set]}.")
+        pepper_state = "speaking"
+        send_state_to_pepper(pepper_state)
         send_to_pepper(f"Let's do some {exercise_list[current_set]}.")
         messages.append({"role": "system", "content": f"Let's do some {exercise_list[current_set]}."})
         inittime = datetime.now(EST)
@@ -229,15 +232,17 @@ async def exercise_session(messages, exercise_list, csv_history_file):
                     pepper_state = "speaking"
                     send_state_to_pepper(pepper_state)
                     last_speaker = "robot"
+                    break
+
 
             elif last_speaker == "user":
                 # Generate and speak robot response
                 conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
-            
-                #sp.text_to_speech(conversational_phrase)
-                send_to_pepper(conversational_phrase)
                 pepper_state = "speaking"
                 send_state_to_pepper(pepper_state)
+                assert pepper_state == "speaking"
+                #sp.text_to_speech(conversational_phrase)
+                send_to_pepper(conversational_phrase)
                 messages.append({"role": "assistant", "content": conversational_phrase})
                 log_conversation("Robot", conversational_phrase, csv_history_file)
 
@@ -246,6 +251,8 @@ async def exercise_session(messages, exercise_list, csv_history_file):
 
         # End of the set
         #sp.text_to_speech("Done with the set.")
+        pepper_state = "speaking"
+        send_state_to_pepper(pepper_state)
         send_to_pepper("Done with the set.")
         log_conversation("Robot", "Done with the set.", csv_history_file)
         send_exercise_to_pepper("rest")
@@ -257,6 +264,8 @@ async def exercise_session(messages, exercise_list, csv_history_file):
             #sp.text_to_speech("Take a rest for 40 seconds.")
             messages.append({"role": "system", "content": "Take a rest for 40 seconds."})
 
+            pepper_state = "speaking"
+            send_state_to_pepper(pepper_state)
             send_to_pepper("Take a rest for 40 seconds.")
             log_conversation("Robot","Take a rest for 40 seconds.", csv_history_file)\
 
@@ -275,10 +284,10 @@ async def exercise_session(messages, exercise_list, csv_history_file):
                         
                         if user_message.lower().replace(" ", "").strip(string.punctuation) == "bye":
                             #sp.text_to_speech("Ending session.")
-                            robot_response="Thank you for exercising with me."
-                            send_to_pepper(robot_response)
                             pepper_state = "speaking"
                             send_state_to_pepper(pepper_state)
+                            robot_response="Thank you for exercising with me."
+                            send_to_pepper(robot_response)
                             send_exercise_to_pepper("rest")
                             log_conversation("Robot", robot_response, csv_file=csv_history_file)
                             print("Ending session.")
@@ -289,28 +298,28 @@ async def exercise_session(messages, exercise_list, csv_history_file):
                         messages.append({"role": "user", "content": user_message})
                     except asyncio.TimeoutError:
                         # Handle timeout case
-                        print("Timeout: No user response detected within 20 seconds.")
+                        print("Timeout: No user response detected within 40 seconds.")
                         pepper_state = "speaking"
                         send_state_to_pepper(pepper_state)
                         last_speaker = "robot"
+                        break
 
                 elif last_speaker == "user":
                     # Generate and speak robot response
                     conversational_phrase = await generate_conversational_phrase(messages, csv_history_file)
                     
-                    #sp.text_to_speech(conversational_phrase)
-                    send_to_pepper(conversational_phrase)
                     pepper_state = "speaking"
                     send_state_to_pepper(pepper_state)
+                    send_to_pepper(conversational_phrase)
                     messages.append({"role": "assistant", "content": conversational_phrase})
                     log_conversation("Robot",conversational_phrase, csv_file=csv_history_file)
                     
                     # Update last speaker
                     last_speaker = "robot"
 
-    #sp.text_to_speech("Great job completing this round!")
+    pepper_state = "speaking"
+    send_state_to_pepper(pepper_state)
     send_to_pepper("Great job completing this round!")
-
     messages.append({"role": "system", "content": "Great job completing this round!"})
     log_conversation("Robot","Great job completing this round!", csv_file=csv_history_file)
 

@@ -6,7 +6,6 @@ from naoqi import ALProxy
 import math
 import time
 from std_msgs.msg import String
-import threading
 
 
 class Pepper:
@@ -97,28 +96,15 @@ class Pepper:
     
     def say_text(self, text):
         """
-        Make Pepper say the provided text.
+        Make Pepper say the provided text in a blocking manner, 
         """
         rospy.loginfo("Saying: {}".format(text))
         self.tts.say(text)
-
-    
-    def set_flag_listening(self):
-        """
-        Set state to 'listening' and trigger appropriate action.
-        """
-        self.state = "listening"
-        self.set_eye_color()
-        self.state_pub.publish("listening")
-
-    def set_flag_speaking(self):
-        """
-        Set state to 'speaking' and trigger appropriate action.
-        """
-        self.state = "speaking"
-        self.set_eye_color((255,255,0))
-        self.state_pub.publish("speaking")
-
+        
+        # Block until speaking is finished
+        while (self.memory.getData("ALTextToSpeech/Status"))[1] != "done":
+            time.sleep(0.1)
+        rospy.loginfo("Finished Speaking...")
 
     def gpt_callback(self, data):
         """
@@ -126,17 +112,18 @@ class Pepper:
         """
         rospy.loginfo("Received GPT Speech: {}".format(data.data))
         self.current_text = data.data
-        self.set_flag_speaking()
-        self.display_text(self.current_text)
-        self.say_text(self.current_text)
-        # TODO: Consider the buffer for this say text function
-        # self.display_text(self.current_text)
-        time.sleep(0.1)
-        while (self.memory.getData("ALTextToSpeech/Status"))[1] != "done":
-            time.sleep(0.1)
-        rospy.loginfo("Finished Speaking...")
-        time.sleep(0.1)
-        self.set_flag_listening()
+
+        print("[WATCHING]------------------------------------------------------")
+        print("[WATCHING]", self.state)
+        print("[WATCHING]------------------------------------------------------")
+
+        if self.state == "speaking":
+            self.state_pub.publish("speaking")
+            self.display_text(self.current_text)
+            self.say_text(self.current_text)
+            self.state = "listening"
+            self.state_pub.publish("listening")
+
 
     def callback_state(self, data):
         """
@@ -144,6 +131,10 @@ class Pepper:
         """
         rospy.loginfo("Received state: {}".format(data.data))
         self.state = data.data
+        if self.state == "speaking":
+            self.set_eye_color(color=(255,255,0))
+        else:
+            self.set_eye_color(color=(255,255,255))
 
 
     def publish_text(self, text):
@@ -258,10 +249,6 @@ class Pepper:
         Moves Pepper's arms up and down for bicep curls until stopped.
         """
         rospy.loginfo("Pepper is performing bicep curls.")
-        rospy.loginfo("-"*20)
-        print()
-        rospy.loginfo("[!!] self.exercise_running = {}".format(self.exercise_running))
-        print()
         
         self.bicep_arm_motion_up()
         rospy.loginfo("Arms moved up.")
@@ -272,30 +259,6 @@ class Pepper:
         rospy.loginfo("Arms moved down.")
         rospy.sleep(2)
         rospy.loginfo("Bicep curls stopped. Entering rest phase.")
-
-        # try:
-        #     while self.exercise_running and not rospy.is_shutdown():
-        #         print()
-        #         rospy.loginfo("[!!] self.exercise_running = {}".format(self.exercise_running))
-        #         print()
-                
-        #         self.bicep_arm_motion_up()
-        #         rospy.loginfo("Arms moved up.")
-                
-        #         rospy.sleep(2)
-
-        #         self.bicep_arm_motion_down()
-        #         rospy.loginfo("Arms moved down.")
-        #         rospy.sleep(2)
-
-        #     self.exercise_running = False
-        #     self.current_exercise = None
-        #     self.is_resting = True
-        #     self.exercise_publisher.publish("rest")  
-
-        # except rospy.ROSInterruptException:
-        #     rospy.loginfo("Bicep curls interrupted.")
-
 
     def lateral_raises(self):
         """
@@ -313,25 +276,6 @@ class Pepper:
 
         rospy.loginfo("Lateral raises stopped. Entering rest phase.")
 
-        # try:
-        #     while self.exercise_running and not rospy.is_shutdown():
-        #         self.lateral_arm_motion_up()
-        #         rospy.loginfo("Arms moved up.")
-                
-        #         rospy.sleep(2)
-
-        #         self.lateral_arm_motion_down()
-        #         rospy.loginfo("Arms moved down.")
-        #         rospy.sleep(2)
-
-        #     rospy.loginfo("Lateral raises stopped. Entering rest phase.")
-        #     self.exercise_running = False
-        #     self.current_exercise = None
-        #     self.is_resting = True
-        #     self.exercise_publisher.publish("rest")  
-
-        # except rospy.ROSInterruptException:
-        #     rospy.loginfo("Lateral raises interrupted.")
     
     ### Look Back Motion ###
     def look_back(self):
@@ -416,12 +360,11 @@ class Pepper:
                 
                 last_command = self.command
 
-                # if self.state == "listening":
-                #     self.set_eye_color()
+                if self.state == "speaking":
+                    self.set_eye_color(color=(255,255,0))
+                else:
+                    self.set_eye_color(color=(255,255,255))
 
-                # elif self.state == "speaking":
-                #     self.set_eye_color((255,255,0))
-                    
                 
                 rospy.sleep(1)
 
