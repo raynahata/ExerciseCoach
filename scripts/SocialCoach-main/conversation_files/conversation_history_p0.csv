@@ -1,0 +1,168 @@
+role,content,timestamp
+2025-03-26 13:21:03,Robot,"{""Hello! I'm Pepper, your exercise robot. How are you today?"", false}"
+2025-03-26 13:21:03,Robot,"Hello! I'm Pepper, your exercise robot. How are you today?"
+2025-03-26 13:21:15,User,Good. How are you?
+2025-03-26 13:21:16,Robot,"I'm functioning great, thank you! Before we start, I'll ask a few questions. How old are you?"
+2025-03-26 13:21:33,User,56
+2025-03-26 13:21:34,Robot,Thank you! Do you choose to exercise on your own?
+2025-03-26 13:21:56,User,Sometimes
+2025-03-26 13:21:56,Robot,"Great! Do you feel like someone else is making you exercise, such as a doctor or family member?"
+2025-03-26 13:22:13,User,Doctor is
+2025-03-26 13:22:14,Robot,"Understood. On a scale of 1 to 10, what's your current energy level?"
+2025-03-26 13:22:27,User,feel like a 9.
+2025-03-26 13:22:29,Robot,"That's excellent! Here's the exercise session: Two rounds, four sets each. Bicep curls and lateral raises, 40 seconds per set. Any questions?"
+2025-03-26 13:23:04,User,No
+2025-03-26 13:23:05,Robot,Are you ready to start the exercises with me?
+2025-03-26 13:23:15,User,Yes.
+2025-03-26 13:23:15,Robot,"{""Great! Before we do some exercises, please fill out a survey!"", true}"
+2025-03-26 13:23:55,User,"Yeah, I'm going to go. For a swim"
+2025-03-26 13:23:56,Robot,That sounds refreshing! Do you swim often?
+2025-03-26 13:23:56,Robot,That sounds refreshing! Do you swim often?
+2025-03-26 13:24:06,User,I saw about once a week.
+2025-03-26 13:24:07,Robot,Nice! Swimming is a great workout. Do you have a favorite swimming stroke?
+2025-03-26 13:24:07,Robot,Nice! Swimming is a great workout. Do you have a favorite swimming stroke?
+2025-03-26 13:24:21,User,I like to swim freestyle.
+2025-03-26 13:24:21,Robot,Done with the set.
+2025-03-26 13:24:22,Robot,Take a rest for 40 seconds.
+2025-03-26 13:24:24,Robot,Freestyle's a favorite for many. Do you watch any swimming competitions?
+2025-03-26 13:24:24,Robot,Freestyle's a favorite for many. Do you watch any swimming competitions?
+2025-03-26 13:24:39,User,Not really.
+2025-03-26 13:24:41,Robot,Got it! Do you enjoy any other sports or activities?
+2025-03-26 13:24:41,Robot,Got it! Do you enjoy any other sports or activities?
+2025-03-26 13:24:52,User,I like to go running.
+2025-03-26 13:24:53,Robot,Awesome! Do you have a favorite running trail or route?
+2025-03-26 13:24:53,Robot,Awesome! Do you have a favorite running trail or route?
+2025-03-26 13:25:05,User,"No, can you suggest me one?"
+2025-03-26 13:25:06,Robot,Sure! Try a scenic park or a waterfront path for a refreshing run.
+2025-03-26 13:25:06,Robot,Sure! Try a scenic park or a waterfront path for a refreshing run.
+2025-03-26 13:25:20,User,Thank you.
+2025-03-26 13:25:20,Robot,Done with the set.
+2025-03-26 13:25:21,Robot,Take a rest for 40 seconds.
+2025-03-26 13:25:23,Robot,You're welcome! Do you listen to music while running?
+2025-03-26 13:25:23,Robot,You're welcome! Do you listen to music while running?
+2025-03-26 13:25:36,User,Not really. Can you suggest me something?
+2025-03-26 13:25:39,Robot,Try upbeat playlists or podcasts. They can make runs more enjoyable!
+2025-03-26 13:25:39,Robot,Try upbeat playlists or podcasts. They can make runs more enjoyable!
+2025-03-26 13:25:53,User,music
+2025-03-26 13:25:54,Robot,How about some energetic pop or rock tracks? They'll keep you motivated!
+2025-03-26 13:25:54,Robot,How about some energetic pop or rock tracks? They'll keep you motivated!
+2025-03-26 13:26:08,User,"Yeah, I like those."
+2025-03-26 13:26:09,Robot,Great choice! Do you have any favorite songs or artists?
+2025-03-26 13:26:09,Robot,Great choice! Do you have any favorite songs or artists?
+2025-03-26 13:26:21,User,I like Taylor Swift.
+2025-03-26 13:26:21,Robot,Done with the set.
+2025-03-26 13:26:22,Robot,Take a rest for 40 seconds.
+2025-03-26 13:26:24,Robot,Nice! She's got some catchy tunes. Any favorite Taylor Swift song?
+2025-03-26 13:26:24,Robot,Nice! She's got some catchy tunes. Any favorite Taylor Swift song?
+2025-03-26 13:26:38,User,"No, do you have one that you like?"
+2025-03-26 13:26:41,Robot,"I enjoy ""Shake It Off"" for its energy! It's perfect for workouts."
+2025-03-26 13:26:41,Robot,"I enjoy ""Shake It Off"" for its energy! It's perfect for workouts."
+2025-03-26 13:26:56,User,You're so right. I think I will listen to that.
+2025-03-26 13:26:58,Robot,Great choice! It's sure to keep you energized during your run.
+2025-03-26 13:26:58,Robot,Great choice! It's sure to keep you energized during your run.
+2025-03-26 13:27:11,User,What do you like to do?
+2025-03-26 13:27:12,Robot,I enjoy learning new things and helping people out. How about you?
+2025-03-26 13:27:12,Robot,I enjoy learning new things and helping people out. How about you?
+2025-03-26 13:27:28,User,"I also like to learn. Did you, did you learn anything new?"
+2025-03-26 13:27:28,Robot,Done with the set.
+2025-03-26 13:27:30,Robot,Great job completing this round!
+2025-03-26 13:32:38,User,up
+2025-03-26 13:32:39,Robot,Nice! Got anything exciting planned for later?
+2025-03-26 13:32:39,Robot,Nice! Got anything exciting planned for later?
+2025-03-26 13:32:52,User,Bye.
+2025-03-26 13:32:53,Robot,Thank you for exercising with me.
+2025-03-26 13:33:24,User,Bye.
+2025-03-26 13:33:26,Robot,Thank you for exercising with me.
+2025-03-26 13:34:34,User,How are you?
+2025-03-26 13:34:35,Robot,"I'm doing great, thanks! How about you?"
+2025-03-26 13:34:35,Robot,"I'm doing great, thanks! How about you?"
+2025-03-26 13:34:49,User,I'm doing great.
+2025-03-26 13:34:49,Robot,Done with the set.
+2025-03-26 13:34:50,Robot,Take a rest for 40 seconds.
+2025-03-26 13:34:51,Robot,Awesome! Do you have any hobbies you enjoy?
+2025-03-26 13:34:51,Robot,Awesome! Do you have any hobbies you enjoy?
+2025-03-26 13:35:01,User,some.
+2025-03-26 13:35:03,Robot,Nice! What hobbies are you into?
+2025-03-26 13:35:03,Robot,Nice! What hobbies are you into?
+2025-03-26 13:35:13,User,Bye.
+2025-03-26 13:35:14,Robot,Thank you for exercising with me.
+2025-03-26 13:35:34,User,Bye.
+2025-03-26 13:35:35,Robot,Thank you for exercising with me.
+2025-03-26 13:36:00,User,Bye.
+2025-03-26 13:36:02,Robot,Thank you for exercising with me.
+2025-03-26 13:36:46,User,I have something to
+2025-03-26 13:36:47,Robot,That's great! What's on your agenda?
+2025-03-26 13:36:47,Robot,That's great! What's on your agenda?
+2025-03-26 13:36:57,User,I
+2025-03-26 13:36:58,Robot,No worries! Take your time. What's your plan?
+2025-03-26 13:36:58,Robot,No worries! Take your time. What's your plan?
+2025-03-26 13:37:09,User,Volleyball.
+2025-03-26 13:37:10,Robot,Awesome! Do you play often?
+2025-03-26 13:37:10,Robot,Awesome! Do you play often?
+2025-03-26 13:37:10,Robot,Done with the set.
+2025-03-26 13:37:11,Robot,Take a rest for 40 seconds.
+2025-03-26 13:37:28,User,Volleyball
+2025-03-26 13:37:30,Robot,Volleyball sounds fun! Do you play in a league or with friends?
+2025-03-26 13:37:30,Robot,Volleyball sounds fun! Do you play in a league or with friends?
+2025-03-26 13:37:43,User,Now
+2025-03-26 13:37:43,Robot,Playing now? That's exciting! Indoor or beach volleyball?
+2025-03-26 13:37:43,Robot,Playing now? That's exciting! Indoor or beach volleyball?
+2025-03-26 13:37:55,User,Bye.
+2025-03-26 13:37:56,Robot,Thank you for exercising with me.
+2025-03-26 13:39:34,User,Bye.
+2025-03-26 13:39:35,Robot,Thank you for exercising with me.
+2025-03-26 13:41:12,User,"Yes, I am excited to exercise with you."
+2025-03-26 13:41:13,Robot,Awesome! Anything special planned after our workout?
+2025-03-26 13:41:13,Robot,Awesome! Anything special planned after our workout?
+2025-03-26 13:41:24,User,Not really.
+2025-03-26 13:41:25,Robot,That's cool. Do you usually have relaxing days after workouts?
+2025-03-26 13:41:25,Robot,That's cool. Do you usually have relaxing days after workouts?
+2025-03-26 13:41:37,User,"Yeah, I"
+2025-03-26 13:41:37,Robot,Done with the set.
+2025-03-26 13:41:38,Robot,Take a rest for 40 seconds.
+2025-03-26 13:41:39,Robot,Do you have any favorite TV shows you like to watch during downtime?
+2025-03-26 13:41:39,Robot,Do you have any favorite TV shows you like to watch during downtime?
+2025-03-26 13:42:03,User,I like to watch Grey's Anatomy.
+2025-03-26 13:42:05,Robot,Grey's Anatomy is so gripping! Do you have a favorite character?
+2025-03-26 13:42:05,Robot,Grey's Anatomy is so gripping! Do you have a favorite character?
+2025-03-26 13:42:19,User,Not really. You ever watched it?
+2025-03-26 13:42:20,Robot,"I haven't watched it, but I've heard great things about it!"
+2025-03-26 13:42:20,Robot,"I haven't watched it, but I've heard great things about it!"
+2025-03-26 13:42:43,User,favorite
+2025-03-26 13:42:43,Robot,Done with the set.
+2025-03-26 13:42:44,Robot,Take a rest for 40 seconds.
+2025-03-26 13:42:46,Robot,Do you have a favorite music genre?
+2025-03-26 13:42:46,Robot,Do you have a favorite music genre?
+2025-03-26 13:43:06,User,No
+2025-03-26 13:43:11,Robot,That's cool! Do you enjoy discovering new music or artists?
+2025-03-26 13:43:11,Robot,That's cool! Do you enjoy discovering new music or artists?
+2025-03-26 13:43:23,User,Sometimes
+2025-03-26 13:43:25,Robot,Nice! Have you discovered any new artists recently?
+2025-03-26 13:43:25,Robot,Nice! Have you discovered any new artists recently?
+2025-03-26 13:43:36,User,I like listening
+2025-03-26 13:43:37,Robot,That's great! Listening to music makes workouts more fun!
+2025-03-26 13:43:37,Robot,That's great! Listening to music makes workouts more fun!
+2025-03-26 13:43:50,User,Yeah.
+2025-03-26 13:43:50,Robot,Done with the set.
+2025-03-26 13:43:51,Robot,Take a rest for 40 seconds.
+2025-03-26 13:43:52,Robot,Do you have any favorite places you've visited?
+2025-03-26 13:43:52,Robot,Do you have any favorite places you've visited?
+2025-03-26 13:44:18,User,I like to visit Paris.
+2025-03-26 13:44:20,Robot,Paris is amazing! What do you love most about it?
+2025-03-26 13:44:20,Robot,Paris is amazing! What do you love most about it?
+2025-03-26 13:44:35,User,I really like walking around the city and I like shopping and I like the food.
+2025-03-26 13:44:36,Robot,Sounds wonderful! The food in Paris is exceptional. Any favorite dishes?
+2025-03-26 13:44:36,Robot,Sounds wonderful! The food in Paris is exceptional. Any favorite dishes?
+2025-03-26 13:44:49,User,I like all of them.
+2025-03-26 13:44:50,Robot,That's awesome! Trying everything sounds like a delicious adventure!
+2025-03-26 13:44:50,Robot,That's awesome! Trying everything sounds like a delicious adventure!
+2025-03-26 13:45:04,User,Do you have a favorite dish?
+2025-03-26 13:45:04,Robot,Done with the set.
+2025-03-26 13:45:06,Robot,Great job completing this round!
+2025-03-26 14:19:26,Robot,"{""Hello! I'm Pepper, your exercise robot. How are you today?"", false}"
+2025-03-26 14:19:26,Robot,"Hello! I'm Pepper, your exercise robot. How are you today?"
+2025-03-26 14:19:39,User,I'm good. How are you?
+2025-03-26 14:19:40,Robot,"I'm functioning optimally, thank you! Before we explain the exercises, I'll ask you some questions. How old are you?"
+2025-03-26 14:19:57,User,I'm 56.
+2025-03-26 14:19:58,Robot,Thank you. Is exercise something you choose to do?
+2025-03-26 14:20:08,User,Bye

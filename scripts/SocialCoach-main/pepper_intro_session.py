@@ -182,7 +182,7 @@ async def exercise_session(messages, exercise_list, csv_history_file):
         messages.append({"role": "system", "content": pepper_speech})
         send_exercise_to_pepper(exercise_list[current_set])
         # Exercise phase (20 seconds)
-        while (datetime.now(EST) - inittime).total_seconds() < 40:
+        while (datetime.now(EST) - inittime).total_seconds() < 10:
             
             
            
@@ -279,6 +279,7 @@ async def exercise_session(messages, exercise_list, csv_history_file):
                     
                     # Update last speaker
                     last_speaker = "robot"
+
         if current_set==4:
     #sp.text_to_speech("Great job completing this round!")
     
@@ -287,14 +288,6 @@ async def exercise_session(messages, exercise_list, csv_history_file):
 
             messages.append({"role": "system", "content": "Great job completing this round!"})
             log_conversation("Robot","Great job completing this round!", csv_file=csv_history_file)
-            break
-    #sp.text_to_speech("Great job completing this round!")
-    
-    # send_to_pepper("Great job completing this round!")
-    # send_exercise_to_pepper("rest")
-
-    # messages.append({"role": "system", "content": "Great job completing this round!"})
-    # log_conversation("Robot","Great job completing this round!", csv_file=csv_history_file)
 
 async def intro_session(messages, csv_history_file):
     """
@@ -367,23 +360,23 @@ async def main():
     csv_history_file = os.path.join(base_dir, "conversation_files",csv_filename)
     
     #getting the prompts
-    #initial_prompt=get_prompt("prompt")
+    initial_prompt=get_prompt("intro_prompt")
     conversational_prompt=get_prompt("conversational_prompt")
 
-    #messages = [{"role": "system", "content": initial_prompt}]
+    messages = [{"role": "system", "content": initial_prompt}]
     conversational_messages = [{"role": "system", "content": conversational_prompt}]
 
 
     # Wake word detection
-    await listen_for_wake_word(wake_word="ready")
+    #await listen_for_wake_word()
 
   
     print("Starting the intro session...")
-    #intro_messages=await intro_session(messages, csv_history_file)
+    intro_messages=await intro_session(messages, csv_history_file)
     
-    print("Starting the exercise session...")
-    exercise_list = ["bicep curls", "bicep curls", "lateral raises", "lateral raises"]
-    await exercise_session(conversational_messages, exercise_list, csv_history_file)
+    #print("Starting the exercise session...")
+    #exercise_list = ["bicep curls", "bicep curls", "lateral raises", "lateral raises"]
+    #await exercise_session(conversational_messages, exercise_list, csv_history_file)
 
 if __name__ == "__main__":
     asyncio.run(main())

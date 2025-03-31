@@ -2146,3 +2146,359 @@ role,content,timestamp
 2025-03-21 13:28:21,Robot,Thank you for exercising with me.
 2025-03-21 13:30:53,User,Bye.
 2025-03-21 13:30:54,Robot,Thank you for exercising with me.
+2025-03-26 12:40:12,User,How are you today?
+2025-03-26 12:40:13,Robot,"I'm doing great, thanks! How about you? Ready to get moving?"
+2025-03-26 12:40:13,Robot,"I'm doing great, thanks! How about you? Ready to get moving?"
+2025-03-26 12:40:23,User,Yeah
+2025-03-26 12:40:24,Robot,Awesome! Got any fun plans after our workout?
+2025-03-26 12:40:24,Robot,Awesome! Got any fun plans after our workout?
+2025-03-26 12:40:42,User,For a run.
+2025-03-26 12:40:42,Robot,Done with the set.
+2025-03-26 12:40:43,Robot,Take a rest for 40 seconds.
+2025-03-26 12:40:45,Robot,Running sounds great! Do you have a favorite route?
+2025-03-26 12:40:45,Robot,Running sounds great! Do you have a favorite route?
+2025-03-26 12:40:56,User,I really like I
+2025-03-26 12:40:58,Robot,That's awesome! Running can be so refreshing. Do you listen to music while you run?
+2025-03-26 12:40:58,Robot,That's awesome! Running can be so refreshing. Do you listen to music while you run?
+2025-03-26 12:41:09,User,"Yeah, I"
+2025-03-26 12:41:10,Robot,Nice! What kind of music do you usually listen to while running?
+2025-03-26 12:41:10,Robot,Nice! What kind of music do you usually listen to while running?
+2025-03-26 12:41:20,User,I
+2025-03-26 12:41:21,Robot,Cool! Do you have a favorite artist or playlist?
+2025-03-26 12:41:21,Robot,Cool! Do you have a favorite artist or playlist?
+2025-03-26 12:41:30,User,Bye.
+2025-03-26 12:41:31,Robot,Thank you for exercising with me.
+2025-03-26 12:42:50,User,How are you today?
+2025-03-26 12:42:51,Robot,"I'm doing great, thanks! How about you?"
+2025-03-26 12:42:51,Robot,"I'm doing great, thanks! How about you?"
+2025-03-26 12:43:07,User,How are you?
+2025-03-26 12:43:07,Robot,Done with the set.
+2025-03-26 12:43:08,Robot,Take a rest for 40 seconds.
+2025-03-26 12:43:10,Robot,"I'm doing well, thanks! What's new with you?"
+2025-03-26 12:43:10,Robot,"I'm doing well, thanks! What's new with you?"
+2025-03-26 12:43:23,User,Hi
+2025-03-26 12:43:25,Robot,Hey! Ready to get those muscles working?
+2025-03-26 12:43:25,Robot,Hey! Ready to get those muscles working?
+2025-03-26 12:43:32,User,Bye.
+2025-03-26 12:43:33,Robot,Thank you for exercising with me.
+2025-03-26 12:44:00,User,are you today?
+2025-03-26 12:44:00,Robot,"I'm great, thanks! How about you? Anything exciting planned today?"
+2025-03-26 12:44:00,Robot,"I'm great, thanks! How about you? Anything exciting planned today?"
+2025-03-26 12:44:32,User,Not really.
+2025-03-26 12:44:32,Robot,Done with the set.
+2025-03-26 12:44:33,Robot,Take a rest for 40 seconds.
+2025-03-26 12:44:35,Robot,Do you have any hobbies you enjoy during downtime?
+2025-03-26 12:44:35,Robot,Do you have any hobbies you enjoy during downtime?
+2025-03-26 12:44:49,User,"Yeah, I to play some board games."
+2025-03-26 12:44:51,Robot,Board games are fun! Do you have a favorite one?
+2025-03-26 12:44:51,Robot,Board games are fun! Do you have a favorite one?
+2025-03-26 12:45:17,User,I really like to play
+2025-03-26 12:45:19,Robot,Nice! Do you play often with family or friends?
+2025-03-26 12:45:19,Robot,Nice! Do you play often with family or friends?
+2025-03-26 12:45:45,User,I play with my friends.
+2025-03-26 12:45:45,Robot,Done with the set.
+2025-03-26 12:45:46,Robot,Take a rest for 40 seconds.
+2025-03-26 12:45:47,Robot,That's awesome! Any other fun activities you like to do with friends?
+2025-03-26 12:45:47,Robot,That's awesome! Any other fun activities you like to do with friends?
+2025-03-26 12:46:01,User,We are going to go watch a play this weekend.
+2025-03-26 12:46:03,Robot,That sounds like a great time! What play are you going to see?
+2025-03-26 12:46:03,Robot,That sounds like a great time! What play are you going to see?
+2025-03-26 12:46:17,User,Something about Virginia Woolf. You know it?
+2025-03-26 12:46:18,Robot,"Yes, ""Who's Afraid of Virginia Woolf?"" is a classic! Enjoy the show!"
+2025-03-26 12:46:18,Robot,"Yes, ""Who's Afraid of Virginia Woolf?"" is a classic! Enjoy the show!"
+2025-03-26 12:46:33,User,Thanks. have a favorite show?
+2025-03-26 12:46:34,Robot,"I enjoy ""Stranger Things."" Have you seen it?"
+2025-03-26 12:46:34,Robot,"I enjoy ""Stranger Things."" Have you seen it?"
+2025-03-26 12:46:46,User,"No, it's on my list of things to watch."
+2025-03-26 12:46:46,Robot,Done with the set.
+2025-03-26 12:46:47,Robot,Take a rest for 40 seconds.
+2025-03-26 12:46:49,Robot,It's a thrilling ride! What genre do you usually enjoy?
+2025-03-26 12:46:49,Robot,It's a thrilling ride! What genre do you usually enjoy?
+2025-03-26 12:47:00,User,I really like
+2025-03-26 12:47:02,Robot,Great choice! Do you have a favorite mystery show?
+2025-03-26 12:47:02,Robot,Great choice! Do you have a favorite mystery show?
+2025-03-26 12:47:15,User,Not really. I kind of like to watch them all.
+2025-03-26 12:47:16,Robot,That's cool! Variety keeps things interesting. Have any recommendations?
+2025-03-26 12:47:16,Robot,That's cool! Variety keeps things interesting. Have any recommendations?
+2025-03-26 12:47:31,User,"So, do you have any recommendations for me?"
+2025-03-26 12:47:32,Robot,"Sure! Try ""Sherlock"" or ""Broadchurch"" for some intriguing mysteries."
+2025-03-26 12:47:32,Robot,"Sure! Try ""Sherlock"" or ""Broadchurch"" for some intriguing mysteries."
+2025-03-26 12:47:47,User,"Cool, thank you so much."
+2025-03-26 12:47:47,Robot,Done with the set.
+2025-03-26 12:47:49,Robot,Great job completing this round!
+2025-03-26 12:50:03,User,How are you today?
+2025-03-26 12:50:04,Robot,"I'm doing great, thanks! How about you?"
+2025-03-26 12:50:04,Robot,"I'm doing great, thanks! How about you?"
+2025-03-26 12:50:15,User,Doing great.
+2025-03-26 12:50:15,Robot,Done with the set.
+2025-03-26 12:50:16,Robot,Take a rest for 40 seconds.
+2025-03-26 12:50:20,Robot,Got any fun plans for later today?
+2025-03-26 12:50:20,Robot,Got any fun plans for later today?
+2025-03-26 12:50:30,User,Bye.
+2025-03-26 12:50:31,Robot,Thank you for exercising with me.
+2025-03-26 12:52:55,User,Bye.
+2025-03-26 12:52:56,Robot,Thank you for exercising with me.
+2025-03-26 12:53:43,User,How are you today?
+2025-03-26 12:53:44,Robot,"I'm doing great, thanks! How about you?"
+2025-03-26 12:53:44,Robot,"I'm doing great, thanks! How about you?"
+2025-03-26 12:53:57,User,I'm doing great. for asking.
+2025-03-26 12:53:57,Robot,Glad to hear that! Got any fun plans after this workout?
+2025-03-26 12:53:57,Robot,Glad to hear that! Got any fun plans after this workout?
+2025-03-26 12:54:10,User,I think I'm
+2025-03-26 12:54:10,Robot,Done with the set.
+2025-03-26 12:54:11,Robot,Take a rest for 40 seconds.
+2025-03-26 12:54:13,Robot,Sounds good! Any good books you've read lately?
+2025-03-26 12:54:13,Robot,Sounds good! Any good books you've read lately?
+2025-03-26 12:54:27,User,Bye.
+2025-03-26 12:54:28,Robot,Thank you for exercising with me.
+2025-03-26 12:55:02,User,are you today?
+2025-03-26 12:55:03,Robot,I'm feeling great! Ready to get moving. How about you?
+2025-03-26 12:55:03,Robot,I'm feeling great! Ready to get moving. How about you?
+2025-03-26 12:55:10,User,Bye.
+2025-03-26 12:55:11,Robot,Thank you for exercising with me.
+2025-03-26 12:55:59,User,How are you today?
+2025-03-26 12:56:00,Robot,"I'm doing great, thanks! How about you?"
+2025-03-26 12:56:00,Robot,"I'm doing great, thanks! How about you?"
+2025-03-26 12:56:13,User,Doing great. Thank you asking.
+2025-03-26 12:56:14,Robot,Glad to hear that! Got any fun plans for today?
+2025-03-26 12:56:14,Robot,Glad to hear that! Got any fun plans for today?
+2025-03-26 12:56:50,User,I'm testing out my microphone.
+2025-03-26 12:56:50,Robot,Done with the set.
+2025-03-26 12:56:52,Robot,Great job completing this round!
+2025-03-26 13:02:47,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-03-26 13:02:47,Robot,"Hello! I'm Pepper, your exercise coach. How are you today?"
+2025-03-26 13:03:46,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-03-26 13:03:46,Robot,"Hello! I'm Pepper, your exercise coach. How are you today?"
+2025-03-26 13:03:59,User,I'm doing good. How are you?
+2025-03-26 13:04:00,Robot,"I'm doing great, thank you! Before we begin, I'll ask a few questions. How old are you?"
+2025-03-26 13:04:26,User,65
+2025-03-26 13:04:27,Robot,Thank you. Is exercise something that you choose to do?
+2025-03-26 13:04:58,User,"Yeah, sometimes"
+2025-03-26 13:04:59,Robot,"Great! Do you feel like someone else is making you exercise, like a doctor or family member?"
+2025-03-26 13:05:15,User,my
+2025-03-26 13:05:17,Robot,"I am sorry, I did not understand what you meant by ""my."" Could you clarify if someone else is making you exercise?"
+2025-03-26 13:05:33,User,My family
+2025-03-26 13:05:34,Robot,"Got it, thank you. On a scale of 1-10, what's your energy level today?"
+2025-03-26 13:05:57,User,6
+2025-03-26 13:05:58,Robot,"Thanks for sharing. Here's the exercise session: two rounds of 4 sets each. First two sets are bicep curls, then two lateral raises. Each set lasts 40 seconds. Do you have any questions?"
+2025-03-26 13:06:26,User,Can you repeat that again?
+2025-03-26 13:06:27,Robot,"Of course! We'll do two rounds of 4 sets each. First two sets are bicep curls, then two lateral raises, each lasting 40 seconds. Any more questions?"
+2025-03-26 13:06:49,User,What are the exercises again?
+2025-03-26 13:06:50,Robot,The exercises are bicep curls for the first two sets and lateral raises for the second two sets. Ready to start?
+2025-03-26 13:07:06,User,I think so.
+2025-03-26 13:07:07,Robot,Great! Let's get started with the exercises.
+2025-03-26 13:07:19,User,OK.
+2025-03-26 13:07:19,Robot,"{""Great! Let's get started with the exercises"", true}"
+2025-03-26 13:09:14,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-03-26 13:09:14,Robot,"Hello! I'm Pepper, your exercise coach. How are you today?"
+2025-03-26 13:09:28,User,I'm again
+2025-03-26 13:09:29,Robot,Glad to hear! Are you ready to start the exercises with me?
+2025-03-26 13:09:39,User,Yes.
+2025-03-26 13:09:40,Robot,"Great! Before we start the exercises, please fill out a survey!"
+2025-03-26 13:09:54,User,OK.
+2025-03-26 13:09:56,Robot,Do you have any injuries or health concerns I should know about?
+2025-03-26 13:10:07,User,Bye.
+2025-03-26 13:11:13,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-03-26 13:11:13,Robot,"Hello! I'm Pepper, your exercise coach. How are you today?"
+2025-03-26 13:11:26,User,I'm good. How are you?
+2025-03-26 13:11:27,Robot,"I'm doing great, thank you! Are you ready to start exercising with me?"
+2025-03-26 13:11:39,User,Yup.
+2025-03-26 13:11:40,Robot,Great! Let's begin the exercises. We'll start with bicep curls. Ready?
+2025-03-26 13:11:55,User,Yep.
+2025-03-26 13:12:01,Robot,"{""Great! Before we start exercising, let's go through an introduction!"", true}"
+2025-03-26 13:13:03,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-03-26 13:13:03,Robot,"Hello! I'm Pepper, your exercise coach. How are you today?"
+2025-03-26 13:13:17,User,I'm doing good. How are you?
+2025-03-26 13:13:18,Robot,"I'm glad to hear that! I'm ready to help you exercise. Before we begin, I'll ask some questions. How old are you?"
+2025-03-26 13:13:36,User,I'm 55.
+2025-03-26 13:13:37,Robot,Thank you for sharing. Is exercise something you choose to do?
+2025-03-26 13:13:48,User,Sometimes
+2025-03-26 13:13:49,Robot,"Thank you. Do you feel like someone else is making you exercise, such as a doctor or family member?"
+2025-03-26 13:14:05,User,My family tells me to
+2025-03-26 13:14:06,Robot,"Understood. On a scale of 1 to 10, what is your energy level right now?"
+2025-03-26 13:14:29,User,Maybe a 5.
+2025-03-26 13:14:31,Robot,"Thank you. Here's the exercise plan: two rounds of bicep curls and lateral raises, 4 sets each, 40 seconds per set. Any questions?"
+2025-03-26 13:14:54,User,How many rounds of races in my doing.
+2025-03-26 13:14:55,Robot,You'll do two sets of lateral raises in each of the two rounds. Are you ready to start exercising with me?
+2025-03-26 13:15:10,User,How many total rounds are there?
+2025-03-26 13:15:12,Robot,There are two total rounds in this exercise session. Are you ready to start exercising with me?
+2025-03-26 13:15:27,User,Yes.
+2025-03-26 13:15:29,Robot,Great! Let's begin our exercise session together. I'm excited to get started!
+2025-03-26 13:15:44,User,OK.
+2025-03-26 13:15:45,Robot,"{""Let's begin our exercise session together. I'm excited to get started!"", true}"
+2025-03-26 13:16:52,Robot,"{""Hello! I'm Pepper, your exercise coach. How are you today?"", false}"
+2025-03-26 13:16:52,Robot,"Hello! I'm Pepper, your exercise coach. How are you today?"
+2025-03-26 13:17:07,User,I'm good. How are you?
+2025-03-26 13:17:08,Robot,"I'm doing great, thank you! Before we explain the exercises, I'll ask some questions. How old are you?"
+2025-03-26 13:17:24,User,8
+2025-03-26 13:17:25,Robot,Thank you. Is exercise something you choose to do?
+2025-03-26 13:17:36,User,No
+2025-03-26 13:17:38,Robot,"Alright. Do you feel like someone else, like a doctor or family member, is making you exercise?"
+2025-03-26 13:17:54,User,My doctor is
+2025-03-26 13:17:55,Robot,"Understood. On a scale of 1 to 10, what is your energy level today?"
+2025-03-26 13:18:07,User,A 3
+2025-03-26 13:18:08,Robot,"Thank you. Here's the exercise session: two rounds of bicep curls and lateral raises, 40 seconds each set. Any questions?"
+2025-03-26 13:18:26,User,No
+2025-03-26 13:18:27,Robot,Great! Are you ready to start the exercising with me?
+2025-03-26 13:18:39,User,Yup.
+2025-03-26 13:18:40,Robot,"{""Great! Before we some exercises, please fill out a survey!"", true}"
+2025-03-26 17:11:22,Robot,Great job completing this round!
+2025-03-26 17:15:14,User,"Can you hear me, Pepper?"
+2025-03-26 17:15:16,Robot,Loud and clear! How's your day going?
+2025-03-26 17:19:02,Robot,Done with the set.
+2025-03-26 17:19:04,Robot,Take a rest for 40 seconds.
+2025-03-26 17:19:05,Robot,Great job completing this round!
+2025-03-26 17:22:56,Robot,Done with the set.
+2025-03-26 17:22:58,Robot,Take a rest for 40 seconds.
+2025-03-26 17:22:59,Robot,Great job completing this round!
+2025-03-26 17:23:36,User,"Can you hear me, Pepper?"
+2025-03-26 17:23:37,Robot,Loud and clear! Ready for a workout?
+2025-03-26 17:28:08,User,"Can you hear me clearly, Pepper?"
+2025-03-26 17:28:10,Robot,"Yes, I can hear you clearly! Let's keep going."
+2025-03-26 17:28:17,Robot,"Yes, I can hear you clearly! Let's keep going."
+2025-03-26 17:28:27,User,Awesome. Can you tell me a story?
+2025-03-26 17:28:30,Robot,Done with the set.
+2025-03-26 17:28:35,Robot,Take a rest for 40 seconds.
+2025-03-26 17:28:37,Robot,Sure! How about a quick one about a dog who found hidden treasure in a park?
+2025-03-26 17:28:47,Robot,Sure! How about a quick one about a dog who found hidden treasure in a park?
+2025-03-26 17:28:56,User,Can you keep the story going?
+2025-03-26 17:28:57,Robot,Absolutely! The dog dug up a mysterious old chest filled with gold coins and ancient maps. Curious explorers soon followed!
+2025-03-26 17:29:09,Robot,Absolutely! The dog dug up a mysterious old chest filled with gold coins and ancient maps. Curious explorers soon followed!
+2025-03-26 17:29:28,User,Are you taking a rest right now?
+2025-03-26 17:29:35,Robot,No rest for me! Let’s keep moving with our workout. How are you feeling?
+2025-03-26 17:29:43,Robot,No rest for me! Let’s keep moving with our workout. How are you feeling?
+2025-03-26 17:29:54,User,I'm feeling tired after the bicep curl.
+2025-03-26 17:29:56,Robot,Done with the set.
+2025-03-26 17:30:02,Robot,Take a rest for 40 seconds.
+2025-03-26 17:30:04,Robot,Great effort! Rest up and catch your breath. Do you enjoy any specific types of workouts?
+2025-03-26 17:30:13,Robot,Great effort! Rest up and catch your breath. Do you enjoy any specific types of workouts?
+2025-03-26 17:30:25,User,Are we now in the resting?
+2025-03-26 17:30:26,Robot,"Yes, we're in rest mode now. Relax and recharge! Any fun plans for today?"
+2025-03-26 17:30:34,Robot,"Yes, we're in rest mode now. Relax and recharge! Any fun plans for today?"
+2025-03-26 17:30:45,User,Do you think debugging you is fun?
+2025-03-26 17:30:52,Robot,Debugging can be challenging but rewarding! It's like solving a puzzle. Ready for lateral raises?
+2025-03-26 17:31:02,Robot,Debugging can be challenging but rewarding! It's like solving a puzzle. Ready for lateral raises?
+2025-03-26 17:31:21,User,Awesome. I don't think you have too much bugs to go.
+2025-03-26 17:31:24,Robot,Done with the set.
+2025-03-26 17:31:30,Robot,Take a rest for 40 seconds.
+2025-03-26 17:31:32,Robot,Thanks! I aim to be as helpful as possible. Enjoy the rest and let me know if you have questions!
+2025-03-26 17:31:42,Robot,Thanks! I aim to be as helpful as possible. Enjoy the rest and let me know if you have questions!
+2025-03-26 17:32:52,Robot,Done with the set.
+2025-03-26 17:32:53,Robot,Great job completing this round!
+2025-03-26 17:37:45,Robot,Great job completing this round!
+2025-03-26 17:39:06,User,"Can you hear me clearly, Pepper?"
+2025-03-26 17:39:08,Robot,Loud and clear! Ready for some exercise chat?
+2025-03-26 17:39:14,Robot,Loud and clear! Ready for some exercise chat?
+2025-03-26 17:39:26,User,"Oh, I see, I see the problem."
+2025-03-26 17:39:29,Robot,Done with the set.
+2025-03-26 17:39:34,Robot,Take a rest for 40 seconds.
+2025-03-26 17:39:36,Robot,What's on your mind? Anything fun planned for today?
+2025-03-26 17:39:42,Robot,What's on your mind? Anything fun planned for today?
+2025-03-26 17:40:52,Robot,Done with the set.
+2025-03-26 17:40:57,Robot,Take a rest for 40 seconds.
+2025-03-26 17:41:59,User,They
+2025-03-26 17:42:00,Robot,Done with the set.
+2025-03-26 17:42:02,Robot,Take a rest for 40 seconds.
+2025-03-26 17:42:04,Robot,Great job completing this round!
+2025-03-26 17:42:40,User,"Can you hear me, Pepper?"
+2025-03-26 17:42:42,Robot,Loud and clear! How's your day going?
+2025-03-26 17:42:46,Robot,Loud and clear! How's your day going?
+2025-03-26 17:42:56,User,"Pretty good. Are you feeling, how are, how about you?"
+2025-03-26 17:42:59,Robot,Done with the set.
+2025-03-26 17:43:04,Robot,Take a rest for 40 seconds.
+2025-03-26 17:43:06,Robot,I'm doing great! Got any fun plans after this workout?
+2025-03-26 17:43:14,Robot,I'm doing great! Got any fun plans after this workout?
+2025-03-26 17:43:26,User,I'm going to do my homework. What about you?
+2025-03-26 17:43:27,Robot,"I'll be here, ready to chat or help with anything you need! What's your homework about?"
+2025-03-26 17:43:35,Robot,"I'll be here, ready to chat or help with anything you need! What's your homework about?"
+2025-03-26 17:43:49,User,Do you know anything about algebraic structure?
+2025-03-26 17:43:56,Robot,"Yes, a bit! What specifically are you studying in algebraic structures?"
+2025-03-26 17:44:04,Robot,"Yes, a bit! What specifically are you studying in algebraic structures?"
+2025-03-26 17:44:12,User,What
+2025-03-26 17:44:14,Robot,What's your question about algebraic structures? Maybe I can help!
+2025-03-26 17:44:21,Robot,What's your question about algebraic structures? Maybe I can help!
+2025-03-26 17:44:24,Robot,Done with the set.
+2025-03-26 17:44:32,Robot,Take a rest for 40 seconds.
+2025-03-26 17:44:46,User,Can you tell me some story.
+2025-03-26 17:44:47,Robot,"Sure! Once, a curious cat traveled the world, making friends and discovering new places. What's your favorite animal?"
+2025-03-26 17:44:59,Robot,"Sure! Once, a curious cat traveled the world, making friends and discovering new places. What's your favorite animal?"
+2025-03-26 17:45:41,Robot,Great job completing this round!
+2025-03-26 17:46:56,User,Are you nodding at me?
+2025-03-26 17:46:58,Robot,Just encouraging you! Keep going strong!
+2025-03-26 17:47:04,Robot,Just encouraging you! Keep going strong!
+2025-03-26 17:47:08,Robot,Done with the set.
+2025-03-26 17:47:13,Robot,Take a rest for 40 seconds.
+2025-03-26 17:47:24,User,"Yeah, it's just you are saying everything very slow."
+2025-03-26 17:47:25,Robot,I'll speed up! Any fun plans today?
+2025-03-26 17:47:31,Robot,I'll speed up! Any fun plans today?
+2025-03-26 17:47:42,User,Is doing exercise consider fun fun plans.
+2025-03-26 17:47:43,Robot,Absolutely! Exercise can be both fun and rewarding. Do you enjoy it?
+2025-03-26 17:47:51,Robot,Absolutely! Exercise can be both fun and rewarding. Do you enjoy it?
+2025-03-26 17:48:02,User,I definitely do.
+2025-03-26 17:48:08,Robot,Awesome! Do you have a favorite exercise routine?
+2025-03-26 17:48:14,Robot,Awesome! Do you have a favorite exercise routine?
+2025-03-26 17:48:30,User,Your actions seems like stuck.
+2025-03-26 17:48:33,Robot,Done with the set.
+2025-03-26 17:48:38,Robot,Take a rest for 40 seconds.
+2025-03-26 17:48:40,Robot,Sorry about that! Any favorite exercises you enjoy?
+2025-03-26 17:48:47,Robot,Sorry about that! Any favorite exercises you enjoy?
+2025-03-26 17:49:01,User,"A pepper, can you look at me?"
+2025-03-26 17:49:02,Robot,I'm here with you! What's your favorite workout move?
+2025-03-26 17:49:08,Robot,I'm here with you! What's your favorite workout move?
+2025-03-26 17:49:19,User,"Yeah, it's just a delay that made me very angry about it."
+2025-03-26 17:49:26,Robot,I understand. Let's focus on crushing this workout together!
+2025-03-26 17:49:32,Robot,I understand. Let's focus on crushing this workout together!
+2025-03-26 17:49:49,User,"I know if I keep doing this, you will, you will like say something you want to say, then reply to my answer."
+2025-03-26 17:49:51,Robot,Done with the set.
+2025-03-26 17:50:00,Robot,Take a rest for 40 seconds.
+2025-03-26 17:50:02,Robot,I appreciate your patience! Do you have a favorite workout playlist?
+2025-03-26 17:50:10,Robot,I appreciate your patience! Do you have a favorite workout playlist?
+2025-03-26 17:51:20,Robot,Done with the set.
+2025-03-26 17:51:28,Robot,Great job completing this round!
+2025-03-26 17:52:56,User,"Can you hear me clearly, Pepper?"
+2025-03-26 17:52:57,Robot,Loud and clear! Any fun plans for today?
+2025-03-26 17:52:58,Robot,Loud and clear! Any fun plans for today?
+2025-03-26 17:53:12,User,Can you tell me a long story?
+2025-03-26 17:53:13,Robot,Done with the set.
+2025-03-26 17:53:15,Robot,Take a rest for 40 seconds.
+2025-03-26 17:53:17,Robot,I can share a short fun fact! Want to hear it?
+2025-03-26 17:53:18,Robot,I can share a short fun fact! Want to hear it?
+2025-03-26 17:53:29,User,Of course
+2025-03-26 17:53:30,Robot,Did you know honey never spoils? Archaeologists found pots of honey in ancient tombs!
+2025-03-26 17:53:31,Robot,Did you know honey never spoils? Archaeologists found pots of honey in ancient tombs!
+2025-03-26 17:54:37,User,It seems like you're replying a little bit faster.
+2025-03-26 17:54:38,Robot,Trying to keep up the energy! Do you have any pets?
+2025-03-26 17:54:39,Robot,Trying to keep up the energy! Do you have any pets?
+2025-03-26 17:54:43,Robot,Done with the set.
+2025-03-26 17:54:45,Robot,Take a rest for 40 seconds.
+2025-03-26 17:54:55,User,"Yeah, this kind of delay is really, really long."
+2025-03-26 17:54:58,Robot,I see! Sorry about that. Do you prefer cats or dogs?
+2025-03-26 17:54:59,Robot,I see! Sorry about that. Do you prefer cats or dogs?
+2025-03-26 17:55:13,User,I prefer dogs.
+2025-03-26 17:55:15,Robot,Dogs are great! Do you have a favorite dog breed?
+2025-03-26 17:55:16,Robot,Dogs are great! Do you have a favorite dog breed?
+2025-03-26 17:55:33,User,Probably shepherd.
+2025-03-26 17:55:37,Robot,Shepherds are so loyal and smart! Ever owned one?
+2025-03-26 17:58:51,Robot,Done with the set.
+2025-03-26 17:58:56,Robot,Take a rest for 40 seconds.
+2025-03-26 17:59:06,User,"Can you tell me a story, Pepper?"
+2025-03-26 17:59:06,Robot,"Sure! Once, a cat and a dog became best friends and traveled the world together."
+2025-03-26 17:59:15,Robot,"Sure! Once, a cat and a dog became best friends and traveled the world together."
+2025-03-26 17:59:28,User,You are like a child. How old are you?
+2025-03-26 17:59:29,Robot,"I don't have an age, but I was ""born"" in 2023!"
+2025-03-26 17:59:36,Robot,"I don't have an age, but I was ""born"" in 2023!"
+2025-03-26 17:59:53,User,Do you know your birth date?
+2025-03-26 17:59:59,Robot,"I don't have an exact birth date, just 2023 as my creation year!"
+2025-03-26 18:00:09,Robot,"I don't have an exact birth date, just 2023 as my creation year!"
+2025-03-26 18:00:24,User,You're replying me very slow.
+2025-03-26 18:00:27,Robot,Done with the set.
+2025-03-26 18:00:32,Robot,Take a rest for 40 seconds.
+2025-03-26 18:00:34,Robot,Sorry about that! I'll try to keep up the pace.
+2025-03-26 18:00:45,Robot,Sorry about that! I'll try to keep up the pace.
+2025-03-26 18:00:52,User,"How are you, Pepper?"
+2025-03-26 18:00:53,Robot,I'm doing great! How about you?
+2025-03-26 18:00:57,Robot,I'm doing great! How about you?
+2025-03-26 18:02:08,Robot,Done with the set.
+2025-03-26 18:02:13,Robot,Take a rest for 40 seconds.
+2025-03-26 18:03:24,Robot,Done with the set.
+2025-03-26 18:03:30,Robot,Great job completing this round!

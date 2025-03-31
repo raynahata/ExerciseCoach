@@ -98,6 +98,9 @@ class Pepper:
                 self.exercise_running = True
                 self.is_resting = False
                 self.current_exercise = "bicep curls"
+                self.set_eye_color((255, 255, 255))
+
+
                 threading.Thread(target=self.bicep_curls).start()
             else:
                 rospy.loginfo("Bicep curls are already running.")
@@ -108,6 +111,7 @@ class Pepper:
                 self.exercise_running = True
                 self.is_resting = False
                 self.current_exercise = "lateral raises"
+                self.set_eye_color((255, 255, 255))
                 # self.lateral_raises()
                 threading.Thread(target=self.lateral_raises()).start()
             else:
