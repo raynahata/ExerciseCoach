@@ -91,14 +91,15 @@ def generate_summary(final_prompt):
         return None
 
 # Function to save the summary to a file dynamically
-def save_summary(participant, summary):
+def save_summary(participant_ID,week, summary):
     base_dir = os.path.dirname(os.path.abspath(__file__))
     summaries_folder = os.path.join(base_dir, "summaries")
 
     # Ensure the "summaries" folder exists
     os.makedirs(summaries_folder, exist_ok=True)
-
-    summary_filename = f"summary_{participant}.txt"
+    
+    
+    summary_filename = f"summary_p{participant_ID}_week{week}.txt"
     summary_filepath = os.path.join(summaries_folder, summary_filename)
 
     try:
@@ -111,13 +112,15 @@ def save_summary(participant, summary):
 # Main function to execute the script
 def main():
     # Set participant ID dynamically
-    participant = 1
+    #week 0 if the first week so you want to save as the week after 
+    participant_ID = 0
+    week = 1
 
     # Specify the prompt filename (static)
     prompt_filename = "summaryPrompt.txt"
 
     # Load conversation and prompt
-    conversation_text = load_conversation(participant)
+    conversation_text = load_conversation(participant_ID)
     prompt_template = load_prompt(prompt_filename)
 
     if conversation_text and prompt_template:
@@ -126,8 +129,8 @@ def main():
         if final_prompt:
             summary = generate_summary(final_prompt)  # Generate summary with GPT-4o
             if summary:
-                print("\nSummary:\n", summary)
-                save_summary(participant, summary)  # Save summary dynamically
+                #print("\nSummary:\n", summary)
+                save_summary(participant_ID,week, summary)  # Save summary dynamically
             else:
                 print("Error: No summary was generated.")
         else:

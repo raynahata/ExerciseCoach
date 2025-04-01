@@ -295,86 +295,34 @@ async def exercise_session(messages, exercise_list, csv_history_file):
 
     # messages.append({"role": "system", "content": "Great job completing this round!"})
     # log_conversation("Robot","Great job completing this round!", csv_file=csv_history_file)
-
-async def intro_session(messages, csv_history_file):
-    """
-    Handles the introduction session as per the flow described in the prompt.
-
-    Args:
-        messages (list): List of conversation messages.
-        csv_history_file (str): Path to the conversation log file.
-
-    Returns:
-        bool: True if the user is ready to start the exercise session, False otherwise.
-    """
-   
-    done_chat=False
-    ready_to_start = False
-    print("Generating initial response...")
-    initial_response= await generate_conversational_phrase(messages, csv_history_file) 
-    spoken_response, ready_to_start = parse_robot_response(initial_response)
-    
-    #sp.text_to_speech(spoken_response)
-    send_to_pepper(spoken_response)
-    log_conversation("Robot",spoken_response,csv_history_file)
-
-    if initial_response:
-        messages.append({"role": "assistant", "content": spoken_response})
-    
-    try: 
-        while not done_chat:
-            if pepper_state == "listening":
-                print("Waiting for user response...")
-                # user_message=await start_transcription()
-                user_message = await asyncio.wait_for(start_transcription(), timeout=40)
-                log_conversation("User",user_message,csv_history_file)
-                print("You:",user_message)
-                if user_message.lower().replace(" ","").strip(string.punctuation)=="bye":
-                    done_chat=True
-                    print("Ending conversation.")
-                    break
-                messages.append({"role":"user","content":user_message})
-                conversational_response = await generate_conversational_phrase(messages, csv_history_file)
-                spoken_response, ready_to_start = parse_robot_response(conversational_response)  # Parse the tuple
-                if spoken_response:
-                    #sp.text_to_speech(spoken_response)
-                    send_to_pepper(spoken_response)
-                    messages.append({"role": "assistant", "content": spoken_response})
-
-                
-                    # If the user is ready to start, end the intro session
-                    if ready_to_start==True:
-                        # print("User is ready to start the exercise session.")
-                        # sp.text_to_speech("Great! Let's begin the exercise session.")
-                        done_chat=True
-                        # print("Ending conversation.")
-                        # return messages
-                        break
-    except asyncio.TimeoutError:
-        # Handle timeout case
-        print("Intro Section Timeout: No user response detected within 20 seconds.")
-                    
                 
   
   
 async def main():
     participant_number = 0
-    csv_filename = f"conversation_history_p{participant_number}.csv"
+    week_number=0
+    
+    csv_filename = f"participant_{participant_number}_week_{week_number}.csv"
 
     #initializing the CSV files 
     base_dir = os.path.dirname(os.path.abspath(__file__))
     initialize_csv(csv_filename)
     csv_history_file = os.path.join(base_dir, "conversation_files",csv_filename)
     
-    #getting the prompts
-    #initial_prompt=get_prompt("prompt")
-    conversational_prompt=get_prompt("conversational_prompt")
+    if week_number == 0:
+        conversational_prompt = "conversational_prompt_0.txt"
+    else:
+        conversational_prompt=f"conversational_prompt_{participant_number}_week_{week_number}.txt"
 
-    #messages = [{"role": "system", "content": initial_prompt}]
+    
+    conversational_prompt=get_prompt(conversational_prompt)
+
     conversational_messages = [{"role": "system", "content": conversational_prompt}]
 
 
     # Wake word detection
+    ready_statement= "When you are ready to exercise, please say 'ready'."
+    send_to_pepper_dispay_only(ready_statement)
     await listen_for_wake_word(wake_word="ready")
 
   
