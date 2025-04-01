@@ -40,6 +40,8 @@ video_control_pub = rospy.Publisher("/pepper_video_control", String, queue_size=
 rospy.Subscriber("pepper_state", String, callback_state)
 
 
+
+
 def getkey():
     global apikey
     if not apikey:
