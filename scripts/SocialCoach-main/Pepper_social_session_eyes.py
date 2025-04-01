@@ -35,6 +35,8 @@ def callback_state(data):
 speech_publisher = rospy.Publisher("/gpt_speech", String, queue_size=10)
 display_publisher = rospy.Publisher("/speech_display", String, queue_size=10)
 exercise_publisher = rospy.Publisher("/exercise_command", String, queue_size=10)
+video_control_pub = rospy.Publisher("/pepper_video_control", String, queue_size=10)
+
 rospy.Subscriber("pepper_state", String, callback_state)
 
 
@@ -301,7 +303,7 @@ async def exercise_session(messages, exercise_list, csv_history_file):
 async def main():
     participant_number = 0
     week_number=0
-    
+
     csv_filename = f"participant_{participant_number}_week_{week_number}.csv"
 
     #initializing the CSV files 
@@ -320,6 +322,11 @@ async def main():
     conversational_messages = [{"role": "system", "content": conversational_prompt}]
 
 
+
+    video_control_pub.publish(f"start recording;participant_{participant_number};week_{week_number};exercise")
+
+
+    
     # Wake word detection
     ready_statement= "When you are ready to exercise, please say 'ready'."
     send_to_pepper_dispay_only(ready_statement)
@@ -332,6 +339,7 @@ async def main():
     print("Starting the exercise session...")
     exercise_list = ["bicep curls", "bicep curls", "lateral raises", "lateral raises"]
     await exercise_session(conversational_messages, exercise_list, csv_history_file)
+    video_control_pub.publish("stop_video")
 
 if __name__ == "__main__":
     asyncio.run(main())

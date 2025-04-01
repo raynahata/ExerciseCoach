@@ -7,6 +7,7 @@ import math
 import time
 from std_msgs.msg import String
 import threading
+import os
 
 
 class Pepper:
@@ -24,8 +25,19 @@ class Pepper:
         self.leds = ALProxy("ALLeds", self.IP, 9559)
         self.tts.setParameter("defaultVoiceSpeed", 70)
         self.tts.setParameter("pitchShift", 1)
+
+        self.videoRecorder = ALProxy("ALVideoRecorder", self.IP, 9559)
+        self.videoRecorder.setResolution(2)  # 640x480
+        self.videoRecorder.setFrameRate(10)  # 30 FPS
+        self.videoRecorder.setVideoFormat("MP4")
+        
+
+
+
+        
         self.exercise_running=False
         self.pepper_thinking = False
+
         
         self.state = ""
         self.current_text = ""
@@ -39,6 +51,9 @@ class Pepper:
         rospy.Subscriber("gpt_speech", String, self.gpt_callback)
         rospy.Subscriber("speech_display", String, self.display_callback)
         rospy.Subscriber("exercise_command", String, self.exercise_callback)
+        rospy.Subscriber("/pepper_video_control", String, self.video_command_callback)
+
+
 
         rospy.loginfo("Subscribed to /gpt_speech")
 
@@ -48,6 +63,67 @@ class Pepper:
 
         rospy.loginfo("Subscribed to /exercise_command topic.")
 
+    def start_video_recording(self, participant_ID, week, session_type):
+        """
+        Start video recording.
+        """
+        rospy.loginfo("Starting video recording...")
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        recordings_folder = os.path.join(base_dir, "recordings")
+        os.makedirs(recordings_folder, exist_ok=True)
+
+        video_filename = "participant_{}_week_{}_{}.mp4".format(participant_ID, week, session_type)
+        video_file_path = os.path.join(recordings_folder, video_filename)
+
+        self.videoRecorder.startRecording(video_file_path)
+        rospy.loginfo("Recording video to: {}".format(video_file_path))
+        time.sleep(2)
+
+        if self.videoRecorder.isRecording():
+            rospy.loginfo("Recording is in progress.")
+        else:
+            rospy.loginfo("Recording failed to start.")
+        return video_file_path
+    
+    def stop_video_recording(self):
+        """
+        Stop video recording.
+        """
+        rospy.loginfo("Stopping video recording...")
+        self.videoRecorder.stopRecording()
+        # Check if recording has stopped
+        recording_status = self.videoRecorder.isRecording()
+        if not recording_status:
+            rospy.loginfo("Recording stopped successfully.")
+        else:
+            rospy.loginfo("Failed to stop recording.")
+
+    def video_command_callback(self, data):
+        """
+        Callback for video control commands.
+        Expected format:
+        'start recording;participant_#;week_#;session_type'
+        or
+        'stop recording'
+        """
+        rospy.loginfo("Received video command: {}".format(data.data))
+        tokens = data.data.strip().lower().split(";")
+
+        if tokens[0] == "start recording":
+            if not self.exercise_running:
+                if len(tokens) >= 4:
+                    participant_id = tokens[1].replace("participant_", "")
+                    week = tokens[2].replace("week_", "")
+                    session_type = tokens[3]  # e.g., 'intro' or 'exercise'
+                    self.start_video_recording(participant_id, week, session_type)
+                else:
+                    rospy.logwarn("Invalid video start format. Use 'start recording;participant_#;week_#;session_type'")
+            else:
+                rospy.loginfo("Cannot start recording during exercise.")
+        elif tokens[0] == "stop recording":
+            self.stop_video_recording()
+        
+        
     ### Helper Function: Convert Degrees to Radians ###
     def degrees_to_radians(self, angles_in_degrees):
         """
