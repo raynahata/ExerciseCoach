@@ -14,6 +14,7 @@ import re
 import time 
 import rospy
 from std_msgs.msg import String
+from std_msgs.msg import Bool
 import sys
 
 # Initialize OpenAI client
@@ -36,6 +37,7 @@ speech_publisher = rospy.Publisher("/gpt_speech", String, queue_size=10)
 display_publisher = rospy.Publisher("/speech_display", String, queue_size=10)
 exercise_publisher = rospy.Publisher("/exercise_command", String, queue_size=10)
 video_control_pub = rospy.Publisher("/pepper_video_control", String, queue_size=10)
+shutdown_publisher = rospy.Publisher("/controller_shutdown", Bool, queue_size=10)
 
 rospy.Subscriber("pepper_state", String, callback_state)
 
@@ -201,6 +203,7 @@ async def intro_session(messages, csv_history_file,participant_number,week_numbe
                 print("You:",user_message)
                 if user_message.lower().replace(" ","").strip(string.punctuation)=="bye":
                     done_chat=True
+                    shutdown_publisher.publish(Bool(data=True))
                     print("Ending conversation.")
                     break
                 messages.append({"role":"user","content":user_message})
@@ -217,6 +220,7 @@ async def intro_session(messages, csv_history_file,participant_number,week_numbe
                         # print("User is ready to start the exercise session.")
                         # sp.text_to_speech("Great! Let's begin the exercise session.")
                         done_chat=True
+                        shutdown_publisher.publish(Bool(data=True))
                         # print("Ending conversation.")
                         # return messages
                         break

@@ -14,6 +14,7 @@ import re
 import time 
 import rospy
 from std_msgs.msg import String
+from std_msgs.msg import Bool
 import sys
 
 # Initialize OpenAI client
@@ -36,6 +37,7 @@ speech_publisher = rospy.Publisher("/gpt_speech", String, queue_size=10)
 display_publisher = rospy.Publisher("/speech_display", String, queue_size=10)
 exercise_publisher = rospy.Publisher("/exercise_command", String, queue_size=10)
 video_control_pub = rospy.Publisher("/pepper_video_control", String, queue_size=10)
+shutdown_publisher = rospy.Publisher("/controller_shutdown", Bool, queue_size=10)
 
 rospy.Subscriber("pepper_state", String, callback_state)
 
@@ -203,6 +205,7 @@ async def exercise_session(messages, exercise_list, csv_history_file):
                         send_exercise_to_pepper("rest")
                         log_conversation("Robot", robot_response, csv_file=csv_history_file)
                         print("Ending session.")
+                        shutdown_publisher.publish(Bool(data=True))
                         return  # Exit early if the user ends the session
 
                     # Update last speaker and append the message
@@ -260,6 +263,7 @@ async def exercise_session(messages, exercise_list, csv_history_file):
                             send_exercise_to_pepper("rest")
                             log_conversation("Robot", robot_response, csv_file=csv_history_file)
                             print("Ending session.")
+                            shutdown_publisher.publish(Bool(data=True))
                             return  # Exit early if the user ends the session
 
                         # Update last speaker and append the message
@@ -289,6 +293,7 @@ async def exercise_session(messages, exercise_list, csv_history_file):
 
             messages.append({"role": "system", "content": "Great job completing this round!"})
             log_conversation("Robot","Great job completing this round!", csv_file=csv_history_file)
+            shutdown_publisher.publish(Bool(data=True))
             break
     #sp.text_to_speech("Great job completing this round!")
     

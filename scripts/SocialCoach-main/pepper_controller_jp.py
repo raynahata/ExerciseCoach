@@ -1,15 +1,11 @@
 # This node file should be run on Python 2.7
 # export PYTHONPATH=${PYTHONPATH}:/home/raynahata/exercise_bot/pynaoqi-python2.7-2.8.6.23-linux64-20191127_152327/lib/python2.7/site-packages
 
-# export PYTHONPATH=${PYTHONPATH}:/home/roshni/Pepper/ExerciseCoach/pynaoqi-python2.7-2.8.6.23-linux64-20191127_152327/lib/python2.7/site-packages
 import rospy
 from naoqi import ALProxy
 import math
 import time
 from std_msgs.msg import String
-from std_msgs.msg import Bool
-from sensor_msgs.msg import Image
-import sys
 import threading
 import os
 
@@ -30,14 +26,13 @@ class Pepper:
         self.tts.setParameter("defaultVoiceSpeed", 70)
         self.tts.setParameter("pitchShift", 1)
 
-       
+        self.videoRecorder = ALProxy("ALVideoRecorder", self.IP, 9559)
+        self.videoRecorder.setResolution(2)  # 640x480
+        self.videoRecorder.setFrameRate(10)  # 30 FPS
+        self.videoRecorder.setVideoFormat("MP4")
         
-    #initialize camera
-        resolution = 2  # 640x480
-        color_space = 11  # RGB
-        fps = 5  # Frames per second
-        self.video_service = ALProxy("ALVideoDevice", self.IP, 9559)
-        self.subscriber_id = self.video_service.subscribeCamera("video_stream", 0, resolution, color_space, fps)
+
+
 
         
         self.exercise_running=False
@@ -56,9 +51,7 @@ class Pepper:
         rospy.Subscriber("gpt_speech", String, self.gpt_callback)
         rospy.Subscriber("speech_display", String, self.display_callback)
         rospy.Subscriber("exercise_command", String, self.exercise_callback)
-        rospy.Subscriber("controller_shutdown", Bool, self.shutdown_callback)
-
-        self.image_publisher = rospy.Publisher("/pepper_camera/image_raw", Image, queue_size=10)
+        rospy.Subscriber("/pepper_video_control", String, self.video_command_callback)
 
 
 
@@ -70,15 +63,65 @@ class Pepper:
 
         rospy.loginfo("Subscribed to /exercise_command topic.")
 
-  
-    def shutdown_callback(self, msg):
-        rospy.loginfo("Received shutdown command: {}".format(msg.data))
-        if msg.data == True:
-            rospy.loginfo("Shutting down controller node and exiting...")
-            rospy.signal_shutdown("Shutdown requested by social session")
-            sys.exit(0)
+    def start_video_recording(self, participant_ID, week, session_type):
+        """
+        Start video recording.
+        """
+        rospy.loginfo("Starting video recording...")
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        recordings_folder = os.path.join(base_dir, "recordings")
+        os.makedirs(recordings_folder, exist_ok=True)
+
+        video_filename = "participant_{}_week_{}_{}.mp4".format(participant_ID, week, session_type)
+        video_file_path = os.path.join(recordings_folder, video_filename)
+
+        self.videoRecorder.startRecording(video_file_path)
+        rospy.loginfo("Recording video to: {}".format(video_file_path))
+        time.sleep(2)
+
+        if self.videoRecorder.isRecording():
+            rospy.loginfo("Recording is in progress.")
+        else:
+            rospy.loginfo("Recording failed to start.")
+        return video_file_path
     
-    
+    def stop_video_recording(self):
+        """
+        Stop video recording.
+        """
+        rospy.loginfo("Stopping video recording...")
+        self.videoRecorder.stopRecording()
+        # Check if recording has stopped
+        recording_status = self.videoRecorder.isRecording()
+        if not recording_status:
+            rospy.loginfo("Recording stopped successfully.")
+        else:
+            rospy.loginfo("Failed to stop recording.")
+
+    def video_command_callback(self, data):
+        """
+        Callback for video control commands.
+        Expected format:
+        'start recording;participant_#;week_#;session_type'
+        or
+        'stop recording'
+        """
+        rospy.loginfo("Received video command: {}".format(data.data))
+        tokens = data.data.strip().lower().split(";")
+
+        if tokens[0] == "start recording":
+            if not self.exercise_running:
+                if len(tokens) >= 4:
+                    participant_id = tokens[1].replace("participant_", "")
+                    week = tokens[2].replace("week_", "")
+                    session_type = tokens[3]  # e.g., 'intro' or 'exercise'
+                    self.start_video_recording(participant_id, week, session_type)
+                else:
+                    rospy.logwarn("Invalid video start format. Use 'start recording;participant_#;week_#;session_type'")
+            else:
+                rospy.loginfo("Cannot start recording during exercise.")
+        elif tokens[0] == "stop recording":
+            self.stop_video_recording()
         
         
     ### Helper Function: Convert Degrees to Radians ###
@@ -423,27 +466,7 @@ class Pepper:
         # Perform the nodding motion twice in 3 seconds
         self.motion.angleInterpolation(names, angles, times, True, _async=True)
 
-    def pub_image(self):
-        image = self.video_service.getImageRemote(self.subscriber_id)
-        if image:
-            width = image[0]
-            height = image[1]
-            timestamp = rospy.Time.now()
 
-            # Create ROS Image message
-            ros_image = Image()
-            #ros_image.header = Header()
-            ros_image.header.stamp = timestamp
-            ros_image.width = width
-            ros_image.height = height
-            ros_image.encoding = "rgb8"
-            #ros_image.is_bigendian = 0
-            ros_image.step = width * 3  # 3 bytes per pixel (RGB)
-            ros_image.data = image[6]  # Image pixel data
-
-            # Publish to ROS topic
-            self.image_publisher.publish(ros_image)
-            # rospy.loginfo("Published a frame from Pepper.")s
     def listener(self):
         """
         Start the ROS listener node and execute the arm motion loop.
@@ -451,23 +474,21 @@ class Pepper:
         rospy.loginfo("Starting listener...")
         self.move_arms_up_and_down()
 
-    
-    def main(self):
-        rate = rospy.Rate(5)  # 10hz
-        # rospy.Subscriber("move_arm_command", String, pepper_listener.move_arm_callback)
-        while not rospy.is_shutdown():
+    def main():
+        rospy.init_node('pepper_controller', anonymous=True)
+        pepper_listener = Pepper(ip="128.237.236.27", port=9559)
 
-            #publish camera image
-            self.pub_image()
-
-            rate.sleep()
-        
-        
-        
+        try:
+            rospy.spin()  # Keep the node running
+        except KeyboardInterrupt:
+            rospy.loginfo("Shutting down Pepper Listener.")
 
 if __name__ == '__main__':
     rospy.init_node('pepper_controller', anonymous=True)
     pepper_listener = Pepper()
-    pepper_listener.main()
-    
-    
+    pepper_listener.clear_screen()
+
+    try:
+        rospy.spin()  # Keep the node running
+    except KeyboardInterrupt:
+        rospy.loginfo("Shutting down Pepper Listener.")
