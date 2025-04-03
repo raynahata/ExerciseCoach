@@ -166,7 +166,7 @@ def read_prompt_file(prompt_file):
 
 
 
-async def intro_session(messages, csv_history_file):
+async def intro_session(messages, csv_history_file,participant_number,week_number):
     """
     Handles the introduction session as per the flow described in the prompt.
 
@@ -177,7 +177,7 @@ async def intro_session(messages, csv_history_file):
     Returns:
         bool: True if the user is ready to start the exercise session, False otherwise.
     """
-   
+    
     done_chat=False
     ready_to_start = False
     print("Generating initial response...")
@@ -250,10 +250,11 @@ async def main():
 
     # Wake word detection
     #await listen_for_wake_word()
-
     video_control_pub.publish(f"start recording;participant_{participant_number};week_{week_number};intro")
+    
     print("Starting the intro session...")
-    await intro_session(messages, csv_history_file)
+    
+    await intro_session(messages, csv_history_file,participant_number,week_number)
     video_control_pub.publish("stop_video")
     
 
