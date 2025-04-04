@@ -12,7 +12,9 @@ from sensor_msgs.msg import Image
 import sys
 import threading
 import os
-
+import subprocess
+import atexit
+from datetime import datetime
 
 class Pepper:
     def __init__(self):
@@ -30,7 +32,8 @@ class Pepper:
         self.tts.setParameter("defaultVoiceSpeed", 70)
         self.tts.setParameter("pitchShift", 1)
 
-       
+        self.start_rosbag_video_recording()
+        atexit.register(self.stop_rosbag_video_recording)
         
     #initialize camera
         resolution = 2  # 640x480
@@ -444,6 +447,7 @@ class Pepper:
             # Publish to ROS topic
             self.image_publisher.publish(ros_image)
             # rospy.loginfo("Published a frame from Pepper.")s
+    
     def listener(self):
         """
         Start the ROS listener node and execute the arm motion loop.
@@ -451,7 +455,25 @@ class Pepper:
         rospy.loginfo("Starting listener...")
         self.move_arms_up_and_down()
 
-    
+    def start_rosbag_video_recording(self):
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        filename = "video_only_{}.bag".format(timestamp)
+        save_path = os.path.join(os.path.expanduser("~"), "recordings", filename)
+
+        if not os.path.exists(os.path.dirname(save_path)):
+            os.makedirs(os.path.dirname(save_path))
+
+        rospy.loginfo("Starting rosbag video recording: {}".format(save_path))
+
+        # Record only the camera image
+        self.rosbag_process = subprocess.Popen(["rosbag", "record", "-O", save_path, "/pepper_camera/image_raw"])
+
+    def stop_rosbag_video_recording(self):
+        if hasattr(self, 'rosbag_process') and self.rosbag_process:
+            rospy.loginfo("Stopping rosbag video recording...")
+            self.rosbag_process.terminate()
+            self.rosbag_process.wait()
+
     def main(self):
         rate = rospy.Rate(5)  # 10hz
         # rospy.Subscriber("move_arm_command", String, pepper_listener.move_arm_callback)
@@ -461,8 +483,7 @@ class Pepper:
             self.pub_image()
 
             rate.sleep()
-        
-        
+    
         
 
 if __name__ == '__main__':
