@@ -458,7 +458,8 @@ class Pepper:
     def start_rosbag_video_recording(self):
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         filename = "video_only_{}.bag".format(timestamp)
-        save_path = os.path.join(os.path.expanduser("~"), "recordings", filename)
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        save_path = os.path.join(base_dir, "recordings", filename)
 
         if not os.path.exists(os.path.dirname(save_path)):
             os.makedirs(os.path.dirname(save_path))

@@ -1,3 +1,20 @@
+#To run the Study 
+
+##Terminal one 
+rosecore 
+
+##Terminal two 
+export PYTHONPATH=${PYTHONPATH}:/home/raynahata/exercise_bot/pynaoqi-python2.7-2.8.6.23-linux64-20191127_152327/lib/python2.7/site-packages
+
+cd ExerciseCoach/scripts/SocialCoach-main
+python2 pepper_controller_eyes.py
+
+##Terminal three
+cd ExerciseCoach/scripts/SocialCoach-main
+pepper_intro_session.py 
+
+ Pepper_social_session_eyes.py
+
 # ExerciseCoach
 
 The STT base code is from: https://github.com/RekhuGopal/PythonHacks/blob/main/AWSBoto3Hacks/AWSboto3TextAnalytics-PDF-AmazonTextract.py
