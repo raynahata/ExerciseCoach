@@ -2,6 +2,7 @@
 # export PYTHONPATH=${PYTHONPATH}:/home/raynahata/exercise_bot/pynaoqi-python2.7-2.8.6.23-linux64-20191127_152327/lib/python2.7/site-packages
 
 # export PYTHONPATH=${PYTHONPATH}:/home/roshni/Pepper/ExerciseCoach/pynaoqi-python2.7-2.8.6.23-linux64-20191127_152327/lib/python2.7/site-packages
+
 import rospy
 from naoqi import ALProxy
 import math
@@ -23,9 +24,9 @@ class Pepper:
         self.motion = ALProxy("ALMotion", self.IP, 9559)
         self.posture = ALProxy("ALRobotPosture", self.IP, 9559)
         self.life = ALProxy('ALAutonomousLife', self.IP, 9559)
-        # self.life.setAutonomousAbilityEnabled("All", True)
-        self.life.setAutonomousAbilityEnabled("All", False)
-        self.life.stopAll()
+        self.life.setAutonomousAbilityEnabled("All", True)
+        #self.life.setAutonomousAbilityEnabled("All", False)
+        #self.life.stopAll()
         self.tablet = ALProxy("ALTabletService",self.IP,9559)
         self.memory = ALProxy("ALMemory", self.IP, 9559)
         self.leds = ALProxy("ALLeds", self.IP, 9559)
@@ -55,10 +56,12 @@ class Pepper:
         self.state_pub = rospy.Publisher("pepper_state", String, queue_size=10)
         self.text_pub = rospy.Publisher("chat_text", String, queue_size=10)
         self.exercise_publisher = rospy.Publisher("/exercise_command", String, queue_size=10)
+        self.tts_status_pub = rospy.Publisher('/pepper/tts_status', Bool, queue_size=1)
         rospy.Subscriber("pepper_state", String, self.callback_state)
         rospy.Subscriber("gpt_speech", String, self.gpt_callback)
         rospy.Subscriber("speech_display", String, self.display_callback)
         rospy.Subscriber("exercise_command", String, self.exercise_callback)
+        
         rospy.Subscriber("controller_shutdown", Bool, self.shutdown_callback)
 
         self.image_publisher = rospy.Publisher("/pepper_camera/image_raw", Image, queue_size=10)
@@ -170,7 +173,9 @@ class Pepper:
         Make Pepper say the provided text.
         """
         rospy.loginfo("Saying: {}".format(text))
+       
         self.tts.say(text)
+        
 
     
     def set_flag_listening(self):
@@ -186,6 +191,7 @@ class Pepper:
         """
         self.state = "speaking"
         self.state_pub.publish("speaking")
+        
 
     def gpt_callback(self, data):
         """
@@ -195,12 +201,19 @@ class Pepper:
         self.current_text = data.data
         self.set_flag_speaking()
         self.display_text(self.current_text)
+        self.tts_status_pub.publish(True)
+        rospy.loginfo("Set speaking status to true...")
         self.say_text(self.current_text)
         # self.display_text(self.current_text)
         while (self.memory.getData("ALTextToSpeech/Status"))[1] != "done":
+            
             time.sleep(0.1)
         rospy.loginfo("Finished Speaking...")
-        time.sleep(0.1)
+        self.tts_status_pub.publish(False)
+        
+
+
+       
         self.set_flag_listening()
 
     def display_callback(self, data):

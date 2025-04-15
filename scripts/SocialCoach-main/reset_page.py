@@ -1,4 +1,4 @@
-# export PYTHONPATH=${PYTHONPATH}:/home/raynahata/exercise_bot/pynaoqi-python2.7-2.8.6.23-linux64-20191127_152327/lib/python2.7/site-packages
+# export PYTHONPATH=${PYTHONPATH}:/home/raynahata/ExerciseCoach/pynaoqi-python2.7-2.8.6.23-linux64-20191127_152327/lib/python2.7/site-packages
 
 import rospy
 from naoqi import ALProxy
@@ -12,7 +12,9 @@ class PepperWebDisplay:
         rospy.loginfo("Displaying CMU website on Pepper's tablet.")
         
         # Automatically show CMU website
-        self.display_webpage("https://www.cmu.edu")
+    
+        self.display_webpage("data:text/html,<html><body style='margin:0;background:white;'></body></html>")
+
 
     def display_webpage(self, url):
         """
