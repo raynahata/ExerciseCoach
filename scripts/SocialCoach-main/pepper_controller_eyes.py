@@ -1,5 +1,5 @@
 # This node file should be run on Python 2.7
-# export PYTHONPATH=${PYTHONPATH}:/home/raynahata/exercise_bot/pynaoqi-python2.7-2.8.6.23-linux64-20191127_152327/lib/python2.7/site-packages
+# export PYTHONPATH=${PYTHONPATH}:/home/raynahata/ExerciseCoach/pynaoqi-python2.7-2.8.6.23-linux64-20191127_152327/lib/python2.7/site-packages
 
 # export PYTHONPATH=${PYTHONPATH}:/home/roshni/Pepper/ExerciseCoach/pynaoqi-python2.7-2.8.6.23-linux64-20191127_152327/lib/python2.7/site-packages
 
@@ -32,6 +32,8 @@ class Pepper:
         self.leds = ALProxy("ALLeds", self.IP, 9559)
         self.tts.setParameter("defaultVoiceSpeed", 70)
         self.tts.setParameter("pitchShift", 1)
+        # self.start_audio_recording()
+        # atexit.register(self.stop_audio_recording)
 
         self.start_rosbag_video_recording()
         atexit.register(self.stop_rosbag_video_recording)
@@ -152,7 +154,7 @@ class Pepper:
                 self.current_exercise = "lateral raises"
                 self.set_eye_color((255, 255, 255))
                 # self.lateral_raises()
-                threading.Thread(target=self.lateral_raises()).start()
+                threading.Thread(target=self.lateral_raises).start()
             else:
                 rospy.loginfo("Lateral raises are already running.")
 
@@ -488,6 +490,33 @@ class Pepper:
             self.rosbag_process.terminate()
             self.rosbag_process.wait()
 
+    # def start_audio_recording(self):
+    #     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    #     filename = "audio_only_{}.wav".format(timestamp)
+
+
+    #     base_dir = os.path.dirname(os.path.abspath(__file__))
+    #     save_path = os.path.join(base_dir, "audio_recordings", filename)
+
+    #     if not os.path.exists(os.path.dirname(save_path)):
+    #         os.makedirs(os.path.dirname(save_path))
+
+        
+
+    #     self.audio = ALProxy("ALAudioDevice", self.IP, 9559)
+    #     try:
+    #         rospy.loginfo("Starting audio recording: {}".format(save_path))
+    #         self.audio.startMicrophonesRecording(save_path)
+    #     except Exception as e:
+    #         rospy.logerr("Failed to start audio recording: {}".format(e))
+
+    # def stop_audio_recording(self):
+    #     try:
+    #         rospy.loginfo("Stopping audio recording...")
+    #         self.audio.stopMicrophonesRecording()
+    #         rospy.loginfo("Audio saved to: {}".format(save))
+    #     except Exception as e:
+    #         rospy.logerr("Failed to stop audio recording: {}".format(e))     
     def main(self):
         rate = rospy.Rate(5)  # 10hz
         # rospy.Subscriber("move_arm_command", String, pepper_listener.move_arm_callback)

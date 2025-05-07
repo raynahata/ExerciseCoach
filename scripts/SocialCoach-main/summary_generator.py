@@ -15,9 +15,9 @@ def get_key():
         return keyfile.read().strip()
 
 # Function to load and clean conversation from a dynamically changing CSV file
-def load_conversation(participant):
+def load_conversation(participant,week):
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    csv_filename = f"conversation_history_p{participant}.csv"
+    csv_filename = f"participant_{participant}_week_{week}.csv"
     csv_filepath = os.path.join(base_dir, "conversation_files", csv_filename)
 
     try:
@@ -112,15 +112,15 @@ def save_summary(participant_ID,week, summary):
 # Main function to execute the script
 def main():
     # Set participant ID dynamically
-    #week 0 if the first week so you want to save as the week after 
-    participant_ID = 0
-    week = 1
+    #week 0 if the first wek so you want to save as the week after 
+    participant_ID = 3
+    week = 2
 
     # Specify the prompt filename (static)
     prompt_filename = "summaryPrompt.txt"
 
     # Load conversation and prompt
-    conversation_text = load_conversation(participant_ID)
+    conversation_text = load_conversation(participant_ID,week)
     prompt_template = load_prompt(prompt_filename)
 
     if conversation_text and prompt_template:
