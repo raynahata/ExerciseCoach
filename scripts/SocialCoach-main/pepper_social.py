@@ -8,18 +8,31 @@ import string
 from datetime import datetime, timezone, timedelta
 
 import rospy
+import yaml
 from std_msgs.msg import String, Bool
 
 from AWS_STT import start_transcription
 from conv_logger import log_conversation
+from summary_generator import generate_summary_for_session
+
+
+def load_config():
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    config_path = os.path.join(base_dir, "config.yaml")
+    with open(config_path, "r") as f:
+        return yaml.safe_load(f) or {}
 
 
 class PepperExerciseSession:
     def __init__(self):
 
-        #CHANGE AT START
-        self.participant_number = 2
-        self.week_number = 3
+        params = load_config()
+        self.participant_number = int(params.get("participant_number", 0))
+        self.week_number = int(params.get("week_number", 0))
+        self.generate_summary_after_session = bool(params.get("generate_summary_after_session", False))
+        self.summary_prompt_file = params.get("summary_prompt_file", "summaryPrompt.txt")
+        self.summary_model = params.get("summary_model", "gpt-4o")
+        self.summary_max_tokens = int(params.get("summary_max_tokens", 250))
         self.pepper_state = "listening"
         self.is_pepper_speaking = False
         self.apikey = None
@@ -72,9 +85,11 @@ class PepperExerciseSession:
     def initialize_csv_file(self):
         filename = f"participant_{self.participant_number}_week_{self.week_number}.csv"
         base_dir = os.path.dirname(os.path.abspath(__file__))
-        full_path = os.path.join(base_dir, "conversation_files", filename)
+        conversation_dir = os.path.join(base_dir, "conversation_files")
+        os.makedirs(conversation_dir, exist_ok=True)
+        full_path = os.path.join(conversation_dir, filename)
         if not os.path.isfile(full_path):
-            log_conversation("System", "Conversation log initialized", csv_file=filename)
+            log_conversation("System", "Conversation log initialized", csv_file=full_path)
         return full_path
 
     def load_prompt(self):
@@ -134,6 +149,27 @@ class PepperExerciseSession:
         exercise_list = ["bicep curls", "bicep curls", "lateral raises", "lateral raises"]
         await self.exercise_session(exercise_list)
         self.video_pub.publish("stop_video")
+        self.maybe_generate_session_summary()
+
+    def maybe_generate_session_summary(self):
+        if not self.generate_summary_after_session:
+            print("Automatic summary generation is disabled.")
+            return
+
+        print("Generating automatic session summary...")
+        summary_path = generate_summary_for_session(
+            self.participant_number,
+            self.week_number,
+            csv_filepath=self.csv_history_file,
+            prompt_filename=self.summary_prompt_file,
+            model=self.summary_model,
+            max_tokens=self.summary_max_tokens
+        )
+
+        if summary_path:
+            print(f"Automatic summary saved to {summary_path}")
+        else:
+            print("Automatic summary generation did not produce a file.")
 
     async def exercise_session(self, exercise_list):
         current_set = 0

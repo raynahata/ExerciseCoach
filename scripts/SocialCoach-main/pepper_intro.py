@@ -9,18 +9,26 @@ import string
 from datetime import datetime
 
 import rospy
+import yaml
 from std_msgs.msg import String, Bool
 
 from AWS_STT import start_transcription
 from conv_logger import log_conversation
 
 
+def load_config():
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    config_path = os.path.join(base_dir, "config.yaml")
+    with open(config_path, "r") as f:
+        return yaml.safe_load(f) or {}
+
+
 class PepperIntroSession:
     def __init__(self):
         
-        #CHANGE AT START
-        self.participant_number = 2
-        self.week_number = 3
+        params = load_config()
+        self.participant_number = int(params.get("participant_number", 0))
+        self.week_number = int(params.get("week_number", 0))
         self.pepper_state = "listening"
         self.is_pepper_speaking = False
         self.apikey = None
@@ -64,9 +72,11 @@ class PepperIntroSession:
     def initialize_csv(self):
         filename = f"participant_{self.participant_number}_week_{self.week_number}.csv"
         base_dir = os.path.dirname(os.path.abspath(__file__))
-        full_path = os.path.join(base_dir, "conversation_files", filename)
+        conversation_dir = os.path.join(base_dir, "conversation_files")
+        os.makedirs(conversation_dir, exist_ok=True)
+        full_path = os.path.join(conversation_dir, filename)
         if not os.path.isfile(full_path):
-            log_conversation("System", "Conversation log initialized", csv_file=filename)
+            log_conversation("System", "Conversation log initialized", csv_file=full_path)
         return full_path
 
     def load_prompt(self):
@@ -147,4 +157,3 @@ class PepperIntroSession:
 if __name__ == "__main__":
     session = PepperIntroSession()
     asyncio.run(session.run())
-

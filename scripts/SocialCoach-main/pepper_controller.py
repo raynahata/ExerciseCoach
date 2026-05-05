@@ -23,41 +23,42 @@ def load_config():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     config_path = os.path.join(base_dir, "config.yaml")
     with open(config_path, "r") as f:
-        return yaml.safe_load(f)
+        return yaml.safe_load(f) or {}
 
 class Pepper:
     def __init__(self):
         params = load_config()
         self.IP = params.get("pepper_ip", "127.0.0.1")
+        self.PORT = int(params.get("pepper_port", 9559))
         self.participant_number = str(params.get("participant_number", 0))
         self.week_number = str(params.get("week_number", 0))
-        self.tts = ALProxy("ALTextToSpeech", self.IP, 9559)
-        self.motion = ALProxy("ALMotion", self.IP, 9559)
-        self.posture = ALProxy("ALRobotPosture", self.IP, 9559)
-        self.life = ALProxy('ALAutonomousLife', self.IP, 9559)
+        self.tts = ALProxy("ALTextToSpeech", self.IP, self.PORT)
+        self.motion = ALProxy("ALMotion", self.IP, self.PORT)
+        self.posture = ALProxy("ALRobotPosture", self.IP, self.PORT)
+        self.life = ALProxy('ALAutonomousLife', self.IP, self.PORT)
         self.life.setAutonomousAbilityEnabled("All", True)
         #self.life.setAutonomousAbilityEnabled("All", False)
         #self.life.stopAll()
-        self.tablet = ALProxy("ALTabletService",self.IP,9559)
-        self.memory = ALProxy("ALMemory", self.IP, 9559)
-        self.leds = ALProxy("ALLeds", self.IP, 9559)
+        self.tablet = ALProxy("ALTabletService", self.IP, self.PORT)
+        self.memory = ALProxy("ALMemory", self.IP, self.PORT)
+        self.leds = ALProxy("ALLeds", self.IP, self.PORT)
         self.tts.setParameter("defaultVoiceSpeed", 70)
         self.tts.setParameter("pitchShift", 1)
-        
+
         # Initialize recording variables
         self.recording = False
         self.audio_process = None
         self.audio_file = None
-        
+
         # Generate timestamp for synchronized recordings
         self.timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        
+
         # Setup directories
         base_dir = os.path.dirname(os.path.abspath(__file__))
         self.recordings_dir = os.path.join(base_dir, "recordings")
         if not os.path.exists(self.recordings_dir):
             os.makedirs(self.recordings_dir)
-        
+
         # Start local audio recording using system commands
         self.start_system_audio_recording()
         atexit.register(self.cleanup_audio)
@@ -69,7 +70,7 @@ class Pepper:
         resolution = 2  # 640x480
         color_space = 11  # RGB
         fps = 5  # Frames per second
-        self.video_service = ALProxy("ALVideoDevice", self.IP, 9559)
+        self.video_service = ALProxy("ALVideoDevice", self.IP, self.PORT)
         self.subscriber_id = self.video_service.subscribeCamera("video_stream", 0, resolution, color_space, fps)
 
         self.exercise_running=False
@@ -107,7 +108,7 @@ class Pepper:
             rospy.loginfo("Shutting down controller node and exiting...")
             rospy.signal_shutdown("Shutdown requested by social session")
             sys.exit(0)
-    
+
     ### Helper Function: Convert Degrees to Radians ###
     def degrees_to_radians(self, angles_in_degrees):
         """
@@ -234,7 +235,7 @@ class Pepper:
         rospy.loginfo("Received display text: {}".format(data.data))
         self.current_text = data.data
         self.display_text(self.current_text)
-    
+
     def callback_state(self, data):
         """
         Callback for 'pepper_state' topic.
@@ -523,7 +524,7 @@ class Pepper:
                 self.stop_system_audio_recording()
         except Exception as e:
             rospy.logerr("Error during audio cleanup: {}".format(e))
-    
+
     def main(self):
         rate = rospy.Rate(5)  # 10hz
         # rospy.Subscriber("move_arm_command", String, pepper_listener.move_arm_callback)
