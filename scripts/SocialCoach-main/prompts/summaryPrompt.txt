@@ -1,1 +1,0 @@
-Take in the conversation between the robot and the person and create a summary of their interaction. The summary should state how the person was feeling about the exercises and what you talked about. The summary should be no more than a pragraph. 
